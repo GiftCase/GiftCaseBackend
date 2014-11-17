@@ -21,7 +21,22 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         public IEnumerable<Item> SuggestGift(string username, int count=3)
         {
-            return TestRepository.Gifts.Take(count);
+            return TestRepository.Items.Take(count);
+        }
+
+        /// <summary>
+        /// Recommends some gifts for a friend from specified gift category
+        /// URL example:
+        /// http://localhost:22467/api/Gifts/SuggestGift?userName=ana&category=1
+        /// </summary>
+        /// <param name="username">Name of the friend to whom to recommend a gift for</param>
+        /// <param name="category">Id of category of gift</param>
+        /// <param name="count"></param>
+        /// <returns>List of gift recommendations</returns>
+        [HttpGet]
+        public IEnumerable<Item> SuggestGift(string username, int category, int count=3)
+        {
+            return TestRepository.Items.Where(x => x.Category.Id == category).Take(count);
         }
 
         /// <summary>
@@ -30,12 +45,13 @@ namespace GiftCaseBackend.Controllers
         /// http://localhost:22467/api/Gifts/SuggestGift?userName=ana&category=Book
         /// </summary>
         /// <param name="username">Name of the friend to whom to recommend a gift for</param>
-        /// <param name="category">Category of gift</param>
+        /// <param name="category">category name of gift</param>
         /// <param name="count"></param>
         /// <returns>List of gift recommendations</returns>
-        public IEnumerable<Item> SuggestGift(string username, ItemCategory category, int count=3)
+        [HttpGet] 
+        public IEnumerable<Item> SuggestGift(string username, string category, int count = 3)
         {
-            return TestRepository.Gifts.Where(x => x.Category == category).Take(count);
+            return TestRepository.Items.Where(x => x.Category.Name == category).Take(count);
         }
     }
 }

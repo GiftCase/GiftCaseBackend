@@ -34,11 +34,11 @@ namespace GiftCaseBackend.Controllers
         /// <summary>
         /// Links facebook account with BaaS
         /// URL example:
-        /// http://localhost:22467/api/User/LoginFacebook?userName=ana&accessToken=someGarbage&deviceToken=whatever
+        /// http://giftcase.azurewebsites.net/api/User/Login?userName=ana&accessToken=someGarbage&deviceToken=whatever
         /// </summary>
         /// <param name="userName">User's user name</param>
         /// <param name="accessToken">Facebook access token</param>
-        /// <param name="deviceToken">A token identifying the device user is login in from</param>
+        /// <param name="deviceToken">A token identifying the device user is logging in from</param>
         /// <returns>status message</returns>
         [HttpGet]
         public User Login(string userName, string accessToken, string deviceToken)
@@ -73,11 +73,14 @@ namespace GiftCaseBackend.Controllers
         }
         /// <summary>
         /// URL example:
-        /// http://localhost:22467/api/User/GetFacebookFriendList?userName=ana
+        /// http://giftcase.azurewebsites.net/api/User/Contacts?userId=ana
+        /// http://giftcase.azurewebsites.net/api/User/ana/Contacts
         /// </summary>
-        /// <param name="userName">Facebook userName of the user</param>
-        /// <returns>list of friends as JSON or XML depending on which type the get call said it preferred</returns>
+        /// <param name="userId">id of the user</param>
+        /// <returns>list of friends as JSON or XML</returns>
         [HttpGet]
+        [Route("api/User/{userId}/Contacts")]
+        [Route("api/User/Contacts")]
         public IEnumerable<Contact> Contacts(string userId)
         {
             try
@@ -100,12 +103,90 @@ namespace GiftCaseBackend.Controllers
             }
         }
 
-        
-
+        /// <summary>
+        /// Url example:
+        /// http://giftcase.azurewebsites.net/api/User/Logout?userId=ana&deviceToken=whatever
+        /// </summary>
+        /// <param name="userId">Id of the logged in user</param>
+        /// <param name="deviceToken">Token of the device that needs to be logged out</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/User/{userId}/LogOut")]
+        [Route("api/User/LogOut")]
         public bool LogOut(string userId, string deviceToken)
         {
             return true;
         }
+
+
+        /// <summary>
+        /// Sends an invitation to a non giftcase user
+        /// Url example:
+        /// http://giftcase.azurewebsites.net/api/User/SendInvitation?userId=ana&email=bla@bla.vom&userName=Vlatko&text=blabla
+        /// http://giftcase.azurewebsites.net/api/User/userId/SendInvitation?email=bla@bla.vom&userName=Vlatko&text=blabla
+        /// </summary>
+        /// <param name="userId">Id of the logged in giftcase user sending the invitation</param>
+        /// <param name="email">Email where invitation will be sent</param>
+        /// <param name="userName">Username of the user being invited</param>
+        /// <param name="text">Optional parameter. Customized text that will be included in the email sent to the user being invited.</param>
+        /// <returns>True if successful, otherwise error message</returns>
+        [HttpGet]
+        [Route("api/User/{userId}/SendInvitation")]
+        [Route("api/User/SendInvitation")]
+        public bool SendInvitation(string userId, string email, string userName, string text="")
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Gets details about the logged in user. Used if the client app needs to refresh user details.
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <returns>User details</returns>
+        [HttpGet]
+        [Route("api/User/{userId}/Details")]
+        [Route("api/User/Details")]
+        public User Details(string userId)
+        {
+            return new User()
+                {
+                    Id = userId,
+                    UserName = "ana",
+                    FacebookAccessToken = "gsjvnker",
+                    Friends = Contacts("ana").ToList(),
+                    Status = UserStatus.Registered,
+                    ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg"
+                };;
+        }
+
+        /// <summary>
+        /// Gets the list of upcoming events
+        /// </summary>
+        /// <param name="userId">Id of the current user</param>
+        /// <returns>List of upcoming events</returns>
+        [HttpGet]
+        [Route("api/User/{userId}/Events")]
+        [Route("api/User/Events")]
+        public IEnumerable<GiftcaseEvent> Events(string userId)
+        {
+            return TestRepository.Events;
+            //.Where(x=>x.RelatedContacts.Count!=1 && x.RelatedContacts[0].UserName=="Gijs")
+        }
+
+        /*
+        public bool SetUserPreferences()
+        {
+            return true;
+        }
+
+        
+        public UserPreferences GetUserPreferences()
+        {
+            
+        }
+        */
+
+
 
         public void GetTest()
         {

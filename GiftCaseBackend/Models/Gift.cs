@@ -5,6 +5,15 @@ using System.Web;
 
 namespace GiftCaseBackend.Models
 {
+    public class ItemCategory
+    {
+        public int Id;
+        
+        public string Name;
+
+        public int? ParentCategory;
+    }
+
     public class Item
     {
         public string Name { get; set; }
@@ -22,6 +31,10 @@ namespace GiftCaseBackend.Models
         public GiftStatus Status { get; set; }
 
         public DateTime DateOfPurchase { get; set; }
+
+        public Contact UserWhoGaveTheGift { get; set; }
+
+        public Contact UserWhoReceivedTheGift { get; set; }
  
     }
 
@@ -32,14 +45,14 @@ namespace GiftCaseBackend.Models
         Received, // the user getting the gift has seen the gift in his app but has not claimed it yet
         Claimed // user downloaded/claimed the gift he has received
     }
-
+    /*
     public enum ItemCategory
     {
         Music,
         Book,
         Movie,
     }
-
+    */
     public enum Store
     {
         Amazon,
