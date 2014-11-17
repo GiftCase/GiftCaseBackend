@@ -13,7 +13,7 @@ namespace GiftCaseBackend.Controllers
         /// <summary>
         /// Recommends some gifts
         /// URL example:
-        /// http://localhost:22467/api/Gifts/SuggestGift?userName=ana
+        /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana
         /// </summary>
         /// <param name="username">Name of the friend to whom to recommend a gift for</param>
         /// <param name="count"></param>
@@ -27,7 +27,7 @@ namespace GiftCaseBackend.Controllers
         /// <summary>
         /// Recommends some gifts for a friend from specified gift category
         /// URL example:
-        /// http://localhost:22467/api/Gifts/SuggestGift?userName=ana&category=1
+        /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana&category=1
         /// </summary>
         /// <param name="username">Name of the friend to whom to recommend a gift for</param>
         /// <param name="category">Id of category of gift</param>
@@ -42,7 +42,7 @@ namespace GiftCaseBackend.Controllers
         /// <summary>
         /// Recommends some gifts for a friend from specified gift category
         /// URL example:
-        /// http://localhost:22467/api/Gifts/SuggestGift?userName=ana&category=Book
+        /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana&category=Book
         /// </summary>
         /// <param name="username">Name of the friend to whom to recommend a gift for</param>
         /// <param name="category">category name of gift</param>

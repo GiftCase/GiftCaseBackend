@@ -156,6 +156,7 @@
     <Compile Include="Models\ContentProviders\eBayProvider.cs" />
     <Compile Include="Models\Engine\GiftRecommendationEngine.cs" />
     <Compile Include="Models\Gift.cs" />
+    <Compile Include="Models\GiftcaseEvent.cs" />
     <Compile Include="Models\NotificationSettings.cs" />
     <Compile Include="Models\TestRepository.cs" />
     <Compile Include="Models\User.cs" />
