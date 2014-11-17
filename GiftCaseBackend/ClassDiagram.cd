@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GiftCaseBackend.Controllers.GiftController">
+    <Position X="2.75" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\GiftController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Controllers.UserController">
+    <Position X="2.75" Y="3" Width="2.25" />
+    <Members>
+      <Method Name="GetTest" Hidden="true" />
+      <Method Name="SocialExceptionHandling" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEABAAAAAAAAAAAIAgIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.AmazonProvider" Collapsed="true">
+    <Position X="4.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAgAACAAAACAAAAAQ=</HashCode>
+      <FileName>Models\ContentProviders\AmazonProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.ContentProviders.eBayProvider" Collapsed="true">
+    <Position X="6.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ContentProviders\eBayProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.BaaS" Collapsed="true">
+    <Position X="3" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAABABAQAAAAAAgAAAAAAAgACAAAAAAAAgAAA=</HashCode>
+      <FileName>Models\BaaS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.Item">
+    <Position X="7.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAQAAAAAQAACAA=</HashCode>
+      <FileName>Models\Gift.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.Gift">
+    <Position X="5.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Models\Gift.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Item" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.NotificationSettings" Collapsed="true">
+    <Position X="8.75" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Models\NotificationSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.Contact">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.User">
+    <Position X="9.75" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAQQAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GiftCaseBackend.Models.Engine.GiftRecommendationEngine" Collapsed="true">
+    <Position X="6" Y="6.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Engine\GiftRecommendationEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
