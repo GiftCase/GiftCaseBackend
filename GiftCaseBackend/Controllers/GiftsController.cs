@@ -19,6 +19,7 @@ namespace GiftCaseBackend.Controllers
         /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana
         /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana&categoryId=1
         /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana&categoryName=Movie
+        /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana&categoryName=Book&priceMin=0&priceMax=20
         /// </summary>
         /// <param name="username">Name of the friend to whom to recommend a gift for</param>
         /// <param name="count"></param>
@@ -51,7 +52,7 @@ namespace GiftCaseBackend.Controllers
         /// <summary>
         /// Gets the user's inbox - list of received gifts
         /// URL example:
-        /// http://giftcase.azurewebsites.net/api/Gifts/Inbox?userId=ana&count=3
+        /// http://giftcase.azurewebsites.net/api/Gifts/Inbox?userId=Vlatko&count=3
         /// http://giftcase.azurewebsites.net/api/ana/Gifts/Inbox?count=3 <- not working
         /// </summary>
         /// <param name="userId">Id of the user using the app</param>
@@ -71,7 +72,7 @@ namespace GiftCaseBackend.Controllers
         /// <summary>
         /// Gets the user's outbox
         /// URL example:
-        /// http://giftcase.azurewebsites.net/api/Gifts/Outbox?userId=ana&count=3
+        /// http://giftcase.azurewebsites.net/api/Gifts/Outbox?userId=Vlatko&count=3
         /// http://giftcase.azurewebsites.net/api/ana/Gifts/Outbox?count=3  <- not working
         /// </summary>
         /// <param name="userId">Id of the user using the app</param>
