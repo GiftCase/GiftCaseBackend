@@ -67,7 +67,6 @@ namespace GiftCaseBackend.Controllers
                     FacebookAccessToken = accessToken,
                     Friends = Contacts(userName).ToList(),
                     Status = UserStatus.Registered,
-                    ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg"
                 };
             }
         }
@@ -96,8 +95,6 @@ namespace GiftCaseBackend.Controllers
             }
             catch(App42Exception ex)
             {
-                SocialExceptionHandling(ex);
-
                 // for testing purposes
                 return TestRepository.Friends;
             }
@@ -140,6 +137,9 @@ namespace GiftCaseBackend.Controllers
 
         /// <summary>
         /// Gets details about the logged in user. Used if the client app needs to refresh user details.
+        /// Url example:
+        /// http://giftcase.azurewebsites.net/api/User/Details?userId=ana
+        /// http://giftcase.azurewebsites.net/api/User/userId/Details
         /// </summary>
         /// <param name="userId">Id of the user</param>
         /// <returns>User details</returns>
@@ -155,12 +155,14 @@ namespace GiftCaseBackend.Controllers
                     FacebookAccessToken = "gsjvnker",
                     Friends = Contacts("ana").ToList(),
                     Status = UserStatus.Registered,
-                    ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg"
                 };;
         }
 
         /// <summary>
         /// Gets the list of upcoming events
+        /// Url example:
+        /// http://giftcase.azurewebsites.net/api/User/Events?userId=ana
+        /// http://giftcase.azurewebsites.net/api/User/userId/Events
         /// </summary>
         /// <param name="userId">Id of the current user</param>
         /// <returns>List of upcoming events</returns>
@@ -193,55 +195,6 @@ namespace GiftCaseBackend.Controllers
             AmazonProvider.Test();
         }
 
-        
-        
-        /// <summary>
-        /// 1400 - BAD REQUEST - The Request parameters are invalid 
-        /// 1401 - UNAUTHORIZED - Client is not authorized 
-        /// 1500 - INTERNAL SERVER ERROR - Internal Server Error. Please try again 
-        /// 3800 - NOT FOUND - Twitter App Credentials(ConsumerKey / ConsumerSecret) does not exist. 
-        /// 3802 - NOT FOUND - Twitter User Access Credentials does not exist. Please use linkUserTwitterAccount API to link the User Twitter account. 
-        /// 3803 - BAD REQUEST - The Twitter Access Credentials are invalid." + &lt;Exception Message&gt;. 
-        /// 3804 - NOT FOUND - Facebook App Credentials(ConsumerKey/ConsumerSecret) does not exist. 
-        /// 3805 - BAD REQUEST - The Facebook Access Credentials are invalid + &lt;Received Facebook Exception Message&gt;. 
-        /// 3806 - NOT FOUND - Facebook User Access Credentials does not exist. Please use linkUserFacebookAccount API to link the User facebook account. 
-        /// 3807 - NOT FOUND - LinkedIn App Credentials(ApiKey/SecretKey) does not exist. 
-        /// 3808 - BAD REQUEST - The Access Credentials are invalid + &lt;Exception Message&gt;. 
-        /// 3809 - NOT FOUND - LinkedIn User Access Credentials does not exist. Please use linkUserLinkedInAccount API to link the User LinkedIn account. 
-        /// 3810 - NOT FOUND - Social App Credentials do not exist. 
-        /// 3811 - NOT FOUND - User Social Access Credentials do not exist. Please use linkUserXXXXXAccount API to link the User Social account. 
-        /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
-        private string SocialExceptionHandling(App42Exception ex)
-        {
-            int appErrorCode = ex.GetAppErrorCode();
-            int httpErrorCode = ex.GetHttpErrorCode();
-            if (appErrorCode == 3800)
-            {
-                // Handle here for Not Found (Twitter App Credentials(ConsumerKey / ConsumerSecret) does not exist.)  
-            }
-            else if (appErrorCode == 3801)
-            {
-                // Handle here for Bad Request (The request is Unauthorized with the provided credentials.)  
-            }
-            else if (appErrorCode == 3802)
-            {
-                // Handle here for Not Found (Twitter User Access Credentials does not exist. Please use linkUserTwitterAccount API to link the User Twitter account.)  
-            }
-            else if (appErrorCode == 3803)
-            {
-                // Handle here for Bad Request (The Twitter Access Credentials are invalid.)  
-            }
-            else if (appErrorCode == 1401)
-            {
-                // handle here for Client is not authorized  
-            }
-            else if (appErrorCode == 1500)
-            {
-                // handle here for Internal Server Error  
-            }
-            return ex.GetMessage();    
-        }
+     
     }
 }

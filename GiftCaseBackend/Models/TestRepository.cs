@@ -16,26 +16,29 @@ namespace GiftCaseBackend.Models
 
         public static List<Item> Items = new List<Item>()
         {
-            new Item()
+            new Book()
             {
                 Category = Categories[0],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1846573785 ",
                 Name = "Fifty Shades of Grey",
-                Store = Store.Amazon
+                Store = Store.Amazon,
+                Id = 0
             },
-            new Item()
+            new Book()
             {
                 Category = Categories[0],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1408855658 ",
                 Name = "Harry Potter and the Philosopher's Stone",
-                Store = Store.Amazon
+                Store = Store.Amazon,
+                Id = 1
             },
-            new Item()
+            new Movie()
             {
                 Category = Categories[1],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/B00F3TCF7O ",
                 Name = "Captain America: The First Avenger",
-                Store = Store.Amazon
+                Store = Store.Amazon,
+                Id = 2
             }
         };
 

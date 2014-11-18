@@ -12,6 +12,13 @@ namespace GiftCaseBackend.Models
         public UserStatus Status { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public Contact()
+        {
+            UserName = "Anonymous";
+            Status = UserStatus.NonRegistered;
+            ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg";
+        }
     }
 
     public class User : Contact
@@ -22,7 +29,12 @@ namespace GiftCaseBackend.Models
 
         public List<Gift> SentGifts { get; set; }
 
-        public List<Gift> ReceivedGifts { get; set; } 
+        public List<Gift> ReceivedGifts { get; set; }
+
+        public User()
+        {
+            Id = UserName;
+        }
     }
 
     public enum UserStatus
