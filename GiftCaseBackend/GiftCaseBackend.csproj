@@ -44,6 +44,9 @@
     <Reference Include="App42_CSHARP_SDK_2.2">
       <HintPath>..\..\..\..\App42_CSHARP_SDK-master\2.2\App42_CSHARP_SDK_2.2.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
@@ -154,6 +157,7 @@
     <Compile Include="Models\ContentProviders\AmazonProvider.cs" />
     <Compile Include="Models\BaaS.cs" />
     <Compile Include="Models\ContentProviders\eBayProvider.cs" />
+    <Compile Include="Models\ContentProviders\SteamProvider.cs" />
     <Compile Include="Models\Engine\GiftRecommendationEngine.cs" />
     <Compile Include="Models\Gift.cs" />
     <Compile Include="Models\GiftcaseEvent.cs" />
