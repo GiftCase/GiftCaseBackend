@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace GiftCaseBackend.Models.ContentProviders
+namespace GiftCaseBackend.Models
 {
     public static class eBayProvider
     {

@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 
 
-namespace GiftCaseBackend.Models.ContentProviders
+namespace GiftCaseBackend.Models
 {
     public enum SteamTags
     {
@@ -53,7 +53,7 @@ namespace GiftCaseBackend.Models.ContentProviders
 
     public static class SteamProvider
     {
-        public static IEnumerable<SteamResult> ParseSteam(SteamTags subCategory) //or an array of subcategories, i can do that, no problem
+        public static IEnumerable<Item> ParseSteam(SteamTags subCategory) //or an array of subcategories, i can do that, no problem
         {
 
             //HtmlAgilityPack.HtmlDocument dokument = new HtmlDocument();
@@ -77,7 +77,8 @@ namespace GiftCaseBackend.Models.ContentProviders
             HtmlNode mainDiv = dokument.DocumentNode.SelectSingleNode("//div[@id='search_result_container']");
             //Debug.WriteLine(node.InnerHtml);
 
-            List<SteamResult> popisIgrica = new List<SteamResult>();
+            //List<SteamResult> popisIgrica = new List<SteamResult>();
+            List<Item> itemList = new List<Item>();
 
             foreach (HtmlNode tag in mainDiv.SelectNodes(".//a")) //[@class='search_result_row ds_collapse_flag app_impression_tracked'] //this is generated afterwords by js?
             {
@@ -149,11 +150,12 @@ namespace GiftCaseBackend.Models.ContentProviders
                 //  HtmlNode temp4 = link.SelectSingleNode("//p[@id='hover_desc']"); //dinamički ga nekako kasnije loada?
 
 
-                popisIgrica.Add(new SteamResult(tempName, tempImageURL, tempGameURL, tempPrice, "")); //description fail x.x
+                float price = Convert.ToSingle(tempPrice.Split('&')[0]);
 
+                itemList.Add(new Item(0, tempName, tempGameURL, "", tempImageURL, price, "€"));//description fail x.x
             }
 
-            return popisIgrica;
+            return itemList;
 
         }
 

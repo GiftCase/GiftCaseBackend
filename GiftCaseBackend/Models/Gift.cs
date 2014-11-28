@@ -30,7 +30,9 @@ namespace GiftCaseBackend.Models
 
         public string IconUrl { get; set; }
 
-        public int Price { get; set; }
+        public float Price { get; set; }
+
+        public float PreviousPrice { get; set; }
 
         public string PriceCurrency { get; set; }
 
@@ -43,6 +45,20 @@ namespace GiftCaseBackend.Models
             Store = Store.Amazon;
             Description = "No description";
             PriceCurrency = "$";
+        }
+
+        public Item(int id, string name, string storeURL, string description, string iconURL, float price, string currency)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.LinkToTheStore = storeURL;
+                //needs store type
+            this.Description = description;
+            this.IconUrl = iconURL;
+            this.Price = price;  //may be problems!
+            this.PriceCurrency = currency;
+            //needs category -> we have to merge Ana and Damir's categories!
+
         }
 
     }

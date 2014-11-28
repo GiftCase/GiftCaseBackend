@@ -36,6 +36,11 @@ namespace GiftCaseBackend.Controllers
 
             if (categoryName != null)
                 gifts = gifts.Where(x => x.Category.Name == categoryName);
+            else if (categoryId == 777) 
+            { 
+                List<Item> list =  SteamProvider.ParseSteam(SteamTags.Racing).ToList<Item>();
+                return list;
+            }
             else if (categoryId != null)
                 gifts = gifts.Where(x => x.Category.Id == categoryId);
 
