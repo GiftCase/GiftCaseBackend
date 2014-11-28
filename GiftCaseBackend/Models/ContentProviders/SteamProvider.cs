@@ -149,8 +149,19 @@ namespace GiftCaseBackend.Models
 
                 //  HtmlNode temp4 = link.SelectSingleNode("//p[@id='hover_desc']"); //dinamički ga nekako kasnije loada?
 
-
-                float price = Convert.ToSingle(tempPrice.Split('&')[0]);
+                float price = 0.0f;
+                try
+                {
+                    if (tempPrice.Trim() != "Free to Play")
+                    {
+                        price = Convert.ToSingle(tempPrice.Split('&')[0]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    price = 0.0f;
+                }
+                
 
                 itemList.Add(new Item(0, tempName, tempGameURL, "", tempImageURL, price, "€"));//description fail x.x
             }

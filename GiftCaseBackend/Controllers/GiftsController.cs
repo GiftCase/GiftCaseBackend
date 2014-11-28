@@ -29,16 +29,17 @@ namespace GiftCaseBackend.Controllers
         /// <param name="priceMax"></param>
         /// <returns>List of gift recommendations</returns>
         [HttpGet]
-        public IEnumerable<Item> SuggestGift(string username, int count=3, int? categoryId=null, string categoryName = null,
+        public IEnumerable<Item> SuggestGift(string username, int count=3, int? categoryId=null, int? subCategoryId = null,string categoryName = null,
             int priceMin=0, int priceMax = int.MaxValue)
         {
             IEnumerable<Item> gifts = TestRepository.Items;
 
             if (categoryName != null)
                 gifts = gifts.Where(x => x.Category.Name == categoryName);
-            else if (categoryId == 777) 
-            { 
-                List<Item> list =  SteamProvider.ParseSteam(SteamTags.Racing).ToList<Item>();
+            else if (categoryId == 777 && subCategoryId != null) 
+            {
+                SteamTags subCat = (SteamTags) subCategoryId;
+                List<Item> list =  SteamProvider.ParseSteam(subCat).ToList<Item>();
                 return list;
             }
             else if (categoryId != null)

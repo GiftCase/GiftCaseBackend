@@ -17,3 +17,25 @@ C:\Users\Ana\FER\DSD\Project\Backend\GiftCaseBackend\IntegrationTests\bin\Debug\
 C:\Users\Ana\FER\DSD\Project\Backend\GiftCaseBackend\IntegrationTests\obj\Debug\IntegrationTests.csprojResolveAssemblyReference.cache
 C:\Users\Ana\FER\DSD\Project\Backend\GiftCaseBackend\IntegrationTests\obj\Debug\IntegrationTests.dll
 C:\Users\Ana\FER\DSD\Project\Backend\GiftCaseBackend\IntegrationTests\obj\Debug\IntegrationTests.pdb
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\WebTest1.webtest
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\IntegrationTests.dll.config
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\IntegrationTests.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\IntegrationTests.pdb
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\GiftCaseBackend.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\Newtonsoft.Json.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Net.Http.Formatting.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Web.Http.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\App42_CSHARP_SDK_2.2.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Web.Http.WebHost.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\Amazon.PAAPI.WCF.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\HtmlAgilityPack.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\GiftCaseBackend.pdb
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\Newtonsoft.Json.xml
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Net.Http.Formatting.xml
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Web.Http.xml
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Web.Http.WebHost.xml
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\HtmlAgilityPack.pdb
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\HtmlAgilityPack.xml
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\obj\Debug\IntegrationTests.csprojResolveAssemblyReference.cache
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\obj\Debug\IntegrationTests.dll
+D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\obj\Debug\IntegrationTests.pdb
