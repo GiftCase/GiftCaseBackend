@@ -11,6 +11,7 @@ using System.Diagnostics;
 
 namespace GiftCaseBackend.Models
 {
+    /* Obsolete
     public enum SteamTags
     {
         Action = 19,
@@ -29,7 +30,7 @@ namespace GiftCaseBackend.Models
         FPS = 1663,
         SciFi = 3942,
         Strategy = 9
-    }
+    }*/
 
     public class SteamResult
     {
@@ -53,13 +54,13 @@ namespace GiftCaseBackend.Models
 
     public static class SteamProvider
     {
-        public static IEnumerable<Item> ParseSteam(SteamTags subCategory) //or an array of subcategories, i can do that, no problem
+        public static IEnumerable<Item> ParseSteam(int subCategory) //or an array of subcategories, i can do that, no problem
         {
 
             //HtmlAgilityPack.HtmlDocument dokument = new HtmlDocument();
             //dokument.Load("C:\\testSteam.xml"); //for testing purposes
 
-            String webSiteURL = "http://store.steampowered.com/search/?tags=" + (int)subCategory;//moglo bi i vise od 1 kategorije?
+            String webSiteURL = "http://store.steampowered.com/search/?tags=" + subCategory;//moglo bi i vise od 1 kategorije?
 
             HtmlAgilityPack.HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument dokument = web.Load(webSiteURL);
@@ -163,7 +164,15 @@ namespace GiftCaseBackend.Models
                 }
                 
 
-                itemList.Add(new Item(0, tempName, tempGameURL, "", tempImageURL, price, "€"));//description fail x.x
+                itemList.Add(new Item()
+                {
+                    Price = price,
+                    Category = TestRepository.Categories.First(x=>x.Id==subCategory),
+                    Name = tempName,
+                    LinkToTheStore = tempGameURL,
+                    IconUrl = tempImageURL,
+                    PriceCurrency = "€"
+                });//description fail x.x
             }
 
             return itemList;

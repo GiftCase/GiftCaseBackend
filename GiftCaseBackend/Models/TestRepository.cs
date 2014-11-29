@@ -12,8 +12,25 @@ namespace GiftCaseBackend.Models
             new ItemCategory(){Id=0,Name = "Book"},
             new ItemCategory(){Id=1,Name = "Movie"},
             new ItemCategory(){Id=2,Name = "Audio"},
-        }; 
 
+
+            new ItemCategory(){Id=3,Name = "Game"},
+            new ItemCategory(){Id=19,Name = "Action",ParentCategory = 3},
+            new ItemCategory(){Id=492,Name = "Indie",ParentCategory = 3},
+            new ItemCategory(){Id=21,Name = "Adventure",ParentCategory = 3},
+            new ItemCategory(){Id=122,Name = "RPG",ParentCategory = 3},
+            new ItemCategory(){Id=599,Name = "Simulation",ParentCategory = 3},
+            new ItemCategory(){Id=597,Name = "Casual",ParentCategory = 3},
+            new ItemCategory(){Id=4182,Name = "Single Player",ParentCategory = 3},
+            new ItemCategory(){Id=128,Name = "MMO",ParentCategory = 3},
+            new ItemCategory(){Id=3859,Name = "MultiPlayer",ParentCategory = 3},
+            new ItemCategory(){Id=699,Name = "Racing",ParentCategory = 3},
+            new ItemCategory(){Id=701,Name = "Sports",ParentCategory = 3},
+            new ItemCategory(){Id=1774,Name = "Shooter",ParentCategory = 3},
+            new ItemCategory(){Id=1663,Name = "FPS",ParentCategory = 3},
+            new ItemCategory(){Id=3942,Name = "SciFi",ParentCategory = 3},
+            new ItemCategory(){Id=9,Name = "Strategy",ParentCategory = 3},
+        };
         public static List<Item> Items = new List<Item>()
         {
             new Book()

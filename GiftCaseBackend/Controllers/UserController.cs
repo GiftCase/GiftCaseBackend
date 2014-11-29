@@ -15,7 +15,7 @@ namespace GiftCaseBackend.Controllers
     {
         /*
          * Instructions:
-         * How you can access the REST api provided by this controler:
+         * How you can access the REST api provided by this controller:
          * use the url:  /api/User/NameOfTheAction?parameterName=value&parameter2=value
          * 
          * Name of the action is the method name. If you want to change the url into something different
@@ -24,8 +24,8 @@ namespace GiftCaseBackend.Controllers
          * The results returned by REST api are either in JSON or XML format. The format depends on what the requester
          * specified he would like to receive. If not specified it defaults to JSON.
          * 
-         * The server will automaticaly try to map what methods should be called with what type of request. If you
-         * want to specify it manualy you can put attributes above the method, eg: [HttpGet],[HttpPost]
+         * The server will automatically try to map what methods should be called with what type of request. If you
+         * want to specify it manually you can put attributes above the method, eg: [HttpGet],[HttpPost]
          */
 
 
@@ -36,23 +36,25 @@ namespace GiftCaseBackend.Controllers
         /// URL example:
         /// http://giftcase.azurewebsites.net/api/User/Login?userName=ana&accessToken=someGarbage&deviceToken=whatever
         /// </summary>
-        /// <param name="userName">User's user name</param>
+        /// <param name="userId">User's facebook user id</param>
         /// <param name="accessToken">Facebook access token</param>
         /// <param name="deviceToken">A token identifying the device user is logging in from</param>
         /// <returns>status message</returns>
         [HttpGet]
-        public User Login(string userName, string accessToken, string deviceToken)
+        public User Login(string userId, string accessToken, string deviceToken)
         {
+            User user = null;
+
             try
             {
-                var social = BaaS.SocialService.LinkUserFacebookAccount(userName, accessToken);
-                var push =  BaaS.PushNotificationService.StoreDeviceToken(userName, deviceToken, DeviceType.ANDROID);
+                var social = BaaS.SocialService.LinkUserFacebookAccount(userId, accessToken);
 
-                return new User()
+               user =  new User()
                 {
-                    Id = accessToken+userName,
-                    UserName = userName, FacebookAccessToken = accessToken,
-                    Friends = Contacts(userName).ToList(),
+                    Id = userId,
+                    UserName = social.GetUserName(), FacebookAccessToken = accessToken,
+                    //Gender = social.GetFacebookProfile().,
+                    Friends = Contacts(userId).ToList(),
                     Status = UserStatus.Registered,
                     ImageUrl = social.facebookProfile.GetPicture()
                 };
@@ -60,15 +62,19 @@ namespace GiftCaseBackend.Controllers
             catch (Exception ex)
             {
                 //SocialExceptionHandling(ex);
-                return new User()
+                user = new User()
                 {
                     Id = "abcd",
-                    UserName = userName,
+                    UserName = userId,
                     FacebookAccessToken = accessToken,
-                    Friends = Contacts(userName).ToList(),
+                    Friends = Contacts(userId).ToList(),
                     Status = UserStatus.Registered,
                 };
             }
+
+            try { var push = BaaS.PushNotificationService.StoreDeviceToken(userId, deviceToken, DeviceType.ANDROID); }
+            catch(Exception e){}
+            return user;
         }
         /// <summary>
         /// URL example:

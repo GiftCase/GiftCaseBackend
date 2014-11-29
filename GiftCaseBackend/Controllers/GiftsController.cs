@@ -29,25 +29,36 @@ namespace GiftCaseBackend.Controllers
         /// <param name="priceMax"></param>
         /// <returns>List of gift recommendations</returns>
         [HttpGet]
-        public IEnumerable<Item> SuggestGift(string username, int count=3, int? categoryId=null, int? subCategoryId = null,string categoryName = null,
+        public IEnumerable<Item> SuggestGift(string username, int count=3, int? categoryId=null, string categoryName = null,
             int priceMin=0, int priceMax = int.MaxValue)
         {
             IEnumerable<Item> gifts = TestRepository.Items;
 
-            if (categoryName != null)
-                gifts = gifts.Where(x => x.Category.Name == categoryName);
-            else if (categoryId == 777 && subCategoryId != null) 
-            {
-                SteamTags subCat = (SteamTags) subCategoryId;
-                List<Item> list =  SteamProvider.ParseSteam(subCat).ToList<Item>();
-                return list;
-            }
-            else if (categoryId != null)
-                gifts = gifts.Where(x => x.Category.Id == categoryId);
+            // get category details
+            ItemCategory category=null;
+            if(categoryId!=null)
+                category = TestRepository.Categories.First(x => x.Id == categoryId);
+            else if(categoryName!=null)
+                category = TestRepository.Categories.First(x => x.Name==categoryName);
 
+            // if we are searching for games, search steam
+            if (category != null && category.ParentCategory == 3)
+            {
+                gifts = SteamProvider.ParseSteam(category.Id);
+            }
+            // if we are not searching for games, just return dummy results
+            else
+            {
+                if (categoryName != null)
+                    gifts = gifts.Where(x => x.Category.Name == categoryName);
+                else if (categoryId != null)
+                    gifts = gifts.Where(x => x.Category.Id == categoryId);
+            }
+
+            // filter by price
             if (priceMin > 0 && priceMax < int.MaxValue && priceMin < priceMax)
                 gifts = gifts.Where(x => x.Price >= priceMin && x.Price <= priceMax);
-
+            // return a certain count
             if (count > 0)
                 gifts = gifts.Take(count);
 

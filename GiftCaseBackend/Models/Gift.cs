@@ -46,21 +46,6 @@ namespace GiftCaseBackend.Models
             Description = "No description";
             PriceCurrency = "$";
         }
-
-        public Item(int id, string name, string storeURL, string description, string iconURL, float price, string currency)
-        {
-            this.Id = id;
-            this.Name = name;
-            this.LinkToTheStore = storeURL;
-                //needs store type
-            this.Description = description;
-            this.IconUrl = iconURL;
-            this.Price = price;  //may be problems!
-            this.PriceCurrency = currency;
-            //needs category -> we have to merge Ana and Damir's categories!
-
-        }
-
     }
 
     [KnownType(typeof(GiftCaseBackend.Models.Book))]
