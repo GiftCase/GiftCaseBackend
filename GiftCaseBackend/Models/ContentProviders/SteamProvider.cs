@@ -35,8 +35,11 @@ namespace GiftCaseBackend.Models
 
     public static class SteamProvider
     {
-        public static IEnumerable<Item> ParseSteam(int subCategory) //or an array of subcategories, i can do that, no problem
+        public static IEnumerable<Item> ParseSteam(int subCategory, int count=25) //or an array of subcategories, i can do that, no problem
         {
+
+            int Count = count; // how many items will be parsed, max is 25!
+            if (Count > 25) { Count = 25; }
 
             //HtmlAgilityPack.HtmlDocument dokument = new HtmlDocument();
             //dokument.Load("C:\\testSteam.xml"); //for testing purposes
@@ -59,10 +62,16 @@ namespace GiftCaseBackend.Models
             HtmlNode mainDiv = dokument.DocumentNode.SelectSingleNode("//div[@id='search_result_container']");
             //Debug.WriteLine(node.InnerHtml);
 
+            int counter = 0;
+
             List<Item> itemList = new List<Item>();
 
             foreach (HtmlNode tag in mainDiv.SelectNodes(".//a")) //[@class='search_result_row ds_collapse_flag app_impression_tracked'] //this is generated afterwords by js?
             {
+
+                if (counter >= Count) { break; }
+                counter++;
+
                 string tempGameURL = "";
                 string tempGameID = "";
 
@@ -144,7 +153,7 @@ namespace GiftCaseBackend.Models
                 {
                     if (tempPrice.Trim() != "Free to Play")
                     {
-                        price = Convert.ToSingle(tempPrice.Split('&')[0]);
+                        price = Convert.ToSingle(tempPrice.Split('&')[0],  new System.Globalization.CultureInfo("de-DE"));
                     }
                 }
                 catch (Exception ex)
