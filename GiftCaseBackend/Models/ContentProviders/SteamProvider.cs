@@ -64,8 +64,17 @@ namespace GiftCaseBackend.Models
             foreach (HtmlNode tag in mainDiv.SelectNodes(".//a")) //[@class='search_result_row ds_collapse_flag app_impression_tracked'] //this is generated afterwords by js?
             {
                 string tempGameURL = "";
+                string tempGameID = "";
+
                 HtmlAttribute gameURL = tag.Attributes["href"];
-                if (gameURL != null) { tempGameURL = gameURL.Value.Trim(); }
+               // HtmlAttribute gameID = tag.Attributes["id"];
+               
+                if (gameURL != null) {
+                    tempGameURL = gameURL.Value.Trim();
+                    tempGameID = tempGameURL.Split(new string[] {"app/","/?"},StringSplitOptions.None)[1]; //trim i br?
+                    //stringSeparators, StringSplitOptions.None)[1].Trim();
+                }
+               
 
                 HtmlNode name = tag.SelectSingleNode(".//span[@class='title']");
 
@@ -142,7 +151,14 @@ namespace GiftCaseBackend.Models
                 {
                     price = 0.0f;
                 }
-                
+
+                HtmlAgilityPack.HtmlWeb webPageDescription= new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument docDescription = webPageDescription.Load("http://store.steampowered.com/apphover/" + tempGameID);
+
+                HtmlNode tempDescriptionNode = docDescription.DocumentNode.SelectSingleNode("//p[@id='hover_desc']");
+              
+                string tempDescription = tempDescriptionNode.InnerHtml;
+                       //HtmlAttribute gameURL = tag.Attributes["href"];
 
                 itemList.Add(new Item()
                 {
@@ -152,8 +168,9 @@ namespace GiftCaseBackend.Models
                     LinkToTheStore = tempGameURL,
                     IconUrl = tempImageURL,
                     PriceCurrency = "€",
-                    Store = Store.Steam
-                });//description fail x.x
+                    Store = Store.Steam,
+                    Description = tempDescription
+                });
             }
 
             return itemList;
