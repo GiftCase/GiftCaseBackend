@@ -32,25 +32,6 @@ namespace GiftCaseBackend.Models
         Strategy = 9
     }*/
 
-    public class SteamResult
-    {
-        public string Name { get; set; }
-        public string Image { get; set; }
-        public string GameURL { get; set; }
-        public string Price { get; set; }
-        public string Description { get; set; }
-
-        public SteamResult(string name, string image, string gameURL, string price, string description)
-        {
-            this.Name = name;
-            this.Image = image;
-            this.GameURL = gameURL;
-            this.Price = price;
-            this.Description = description; //cant parse it properly...YET!
-        }
-
-    }
-
 
     public static class SteamProvider
     {
@@ -78,7 +59,6 @@ namespace GiftCaseBackend.Models
             HtmlNode mainDiv = dokument.DocumentNode.SelectSingleNode("//div[@id='search_result_container']");
             //Debug.WriteLine(node.InnerHtml);
 
-            //List<SteamResult> popisIgrica = new List<SteamResult>();
             List<Item> itemList = new List<Item>();
 
             foreach (HtmlNode tag in mainDiv.SelectNodes(".//a")) //[@class='search_result_row ds_collapse_flag app_impression_tracked'] //this is generated afterwords by js?
@@ -148,7 +128,7 @@ namespace GiftCaseBackend.Models
                     Debug.WriteLine(tempImageURL);
                 }
 
-                //  HtmlNode temp4 = link.SelectSingleNode("//p[@id='hover_desc']"); //dinamički ga nekako kasnije loada?
+                //  HtmlNode temp4 = link.SelectSingleNode("//p[@id='hover_desc']"); //dinamički ga nekako kasnije loada? js?
 
                 float price = 0.0f;
                 try
@@ -171,7 +151,8 @@ namespace GiftCaseBackend.Models
                     Name = tempName,
                     LinkToTheStore = tempGameURL,
                     IconUrl = tempImageURL,
-                    PriceCurrency = "€"
+                    PriceCurrency = "€",
+                    Store = Store.Steam
                 });//description fail x.x
             }
 

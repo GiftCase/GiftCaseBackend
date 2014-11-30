@@ -34,7 +34,6 @@ D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin
 D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Net.Http.Formatting.xml
 D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Web.Http.xml
 D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\System.Web.Http.WebHost.xml
-D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\HtmlAgilityPack.pdb
 D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\bin\Debug\HtmlAgilityPack.xml
 D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\obj\Debug\IntegrationTests.csprojResolveAssemblyReference.cache
 D:\My Documents\Visual Studio 2012\Projects\GitHub\GiftCase\IntegrationTests\obj\Debug\IntegrationTests.dll
