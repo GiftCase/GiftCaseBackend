@@ -44,7 +44,7 @@ namespace GiftCaseBackend.Controllers
             // if we are searching for games, search steam
             if (category != null && category.ParentCategory == 3)
             {
-                gifts = SteamProvider.ParseSteam(category.Id);
+                gifts = SteamProvider.ParseSteam(category.Id,count);
             }
             // if we are not searching for games, just return dummy results
             else

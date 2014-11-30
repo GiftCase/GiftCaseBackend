@@ -96,5 +96,6 @@ namespace GiftCaseBackend.Models
         Amazon,
         eBay,
         iTunes,
+        Steam
     }
 }

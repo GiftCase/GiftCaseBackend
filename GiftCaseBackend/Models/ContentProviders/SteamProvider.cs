@@ -32,30 +32,14 @@ namespace GiftCaseBackend.Models
         Strategy = 9
     }*/
 
-    public class SteamResult
-    {
-        public string Name { get; set; }
-        public string Image { get; set; }
-        public string GameURL { get; set; }
-        public string Price { get; set; }
-        public string Description { get; set; }
-
-        public SteamResult(string name, string image, string gameURL, string price, string description)
-        {
-            this.Name = name;
-            this.Image = image;
-            this.GameURL = gameURL;
-            this.Price = price;
-            this.Description = description; //cant parse it properly...YET!
-        }
-
-    }
-
 
     public static class SteamProvider
     {
-        public static IEnumerable<Item> ParseSteam(int subCategory) //or an array of subcategories, i can do that, no problem
+        public static IEnumerable<Item> ParseSteam(int subCategory, int count=25) //or an array of subcategories, i can do that, no problem
         {
+
+            int Count = count; // how many items will be parsed, max is 25!
+            if (Count > 25) { Count = 25; }
 
             //HtmlAgilityPack.HtmlDocument dokument = new HtmlDocument();
             //dokument.Load("C:\\testSteam.xml"); //for testing purposes
@@ -78,14 +62,28 @@ namespace GiftCaseBackend.Models
             HtmlNode mainDiv = dokument.DocumentNode.SelectSingleNode("//div[@id='search_result_container']");
             //Debug.WriteLine(node.InnerHtml);
 
-            //List<SteamResult> popisIgrica = new List<SteamResult>();
+            int counter = 0;
+
             List<Item> itemList = new List<Item>();
 
             foreach (HtmlNode tag in mainDiv.SelectNodes(".//a")) //[@class='search_result_row ds_collapse_flag app_impression_tracked'] //this is generated afterwords by js?
             {
+
+                if (counter >= Count) { break; }
+                counter++;
+
                 string tempGameURL = "";
+                string tempGameID = "";
+
                 HtmlAttribute gameURL = tag.Attributes["href"];
-                if (gameURL != null) { tempGameURL = gameURL.Value.Trim(); }
+               // HtmlAttribute gameID = tag.Attributes["id"];
+               
+                if (gameURL != null) {
+                    tempGameURL = gameURL.Value.Trim();
+                    tempGameID = tempGameURL.Split(new string[] {"app/","/?"},StringSplitOptions.None)[1]; //trim i br?
+                    //stringSeparators, StringSplitOptions.None)[1].Trim();
+                }
+               
 
                 HtmlNode name = tag.SelectSingleNode(".//span[@class='title']");
 
@@ -131,6 +129,7 @@ namespace GiftCaseBackend.Models
 
                 }
 
+
                 Debug.WriteLine(tempPrice);
 
                 HtmlNode divPictureTag = tag.SelectSingleNode(".//div[@class='col search_capsule']");
@@ -148,32 +147,41 @@ namespace GiftCaseBackend.Models
                     Debug.WriteLine(tempImageURL);
                 }
 
-                //  HtmlNode temp4 = link.SelectSingleNode("//p[@id='hover_desc']"); //dinamički ga nekako kasnije loada?
+                //  HtmlNode temp4 = link.SelectSingleNode("//p[@id='hover_desc']"); //dinamički ga nekako kasnije loada? js?
 
                 float price = 0.0f;
                 try
                 {
                     if (tempPrice.Trim() != "Free to Play")
                     {
-                        price = Convert.ToSingle(tempPrice.Split('&')[0]);
+                        price = Convert.ToSingle(tempPrice.Split('&')[0],  new System.Globalization.CultureInfo("de-DE"));
                     }
                 }
                 catch (Exception ex)
                 {
                     price = 0.0f;
                 }
-                
+
+                HtmlAgilityPack.HtmlWeb webPageDescription= new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument docDescription = webPageDescription.Load("http://store.steampowered.com/apphover/" + tempGameID);
+
+                HtmlNode tempDescriptionNode = docDescription.DocumentNode.SelectSingleNode("//p[@id='hover_desc']");
+              
+                string tempDescription = tempDescriptionNode.InnerHtml;
+                       //HtmlAttribute gameURL = tag.Attributes["href"];
 
                 itemList.Add(new Item()
                 {
-                    //Id = ,
+                    Id = int.Parse(tempGameID),
                     Price = price,
                     Category = TestRepository.Categories.First(x=>x.Id==subCategory),
                     Name = tempName,
                     LinkToTheStore = tempGameURL,
                     IconUrl = tempImageURL,
-                    PriceCurrency = "€"
-                });//description fail x.x
+                    PriceCurrency = "€",
+                    Store = Store.Steam,
+                    Description = tempDescription,
+                });
             }
 
             return itemList;
