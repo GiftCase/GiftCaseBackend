@@ -54,7 +54,7 @@ namespace GiftCaseBackend.Controllers
                     Id = userId,
                     UserName = social.GetUserName(), FacebookAccessToken = accessToken,
                     //Gender = social.GetFacebookProfile().,
-                    Friends = Contacts(userId).ToList(),
+                    //Friends = Contacts(userId).ToList(),
                     Status = UserStatus.Registered,
                     ImageUrl = social.facebookProfile.GetPicture()
                 };
@@ -67,7 +67,7 @@ namespace GiftCaseBackend.Controllers
                     Id = "abcd",
                     UserName = userId,
                     FacebookAccessToken = accessToken,
-                    Friends = Contacts(userId).ToList(),
+                    //Friends = Contacts(userId).ToList(),
                     Status = UserStatus.Registered,
                 };
             }

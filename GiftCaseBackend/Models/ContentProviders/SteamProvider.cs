@@ -166,6 +166,7 @@ namespace GiftCaseBackend.Models
 
                 itemList.Add(new Item()
                 {
+                    //Id = ,
                     Price = price,
                     Category = TestRepository.Categories.First(x=>x.Id==subCategory),
                     Name = tempName,
