@@ -90,7 +90,7 @@ namespace GiftCaseBackend.Controllers
         {
             try
             {
-                var social =BaaS.SocialService.GetFacebookProfilesFromIds(new []{userId});
+                var social =BaaS.SocialService.GetFacebookFriendsFromLinkUser(userId);
                 return social.GetFriendList().Select(x=>
                     new Contact()
                     {
