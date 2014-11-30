@@ -32,7 +32,10 @@ namespace GiftCaseBackend.Controllers
 
 
         /// <summary>
-        /// Links facebook account with BaaS
+        /// Links facebook account with BaaS. Creates user profiles in the database, upgrades profiles from non registered to registered if they exist.
+        /// Todo: update the profile data if it has changed
+        /// Sets up push notification services.
+        /// --------------------------------------
         /// URL example:
         /// http://giftcase.azurewebsites.net/api/User/Login?userName=ana&accessToken=someGarbage&deviceToken=whatever
         /// </summary>
@@ -49,27 +52,40 @@ namespace GiftCaseBackend.Controllers
             {
                 var social = BaaS.SocialService.LinkUserFacebookAccount(userId, accessToken);
 
-               user =  new User()
+                user =  new User()
                 {
                     Id = userId,
-                    UserName = social.GetUserName(), FacebookAccessToken = accessToken,
+                    FacebookAccessToken = accessToken,
                     //Gender = social.GetFacebookProfile().,
                     //Friends = Contacts(userId).ToList(),
                     Status = UserStatus.Registered,
-                    ImageUrl = social.facebookProfile.GetPicture()
+                    
                 };
+
+                var facebookProfile = social.GetFacebookProfile();
+                user.UserName = facebookProfile.GetName();
+                user.ImageUrl = facebookProfile.GetPicture();
+
+                // creates user details data entry in the database
+                if (BaaS.DoesUserDataExist(userId))
+                    BaaS.UpdateNonregisteredToRegisteredUserIfNeeded(user);
+                else
+                    BaaS.CreateUser(user);
             }
             catch (Exception ex)
             {
-                //SocialExceptionHandling(ex);
-                user = new User()
+                if (user == null)
                 {
-                    Id = "abcd",
-                    UserName = userId,
-                    FacebookAccessToken = accessToken,
-                    //Friends = Contacts(userId).ToList(),
-                    Status = UserStatus.Registered,
-                };
+                    //SocialExceptionHandling(ex);
+                    user = new User()
+                    {
+                        Id = "abcd",
+                        UserName = userId,
+                        FacebookAccessToken = accessToken,
+                        //Friends = Contacts(userId).ToList(),
+                        Status = UserStatus.Registered,
+                    };
+                }
             }
 
             try { var push = BaaS.PushNotificationService.StoreDeviceToken(userId, deviceToken, DeviceType.ANDROID); }
@@ -77,6 +93,9 @@ namespace GiftCaseBackend.Controllers
             return user;
         }
         /// <summary>
+        /// Gets a list of all user friends. Currently only gets friends who are registered GiftCase users.
+        /// Todo: find a way to list all friends, not just registered friends.
+        /// --------------------------------------
         /// URL example:
         /// http://giftcase.azurewebsites.net/api/User/Contacts?userId=ana
         /// http://giftcase.azurewebsites.net/api/User/ana/Contacts
@@ -88,25 +107,39 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Contacts")]
         public IEnumerable<Contact> Contacts(string userId)
         {
+            IEnumerable<Contact> friends = null;
             try
             {
                 var social =BaaS.SocialService.GetFacebookFriendsFromLinkUser(userId);
-                return social.GetFriendList().Select(x=>
+                friends = social.GetFriendList().Select(x=>
                     new Contact()
                     {
+                        Id = x.id,
                         UserName = x.name,
                         ImageUrl = x.GetPicture(),
-                        Status = UserStatus.NonRegistered
                     });
+
+                foreach (var contact in friends)
+                {
+                    contact.Status = (BaaS.DoesUserDataExist(contact.Id)) ? UserStatus.NonRegistered : UserStatus.Registered;
+                    if(contact.Status==UserStatus.NonRegistered)
+                        BaaS.CreateNonregisteredUser(contact.Id);
+                }
+
+                return friends;
             }
-            catch(App42Exception ex)
+            catch(Exception ex)
             {
+                if (friends != null)
+                    return friends;
                 // for testing purposes
                 return TestRepository.Friends;
             }
         }
 
         /// <summary>
+        /// Currently doesn't do anything.
+        /// --------------------------------------
         /// Url example:
         /// http://giftcase.azurewebsites.net/api/User/Logout?userId=ana&deviceToken=whatever
         /// </summary>
@@ -154,14 +187,34 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Details")]
         public User Details(string userId)
         {
-            return new User()
+            User user = null;
+            try
+            {
+                if(!BaaS.DoesUserDataExist(userId))
+                user = new User()
                 {
                     Id = userId,
                     UserName = "ana",
                     FacebookAccessToken = "gsjvnker",
-                    Friends = Contacts("ana").ToList(),
+                    //Friends = Contacts("ana").ToList(),
                     Status = UserStatus.Registered,
-                };;
+                };
+                else
+                    user = BaaS.GetUser(userId);
+            }
+            catch (Exception)
+            {
+                user = new User()
+                {
+                    Id = userId,
+                    UserName = "ana",
+                    FacebookAccessToken = "gsjvnker",
+                    //Friends = Contacts("ana").ToList(),
+                    Status = UserStatus.Registered,
+                };
+            }
+            
+            return user;
         }
 
         /// <summary>

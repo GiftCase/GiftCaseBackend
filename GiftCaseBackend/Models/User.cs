@@ -7,6 +7,8 @@ namespace GiftCaseBackend.Models
 {
     public class Contact
     {
+        public string Id { get; set; }
+
         public string UserName { get; set; }
 
         public UserStatus Status { get; set; }
@@ -23,7 +25,6 @@ namespace GiftCaseBackend.Models
 
     public class User : Contact
     {
-        public string Id { get; set; }
         public string FacebookAccessToken { get; set; }
         public List<Contact> Friends { get; set; }
 
