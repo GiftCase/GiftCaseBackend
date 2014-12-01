@@ -32,6 +32,19 @@ namespace GiftCaseBackend.Controllers
         public IEnumerable<Item> SuggestGift(string username, int count=3, int? categoryId=null, string categoryName = null,
             int priceMin=0, int priceMax = int.MaxValue)
         {
+            //User tempuser = TestRepository.Users.Find(username); //take username and get a user, and then forward it to the Recommendation engine! ANA?
+
+            User tempUser = new User { UserName = username };
+
+            if (categoryId == null)
+            {
+                categoryId = -1; //meaning all cats
+            }
+             IEnumerable<Item> gifts = GiftRecommendationEngine.RecommendGifts(tempUser, count, categoryId);
+
+            /*
+             //removed, it's in the gift recommendation engine now
+             
             IEnumerable<Item> gifts = TestRepository.Items;
 
             // get category details
@@ -63,6 +76,9 @@ namespace GiftCaseBackend.Controllers
                 gifts = gifts.Take(count);
 
             return gifts;
+             */
+
+             return gifts;
         }
 
 

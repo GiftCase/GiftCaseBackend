@@ -26,15 +26,28 @@ namespace GiftCaseBackend.Models
     public class User : Contact
     {
         public string FacebookAccessToken { get; set; }
+
         public List<Contact> Friends { get; set; }
 
         public List<Gift> SentGifts { get; set; }
 
         public List<Gift> ReceivedGifts { get; set; }
 
+        public Dictionary<string, int> Affinity = new Dictionary<string, int>();
+
+        public string TelcoID { get; set; } //we assume all of our users have telcoID
+
+        public UserGender Gender = UserGender.Unspecified;
+
+
         public User()
         {
             Id = UserName;
+            Affinity.Add(ItemCategoryEnum.Game.ToString(), 10); //default affinities, remove when facebook API starts working
+            Affinity.Add(ItemCategoryEnum.Book.ToString(), 2);
+            Affinity.Add(ItemCategoryEnum.Audio.ToString(), 0);
+            Affinity.Add(ItemCategoryEnum.Movie.ToString(),0);
+
         }
     }
 
@@ -44,4 +57,12 @@ namespace GiftCaseBackend.Models
         NonRegistered,
         Banned
     }
+
+    public enum UserGender
+    {
+        Male,
+        Female,
+        Unspecified
+    }
+
 }

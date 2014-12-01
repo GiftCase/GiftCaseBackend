@@ -5,16 +5,25 @@ using System.Web;
 
 namespace GiftCaseBackend.Models
 {
+
+    public enum ItemCategoryEnum
+    {
+        Book,
+        Movie,
+        Audio,
+        Game
+    }
+
     public class TestRepository
     {
         public static List<ItemCategory> Categories = new List<ItemCategory>()
         {
-            new ItemCategory(){Id=0,Name = "Book"},
-            new ItemCategory(){Id=1,Name = "Movie"},
-            new ItemCategory(){Id=2,Name = "Audio"},
+            new ItemCategory(){Id=0,Name = ItemCategoryEnum.Book.ToString()},
+            new ItemCategory(){Id=1,Name = ItemCategoryEnum.Movie.ToString()},
+            new ItemCategory(){Id=2,Name = ItemCategoryEnum.Audio.ToString()},
+            new ItemCategory(){Id=3,Name = ItemCategoryEnum.Game.ToString()},
 
 
-            new ItemCategory(){Id=3,Name = "Game"},
             new ItemCategory(){Id=19,Name = "Action",ParentCategory = 3},
             new ItemCategory(){Id=492,Name = "Indie",ParentCategory = 3},
             new ItemCategory(){Id=21,Name = "Adventure",ParentCategory = 3},
