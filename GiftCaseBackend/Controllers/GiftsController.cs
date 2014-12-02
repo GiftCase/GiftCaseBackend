@@ -191,7 +191,7 @@ namespace GiftCaseBackend.Controllers
         /// http://giftcase.azurewebsites.net/api/Gifts/1/SendGift?userId=Ana&store=Steam&contactId=Vlatko
         /// </summary>
         /// <param name="itemId">Id of the item that is being purchased</param>
-        /// <param name="store">Name of the store the item is being purchased from. Todo: test if I can use an enum here, otherwise use string</param>
+        /// <param name="store">Name of the store the item is being purchased from.
         /// <param name="userId">Id of the user who purchased the gift</param>
         /// <param name="contactId">Username of the contact the user wants to buy the gift for</param>
         /// <returns>Gift details</returns>
