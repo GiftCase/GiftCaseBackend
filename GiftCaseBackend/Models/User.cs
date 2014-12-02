@@ -51,7 +51,13 @@ namespace GiftCaseBackend.Models
             Affinity.Add(ItemCategoryEnum.Movie.ToString(),0);
 
             EventList.Add(TestRepository.Events[1]); 
+            //or EventList.AddRange(something clever with LINQ);
 
+        }
+
+        public void CalculateAffinity(){
+            //this.Affinity =  //i should probably improve this!
+            GiftRecommendationEngine.CalculateAffinity(this);
         }
     }
 

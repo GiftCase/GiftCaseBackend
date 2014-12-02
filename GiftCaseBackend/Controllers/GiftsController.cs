@@ -35,6 +35,8 @@ namespace GiftCaseBackend.Controllers
             //User tempuser = TestRepository.Users.Find(username); //take username and get a user, and then forward it to the Recommendation engine! ANA?
 
             User tempUser = new User { UserName = username };
+            //GiftRecommendationEngine.CalculateAffinity(tempUser);
+            tempUser.CalculateAffinity();
 
             if (categoryId == null)
             {
@@ -69,10 +71,12 @@ namespace GiftCaseBackend.Controllers
              }
 
               * */
+
              // filter by price
              //some free games have price = 0, we should ignore them?
-             priceMin = 2;
-             priceMax = 20;
+
+            // priceMin = 2;
+            // priceMax = 20;
             if (priceMin > 0 && priceMax < int.MaxValue && priceMin < priceMax) 
                 gifts = gifts.Where(x => x.Price >= priceMin && x.Price <= priceMax);
             // return a certain count

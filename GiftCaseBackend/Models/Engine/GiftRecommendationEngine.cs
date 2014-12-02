@@ -8,10 +8,56 @@ namespace GiftCaseBackend.Models
 {
     public static class GiftRecommendationEngine
     {
-        public static  IEnumerable<Item> RecommendGifts(User user, int count, int? catID=-1)
+        public static void CalculateAffinity(User user) //return user? Depends on where and how we save the user affinity.
         {
+            int temp = new Random().Next(0, 4);
+            if (temp == 0)
+            {
+                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 0;
+                user.Affinity[ItemCategoryEnum.Book.ToString()] = 9;
+                user.Affinity[ItemCategoryEnum.Game.ToString()] = 10;
+                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 0;
 
-            //somehow decide the 2 best categories and subcategories 
+            }
+            else if (temp==1)
+            {
+                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 1;
+                user.Affinity[ItemCategoryEnum.Book.ToString()] = 16;
+                user.Affinity[ItemCategoryEnum.Game.ToString()] = 0;
+                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 1;
+            }
+
+            else if (temp == 2)
+            {
+                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 0;
+                user.Affinity[ItemCategoryEnum.Book.ToString()] = 2;
+                user.Affinity[ItemCategoryEnum.Game.ToString()] = 15;
+                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 0;
+            }
+            else if (temp == 3)
+            {
+                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 0;
+                user.Affinity[ItemCategoryEnum.Book.ToString()] = 16;
+                user.Affinity[ItemCategoryEnum.Game.ToString()] = 18;
+                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 1;
+            }
+
+        }
+        public static  IEnumerable<Item> RecommendGifts(User user, int count, int? catID=-1)  //min-max price? The search should parse until it finds n results within the price range!
+        {
+            IEnumerable<Item> SteamGiftList = new List<Item>();
+            IEnumerable<Item> AmazonGiftList = new List<Item>();
+            IEnumerable<Item> ThirdGiftList = new List<Item>();
+
+            List<Item> CombinedGiftList = new List<Item>();
+
+            if (count > 25) //at least for now, because I don't want to parse multiple result pages
+            {
+                count = 25;
+            }
+
+
+            //somehow choose the 2 best categories and subcategories 
             int GameSubcategory = 122;
            
 
@@ -24,19 +70,12 @@ namespace GiftCaseBackend.Models
 
             GameSubcategory = choices[numberOne];
 
-            IEnumerable<Item> SteamGiftList = new List<Item>();
-            IEnumerable<Item> AmazonGiftList = new List<Item>();
-            IEnumerable<Item> ThirdGiftList = new List<Item>();
+          
+           //all providers should take minPrice and maxPrice? Or should we filter it later?
 
-            List<Item> CombinedGiftList = new List<Item>();
-           
+            
 
-            if (count > 25) //at least for now, because I don't want to parse multiple result pages
-	        {
-		        count = 25;
-	        }
-
-            if (catID == -1) //search all categories
+            if (catID == -1) //search all categories -> engine selects the 2 categories that fit best
             {
                 //fetch 1/3 of count from all providers
                 SteamGiftList = SteamProvider.ParseSteam(new int[]{GameSubcategory},count / 3);
@@ -180,11 +219,9 @@ namespace GiftCaseBackend.Models
 
             //what about subcategories?
 
-           //combine 2 lists into 1 mega list
+          
             //naizmjenice uzimaj jednog, ili npr 2 od games, pa 1 od books, ovisno o omjeru!
-           // List<Item> CombinedGiftList = new List<Item>();
-            //CombinedGiftList.AddRange(tempGiftList);
-            //add all non-empty to combined List? Mix the results somehow?
+           
             */
 
 
