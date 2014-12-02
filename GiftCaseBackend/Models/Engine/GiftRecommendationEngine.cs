@@ -11,7 +11,6 @@ namespace GiftCaseBackend.Models
         public static  IEnumerable<Item> RecommendGifts(User user, int count, int? catID=-1)
         {
 
-
             //somehow decide the 2 best categories and subcategories 
             int GameSubcategory = 122;
            
@@ -49,7 +48,7 @@ namespace GiftCaseBackend.Models
                 CombinedGiftList.AddRange(AmazonGiftList);
                 CombinedGiftList.AddRange(ThirdGiftList);
 
-                return CombinedGiftList.Take(count); //or maybe even less? 
+               // return CombinedGiftList.Take(count); //or maybe even less? 
             }
 
 
@@ -57,7 +56,7 @@ namespace GiftCaseBackend.Models
             {
                 if (catID == 0 || catID == 1 || catID == 2) //return dummy data for non-steam items
                 { 
-                        CombinedGiftList = TestRepository.Items.Where(x => x.Category.Id == catID).ToList<Item>();
+                        CombinedGiftList = TestRepository.Items.Where(x => x.Category.Id == catID).Take(count).ToList<Item>();
                 }
                     /*
                 else if (catID == 1)
@@ -187,6 +186,10 @@ namespace GiftCaseBackend.Models
             //CombinedGiftList.AddRange(tempGiftList);
             //add all non-empty to combined List? Mix the results somehow?
             */
+
+
+            //filter according to price
+            //filter gifts already received
 
             return CombinedGiftList.Take(count);
             

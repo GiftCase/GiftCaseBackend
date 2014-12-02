@@ -39,6 +39,8 @@ namespace GiftCaseBackend.Models
 
         public UserGender Gender = UserGender.Unspecified;
 
+        public List<GiftcaseEvent> EventList = new List<GiftcaseEvent>();
+
 
         public User()
         {
@@ -47,6 +49,8 @@ namespace GiftCaseBackend.Models
             Affinity.Add(ItemCategoryEnum.Book.ToString(), 2);
             Affinity.Add(ItemCategoryEnum.Audio.ToString(), 0);
             Affinity.Add(ItemCategoryEnum.Movie.ToString(),0);
+
+            EventList.Add(TestRepository.Events[1]); 
 
         }
     }
