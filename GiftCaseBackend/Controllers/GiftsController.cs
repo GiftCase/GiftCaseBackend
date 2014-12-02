@@ -32,7 +32,7 @@ namespace GiftCaseBackend.Controllers
         /// <param name="priceMax"></param>
         /// <returns>List of gift recommendations</returns>
         [HttpGet]
-        public IEnumerable<Item> SuggestGift(string username, int count=3, int? categoryId=null, string categoryName = null,
+        public IEnumerable<Item> SuggestGift(string userName, int count=3, int? categoryId=null, string categoryName = null,
             float priceMin=0, float priceMax = 100000)
         {
             IEnumerable<Item> gifts = TestRepository.Items;
@@ -187,8 +187,8 @@ namespace GiftCaseBackend.Controllers
         /// <summary>
         /// Purchases and sends the gift to a user
         /// URL example:
-        /// http://giftcase.azurewebsites.net/api/Gifts/SendGift?itemId=1&userId=Ana&contactUsername=Vlatko
-        /// http://giftcase.azurewebsites.net/api/Gifts/1/SendGift?userId=Ana&contactUsername=Vlatko
+        /// http://giftcase.azurewebsites.net/api/Gifts/SendGift?itemId=1&store=Steam&userId=Ana&contactId=Vlatko
+        /// http://giftcase.azurewebsites.net/api/Gifts/1/SendGift?userId=Ana&store=Steam&contactId=Vlatko
         /// </summary>
         /// <param name="itemId">Id of the item that is being purchased</param>
         /// <param name="store">Name of the store the item is being purchased from. Todo: test if I can use an enum here, otherwise use string</param>
@@ -198,8 +198,15 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/Gifts/{itemId}/SendGift")]
         [Route("api/Gifts/SendGift")]
-        public Gift SendGift(string itemId, Store store, string userId, string contactId)
-        {
+        public Gift SendGift(string itemId,
+            Store store, //string storeName, 
+            string userId, string contactId)
+        {/*
+            Store store = Store.Amazon;
+            try { store = (Store)Enum.Parse(typeof(Store), storeName); }
+            catch (Exception) { }
+                */
+
             Gift gift = new Gift()
             {
                 DateOfPurchase = DateTime.Now,

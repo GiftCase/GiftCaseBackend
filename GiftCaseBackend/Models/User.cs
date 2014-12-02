@@ -19,7 +19,7 @@ namespace GiftCaseBackend.Models
 
         public Gender Gender { get; set; }
 
-        public Dictionary<string, int> Affinity { get; set; }
+        internal Dictionary<string, int> Affinity { get; set; }
 
         public List<GiftcaseEvent> EventList = new List<GiftcaseEvent>();
 
@@ -37,7 +37,7 @@ namespace GiftCaseBackend.Models
             Affinity.Add(TestRepository.ItemCategoryEnum.Movie.ToString(), 0);
 
             EventList = new List<GiftcaseEvent>();
-            //EventList.Add(TestRepository.Events[1]); 
+            //EventList.Add(TestRepository.Events[1]); <-- infinite loop Damir :P
 
         }
 

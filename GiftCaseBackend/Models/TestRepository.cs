@@ -48,7 +48,8 @@ namespace GiftCaseBackend.Models
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1846573785 ",
                 Name = "Fifty Shades of Grey",
                 Store = Store.Amazon,
-                Id = "0"
+                Id = "0",
+                Price = 8.6f
             },
             new Book()
             {
@@ -56,7 +57,8 @@ namespace GiftCaseBackend.Models
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1408855658 ",
                 Name = "Harry Potter and the Philosopher's Stone",
                 Store = Store.Amazon,
-                Id = "1"
+                Id = "1",
+                Price = 18.6f
             },
             new Movie()
             {
@@ -64,7 +66,8 @@ namespace GiftCaseBackend.Models
                 LinkToTheStore = "http://www.amazon.co.uk/dp/B00F3TCF7O ",
                 Name = "Captain America: The First Avenger",
                 Store = Store.Amazon,
-                Id = "2"
+                Id = "2",
+                Price = 5.55f
             } 
         };
 
@@ -74,25 +77,25 @@ namespace GiftCaseBackend.Models
             {
                 UserName = "Ana Stepic",
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
-                Status = UserStatus.NonRegistered
+                Status = UserStatus.NonRegistered,
             },
             new Contact()
             {
                 UserName = "Damir Tomic",
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
-                Status = UserStatus.Registered
+                Status = UserStatus.Registered,
             },
             new Contact()
             {
                 UserName = "Vlatko",
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
-                Status = UserStatus.Registered
+                Status = UserStatus.Registered,
             },
             new Contact()
             {
                 UserName = "Gijs",
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
-                Status = UserStatus.Registered
+                Status = UserStatus.Registered,
             },
         };
 
