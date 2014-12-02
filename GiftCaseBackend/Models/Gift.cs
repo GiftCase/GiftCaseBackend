@@ -155,11 +155,5 @@ namespace GiftCaseBackend.Models
         Steam
     }
 
-    public enum ItemCategoryEnum
-    {
-        Audio,
-        Book,
-        Game,
-        Movie
-    }
+    
 }

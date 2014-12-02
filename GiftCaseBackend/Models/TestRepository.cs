@@ -7,15 +7,23 @@ namespace GiftCaseBackend.Models
 {
     public class TestRepository
     {
+        public enum ItemCategoryEnum
+        {
+            Audio,
+            Book,
+            Game,
+            Movie
+        }
+
         public static Dictionary<string,ItemCategory> Categories = new Dictionary<string,ItemCategory>()
         {
             
-            {"Book",new ItemCategory(){Id=1000,Name = "Book"}}, // amazon browse node id = 1000
-            {"Movie",new ItemCategory(){Id=1,Name = "Movie"}},
-            {"Audio",new ItemCategory(){Id=2,Name = "Audio"}},
+            {ItemCategoryEnum.Book.ToString(),new ItemCategory(){Id=1000,Name = ItemCategoryEnum.Book.ToString()}}, // amazon browse node id = 1000
+            {ItemCategoryEnum.Movie.ToString(),new ItemCategory(){Id=1,Name = ItemCategoryEnum.Movie.ToString()}},
+            {ItemCategoryEnum.Audio.ToString(),new ItemCategory(){Id=2,Name = ItemCategoryEnum.Audio.ToString()}},
 
 
-            {"Game",new ItemCategory(){Id=3,Name = "Game"}},
+            {ItemCategoryEnum.Game.ToString(),new ItemCategory(){Id=3,Name = ItemCategoryEnum.Game.ToString()}},
             {"Action",new ItemCategory(){Id=19,Name = "Action",ParentCategory = 3}},
             {"Indie",new ItemCategory(){Id=492,Name = "Indie",ParentCategory = 3}},
             {"Adventure",new ItemCategory(){Id=21,Name = "Adventure",ParentCategory = 3}},

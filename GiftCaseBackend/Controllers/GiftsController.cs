@@ -47,6 +47,7 @@ namespace GiftCaseBackend.Controllers
             /*
              * 
             User tempUser = new User { UserName = username };
+            tempUser.CalculateAffinity();
 
             if (categoryId == null)
             {
