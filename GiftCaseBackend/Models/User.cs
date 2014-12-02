@@ -36,7 +36,8 @@ namespace GiftCaseBackend.Models
             Affinity.Add(TestRepository.ItemCategoryEnum.Audio.ToString(), 0);
             Affinity.Add(TestRepository.ItemCategoryEnum.Movie.ToString(), 0);
 
-            EventList.Add(TestRepository.Events[1]); 
+            EventList = new List<GiftcaseEvent>();
+            //EventList.Add(TestRepository.Events[1]); 
 
         }
 

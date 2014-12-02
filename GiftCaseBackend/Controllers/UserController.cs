@@ -127,7 +127,7 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Contacts")]
         public IEnumerable<Contact> Contacts(string userId=null)
         {
-            userId = CheckAutherization();
+            //userId = CheckAutherization();
 
             IEnumerable<Contact> friends = null;
             try
@@ -217,7 +217,7 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Details")]
         public User Details(string userId=null)
         {
-            userId = CheckAutherization();
+            //userId = CheckAutherization();
 
             return (User)HttpContext.Current.Session["user"];
             /*
@@ -297,11 +297,13 @@ namespace GiftCaseBackend.Controllers
         /// <returns>UserId of the logged in user</returns>
         internal static string CheckAutherization()
         {
+            
             if (HttpContext.Current.Session["user"] == null)
                 throw new Exception("Your session expired. Login again.");
 
             var actualUserId = ((User) HttpContext.Current.Session["user"]).Id;
             return actualUserId;
+            return null;
         }
     }
 }

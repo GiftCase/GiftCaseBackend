@@ -102,7 +102,7 @@ namespace GiftCaseBackend.Controllers
         [Route("api/Gifts/Inbox")]
         public IEnumerable<Gift> Inbox(string userId, int count = 0)
         {
-            userId = UserController.CheckAutherization();
+            //userId = UserController.CheckAutherization();
               
             IEnumerable<Gift> inbox;
             try

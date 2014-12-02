@@ -13,33 +13,33 @@ namespace GiftCaseBackend.Models
             int temp = new Random().Next(0, 4);
             if (temp == 0)
             {
-                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 0;
-                user.Affinity[ItemCategoryEnum.Book.ToString()] = 9;
-                user.Affinity[ItemCategoryEnum.Game.ToString()] = 10;
-                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 0; 
+                user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 0;
+                user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 9;
+                user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 10;
+                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 0; 
 
             }
             else if (temp==1)
             {
-                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 1;
-                user.Affinity[ItemCategoryEnum.Book.ToString()] = 16;
-                user.Affinity[ItemCategoryEnum.Game.ToString()] = 0;
-                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 1;
+                user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 1;
+                user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 16;
+                user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 0;
+                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 1;
             }
 
             else if (temp == 2)
             {
-                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 0;
-                user.Affinity[ItemCategoryEnum.Book.ToString()] = 2;
-                user.Affinity[ItemCategoryEnum.Game.ToString()] = 15;
-                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 0;
+                user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 0;
+                user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 2;
+                user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 15;
+                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 0;
             }
             else if (temp == 3)
             {
-                user.Affinity[ItemCategoryEnum.Audio.ToString()] = 0;
-                user.Affinity[ItemCategoryEnum.Book.ToString()] = 16;
-                user.Affinity[ItemCategoryEnum.Game.ToString()] = 18;
-                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 1;
+                user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 0;
+                user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 16;
+                user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 18;
+                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 1;
             }
 
         }
