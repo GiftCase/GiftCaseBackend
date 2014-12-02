@@ -155,8 +155,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ContentProviders\AmazonProvider.cs" />
     <Compile Include="Models\BaaS.cs" />
+    <Compile Include="Models\ContentProviders\AmazonProvider.cs" />
+    <Compile Include="Models\FacebookProvider.cs" />
     <Compile Include="Models\ContentProviders\eBayProvider.cs" />
     <Compile Include="Models\ContentProviders\SteamProvider.cs" />
     <Compile Include="Models\Engine\GiftRecommendationEngine.cs" />
@@ -184,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\Services\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

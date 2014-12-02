@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
+using System.Web.SessionState;
 using com.shephertz.app42.paas.sdk.csharp;
 using com.shephertz.app42.paas.sdk.csharp.pushNotification;
 using com.shephertz.app42.paas.sdk.csharp.social;
 using GiftCaseBackend.Models;
+using GiftCaseBackend.Models.Services;
+using Newtonsoft.Json;
 
 namespace GiftCaseBackend.Controllers
 {
@@ -30,7 +35,7 @@ namespace GiftCaseBackend.Controllers
 
 
 
-
+        #region Login
         /// <summary>
         /// Links facebook account with BaaS. Creates user profiles in the database, upgrades profiles from non registered to registered if they exist.
         /// Todo: update the profile data if it has changed
@@ -47,7 +52,6 @@ namespace GiftCaseBackend.Controllers
         public User Login(string userId, string accessToken, string deviceToken)
         {
             User user = null;
-
             try
             {
                 var social = BaaS.SocialService.LinkUserFacebookAccount(userId, accessToken);
@@ -62,9 +66,17 @@ namespace GiftCaseBackend.Controllers
                     
                 };
 
-                var facebookProfile = social.GetFacebookProfile();
-                user.UserName = facebookProfile.GetName();
-                user.ImageUrl = facebookProfile.GetPicture();
+                FacebookProvider.UpdateUserInfoWithPublicProfile(user);
+
+                try
+                {
+                    // todo: this shit often doesn't work for some reason
+                    var facebookProfile = social.GetFacebookProfile(); //GetPublicProfile()[0];//GetFacebookProfile();
+                    //user.UserName = facebookProfile.GetName();
+                    user.ImageUrl = facebookProfile.GetPicture();
+                }
+                catch (Exception e)
+                {}
 
                 // creates user details data entry in the database
                 if (BaaS.DoesUserDataExist(userId))
@@ -87,11 +99,19 @@ namespace GiftCaseBackend.Controllers
                     };
                 }
             }
-
+            /*
             try { var push = BaaS.PushNotificationService.StoreDeviceToken(userId, deviceToken, DeviceType.ANDROID); }
             catch(Exception e){}
+            */
+
+            // remember current user so we can authenticate the requests
+            HttpContext.Current.Session["user"] = user;
+
             return user;
         }
+        #endregion
+
+        #region Contacts
         /// <summary>
         /// Gets a list of all user friends. Currently only gets friends who are registered GiftCase users.
         /// Todo: find a way to list all friends, not just registered friends.
@@ -105,11 +125,14 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/User/{userId}/Contacts")]
         [Route("api/User/Contacts")]
-        public IEnumerable<Contact> Contacts(string userId)
+        public IEnumerable<Contact> Contacts(string userId=null)
         {
+            userId = CheckAutherization();
+
             IEnumerable<Contact> friends = null;
             try
             {
+                // try to get user's registered friends
                 var social =BaaS.SocialService.GetFacebookFriendsFromLinkUser(userId);
                 friends = social.GetFriendList().Select(x=>
                     new Contact()
@@ -119,6 +142,7 @@ namespace GiftCaseBackend.Controllers
                         ImageUrl = x.GetPicture(),
                     });
 
+                // if we were able to get non registered friends, add them to the database
                 foreach (var contact in friends)
                 {
                     contact.Status = (BaaS.DoesUserDataExist(contact.Id)) ? UserStatus.NonRegistered : UserStatus.Registered;
@@ -130,13 +154,16 @@ namespace GiftCaseBackend.Controllers
             }
             catch(Exception ex)
             {
+                //fallback for testing purposes
                 if (friends != null)
                     return friends;
                 // for testing purposes
                 return TestRepository.Friends;
             }
         }
+        #endregion
 
+        #region Low priority
         /// <summary>
         /// Currently doesn't do anything.
         /// --------------------------------------
@@ -151,11 +178,14 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/LogOut")]
         public bool LogOut(string userId, string deviceToken)
         {
+            //todo: remove registered device id's so the user doesn't get notifications
+
             return true;
         }
 
 
         /// <summary>
+        /// Todo: we might not be able to do this :(
         /// Sends an invitation to a non giftcase user
         /// Url example:
         /// http://giftcase.azurewebsites.net/api/User/SendInvitation?userId=ana&email=bla@bla.vom&userName=Vlatko&text=blabla
@@ -185,8 +215,12 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/User/{userId}/Details")]
         [Route("api/User/Details")]
-        public User Details(string userId)
+        public User Details(string userId=null)
         {
+            userId = CheckAutherization();
+
+            return (User)HttpContext.Current.Session["user"];
+            /*
             User user = null;
             try
             {
@@ -214,8 +248,10 @@ namespace GiftCaseBackend.Controllers
                 };
             }
             
-            return user;
+            return user;*/
         }
+
+        #endregion
 
         /// <summary>
         /// Gets the list of upcoming events
@@ -247,13 +283,25 @@ namespace GiftCaseBackend.Controllers
         }
         */
 
+         
 
-
-        public void GetTest()
+        public IEnumerable<Book> GetTest()
         {
-            AmazonProvider.Test();
+            return AmazonProvider.BrowseBooks(0,0);
+
         }
 
-     
+        /// <summary>
+        /// Checks if user is authorized to access this resource.
+        /// </summary>
+        /// <returns>UserId of the logged in user</returns>
+        internal static string CheckAutherization()
+        {
+            if (HttpContext.Current.Session["user"] == null)
+                throw new Exception("Your session expired. Login again.");
+
+            var actualUserId = ((User) HttpContext.Current.Session["user"]).Id;
+            return actualUserId;
+        }
     }
 }

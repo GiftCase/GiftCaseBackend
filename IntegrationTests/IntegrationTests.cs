@@ -19,7 +19,7 @@ namespace IntegrationTests
 
 
         [TestInitialize]
-        public void InitializeServer()
+        public void InitializeServer() 
         {
             var config = new HttpConfiguration();
             config.MessageHandlers.Add(new WebApiKeyHandler());

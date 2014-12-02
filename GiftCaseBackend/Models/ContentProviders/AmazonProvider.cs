@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.ServiceModel;
@@ -20,10 +21,64 @@ namespace GiftCaseBackend.Models
 
         private static AWSECommerceServicePortTypeClient Client;
 
-        public static void Test()
+        public static IEnumerable<Book> BrowseBooks(float minPrice, float maxPrice)
         {
             // create a WCF Amazon ECS client
             AWSECommerceServicePortTypeClient client = new AWSECommerceServicePortTypeClient();
+            client.ChannelFactory.Endpoint.Behaviors.Add(new AmazonSigningEndpointBehavior(AccessKeyId, SecretKey));
+
+
+            // prepare an ItemSearch request
+            ItemSearchRequest request = new ItemSearchRequest();
+            request.SearchIndex = "Books";
+            request.BrowseNode = "1000";
+            request.Sort = "salesrank";
+            //request.Title = "WCF";
+            request.ResponseGroup = new string[] { "Small", "OfferSummary", "Images"};
+            if (minPrice > 0)
+                request.MinimumPrice = minPrice.ToString(CultureInfo.InvariantCulture);
+            if(maxPrice>minPrice && maxPrice>0) 
+                request.MaximumPrice = maxPrice.ToString(CultureInfo.InvariantCulture);
+
+            ItemSearch itemSearch = new ItemSearch();
+            itemSearch.Request = new ItemSearchRequest[] { request };
+            itemSearch.AWSAccessKeyId = AccessKeyId;
+            itemSearch.AssociateTag = "";
+
+            
+
+
+            // issue the ItemSearch request
+            ItemSearchResponse response = client.ItemSearch(itemSearch);
+
+            var convertedItems = new List<Book>();
+            var items = response.Items[0].Item;
+            foreach (var item in items)
+            {
+                Book book = new Book()
+                {
+                    Author = item.ItemAttributes.Author[0],
+                    Name = item.ItemAttributes.Title,
+                    Category = TestRepository.Categories["Book"],
+                    IconUrl = item.SmallImage.URL,
+                    Id = item.ASIN,
+                    Price = float.Parse(item.OfferSummary.LowestNewPrice.FormattedPrice.Substring(1)),
+                    LinkToTheStore = item.DetailPageURL.Replace("null",""),
+                    PreviousPrice = 0,
+                    PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode,
+                    Store = Store.Amazon,
+                   // Description = item.EditorialReviews[0].Content
+                };
+                
+                convertedItems.Add(book);
+            }
+
+            return convertedItems;
+        }
+
+        public static void Test()
+        {
+            
             /*BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
             binding.MaxReceivedMessageSize = int.MaxValue;
             AWSECommerceServicePortTypeClient client = new AWSECommerceServicePortTypeClient(
@@ -31,21 +86,7 @@ namespace GiftCaseBackend.Models
                 new EndpointAddress("https://webservices.amazon.com/onca/soap?Service=AWSECommerceService"));
             */
             // add authentication to the ECS client
-            client.ChannelFactory.Endpoint.Behaviors.Add(new AmazonSigningEndpointBehavior(AccessKeyId, SecretKey));
- 
-            // prepare an ItemSearch request
-            ItemSearchRequest request = new ItemSearchRequest();
-            request.SearchIndex = "Books";
-            request.Title = "WCF";
-            request.ResponseGroup = new string[] { "Small" };
-
-            ItemSearch itemSearch = new ItemSearch();
-            itemSearch.Request = new ItemSearchRequest[] { request };
-            itemSearch.AWSAccessKeyId = AccessKeyId;
-            itemSearch.AssociateTag = "";
-
-            // issue the ItemSearch request
-            ItemSearchResponse response = client.ItemSearch(itemSearch);
+            
 
             /*
             Client = new Amazon.AWSECommerceServicePortTypeClient(EndPoint);

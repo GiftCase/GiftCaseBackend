@@ -35,7 +35,7 @@ namespace GiftCaseBackend.Models
 
     public static class SteamProvider
     {
-        public static IEnumerable<Item> ParseSteam(int [] subCategory, int count=25) //or an array of subcategories, i can do that, no problem
+        public static IEnumerable<Item> ParseSteam(int[] subCategory, int count=25) //or an array of subcategories, i can do that, no problem
         {
 
             int Count = count; // how many items will be parsed, max is 25!
@@ -44,6 +44,7 @@ namespace GiftCaseBackend.Models
             //HtmlAgilityPack.HtmlDocument dokument = new HtmlDocument();
             //dokument.Load("C:\\testSteam.xml"); //for testing purposes
 
+
             string combinedCategories = subCategory[0].ToString();
 
             for (int i = 1; i < subCategory.Length; i++)
@@ -51,7 +52,7 @@ namespace GiftCaseBackend.Models
                 combinedCategories += subCategory[i].ToString();
             }
 
-            String webSiteURL = "http://store.steampowered.com/search/?tags=" + combinedCategories; //subCategory;//moglo bi i vise od 1 kategorije?
+            String webSiteURL = "http://store.steampowered.com/search/?category1=998&tags=" + combinedCategories; //subCategory;//moglo bi i vise od 1 kategorije?
 
             HtmlAgilityPack.HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument dokument = web.Load(webSiteURL);
@@ -73,14 +74,14 @@ namespace GiftCaseBackend.Models
 
             List<Item> itemList = new List<Item>();
 
-
-            
             if (mainDiv.InnerHtml == "" || mainDiv.SelectNodes(".//a") == null)
             {
-                    return itemList;  
+                return itemList;
             }
 
             //steam je blokiran na feru, PROBLEM! bar ako localhost radi!!!!!
+
+
             foreach (HtmlNode tag in mainDiv.SelectNodes(".//a")) //[@class='search_result_row ds_collapse_flag app_impression_tracked'] //this is generated afterwords by js?
             {
 
@@ -176,7 +177,7 @@ namespace GiftCaseBackend.Models
                 {
                     price = 0.0f;
                 }
-
+                 
                 HtmlAgilityPack.HtmlWeb webPageDescription= new HtmlWeb();
                 HtmlAgilityPack.HtmlDocument docDescription = webPageDescription.Load("http://store.steampowered.com/apphover/" + tempGameID);
 
@@ -187,10 +188,9 @@ namespace GiftCaseBackend.Models
 
                 itemList.Add(new Item()
                 {
-                    Id = int.Parse(tempGameID),
+                    Id = tempGameID,
                     Price = price,
-                  //  Category = TestRepository.Categories.First(x=>x.Id==subCategory),
-                    Category = TestRepository.Categories.First(x => x.Id == subCategory[0]), //multiplesubcats!
+                    Category = TestRepository.Categories.First(x=>x.Value.Id==subCategory[0]).Value,
                     Name = tempName,
                     LinkToTheStore = tempGameURL,
                     IconUrl = tempImageURL,

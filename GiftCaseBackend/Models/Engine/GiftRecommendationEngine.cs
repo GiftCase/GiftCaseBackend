@@ -16,7 +16,7 @@ namespace GiftCaseBackend.Models
                 user.Affinity[ItemCategoryEnum.Audio.ToString()] = 0;
                 user.Affinity[ItemCategoryEnum.Book.ToString()] = 9;
                 user.Affinity[ItemCategoryEnum.Game.ToString()] = 10;
-                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 0;
+                user.Affinity[ItemCategoryEnum.Movie.ToString()] = 0; 
 
             }
             else if (temp==1)

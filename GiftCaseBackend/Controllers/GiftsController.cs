@@ -13,8 +13,11 @@ namespace GiftCaseBackend.Controllers
 {
     public class GiftsController : ApiController
     {
+        #region SuggestGift
         /// <summary>
         /// Recommends some gifts
+        /// todo: use gift recommendation engine to do recommendations
+        /// todo: integrate amazon
         /// URL example:
         /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana
         /// http://giftcase.azurewebsites.net/api/Gifts/SuggestGift?userName=ana&categoryId=1
@@ -30,13 +33,20 @@ namespace GiftCaseBackend.Controllers
         /// <returns>List of gift recommendations</returns>
         [HttpGet]
         public IEnumerable<Item> SuggestGift(string username, int count=3, int? categoryId=null, string categoryName = null,
-            int priceMin=0, int priceMax = int.MaxValue)
+            float priceMin=0, float priceMax = 100000)
         {
-            //User tempuser = TestRepository.Users.Find(username); //take username and get a user, and then forward it to the Recommendation engine! ANA?
+            IEnumerable<Item> gifts = TestRepository.Items;
 
+            // get category details
+            ItemCategory category=null;
+            if(categoryId!=null)
+                category = TestRepository.Categories.First(x => x.Value.Id == categoryId).Value;
+            else if(categoryName!=null)
+                category = TestRepository.Categories[categoryName];
+
+            /*
+             * 
             User tempUser = new User { UserName = username };
-            //GiftRecommendationEngine.CalculateAffinity(tempUser);
-            tempUser.CalculateAffinity();
 
             if (categoryId == null)
             {
@@ -44,49 +54,38 @@ namespace GiftCaseBackend.Controllers
             }
              IEnumerable<Item> gifts = GiftRecommendationEngine.RecommendGifts(tempUser, count, categoryId);
 
-             /*
-              //removed, it's in the gift recommendation engine now
-             
-             IEnumerable<Item> gifts = TestRepository.Items;
+             * 
+             */
 
-             // get category details
-             ItemCategory category=null;
-             if(categoryId!=null)
-                 category = TestRepository.Categories.First(x => x.Id == categoryId);
-             else if(categoryName!=null)
-                 category = TestRepository.Categories.First(x => x.Name==categoryName);
 
-             // if we are searching for games, search steam
-             if (category != null && category.ParentCategory == 3)
-             {
-                 gifts = SteamProvider.ParseSteam(category.Id,count);
-             }
-             // if we are not searching for games, just return dummy results
-             else
-             {
-                 if (categoryName != null)
-                     gifts = gifts.Where(x => x.Category.Name == categoryName);
-                 else if (categoryId != null)
-                     gifts = gifts.Where(x => x.Category.Id == categoryId);
-             }
 
-              * */
+            // if we are searching for games, search steam
+            if (category != null && category.ParentCategory == 3)
+            {
+                gifts = SteamProvider.ParseSteam(new []{category.Id},count);
+            }
+            // if we are not searching for games, just return dummy results
+            else
+            {
+                if (categoryName != null)
+                    gifts = gifts.Where(x => x.Category.Name == categoryName);
+                else if (categoryId != null)
+                    gifts = gifts.Where(x => x.Category.Id == categoryId);
+            }
 
-             // filter by price
-             //some free games have price = 0, we should ignore them?
+            // to ignore free games
+            priceMin = 0.1f;
 
-            // priceMin = 2;
-            // priceMax = 20;
-            if (priceMin > 0 && priceMax < int.MaxValue && priceMin < priceMax) 
+            // filter by price
+            if (priceMin > 0 && priceMax < int.MaxValue && priceMin < priceMax)
                 gifts = gifts.Where(x => x.Price >= priceMin && x.Price <= priceMax);
             // return a certain count
             if (count > 0)
                 gifts = gifts.Take(count);
 
-
-             return gifts;
+            return gifts;
         }
-
+        #endregion
 
         /// <summary>
         /// Gets the user's inbox - list of received gifts
@@ -100,12 +99,29 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/Gifts/{userId}/Inbox")]
         [Route("api/Gifts/Inbox")]
-        public IEnumerable<Gift> Inbox(string userId, int count=0)
+        public IEnumerable<Gift> Inbox(string userId, int count = 0)
         {
-            var inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.UserName == userId);
-            if (count < 1)
-                return inbox;
-            return inbox.Take(count);
+            userId = UserController.CheckAutherization();
+              
+            IEnumerable<Gift> inbox;
+            try
+            {
+                // test if the user is 
+                if (BaaS.DoesUserDataExist(userId))
+                    inbox = BaaS.GetInbox(userId);
+                // fallback to test results
+                else
+                    inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.UserName == userId);
+
+            }
+            catch (Exception e)
+            {
+                inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.UserName == userId);
+            }
+            
+            if (count >= 1)
+                inbox = inbox.Take(count);
+            return inbox;
         }
 
         /// <summary>
@@ -122,26 +138,30 @@ namespace GiftCaseBackend.Controllers
         [Route("api/Gifts/Outbox")]
         public IEnumerable<Gift> Outbox(string userId, int count = 0)
         {
-            var outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.UserName == userId);
+            IEnumerable<Gift> outbox;
+            try
+            {
+                if (BaaS.DoesUserDataExist(userId))
+                    outbox = BaaS.GetOutbox(userId);
+                // fallback to test results
+                else
+                    outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.UserName == userId);
+            }
+            catch (Exception e)
+            {
+                outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.UserName == userId);
+            }
+            
+
             if (count < 1)
                 return outbox;
             return outbox.Take(count);
         }
 
         /// <summary>
-        /// Gets the list of all available categories
-        /// URL example:
-        /// http://giftcase.azurewebsites.net/api/Gifts/CategoriesList
-        /// </summary>
-        /// <returns>List of categories</returns>
-        [HttpGet]
-        public List<ItemCategory> CategoriesList()
-        {
-            return TestRepository.Categories;
-        }
-
-        /// <summary>
         /// Updates the gift status
+        /// todo: actually make it work
+        /// todo: send notifications to users
         /// URL example:
         /// http://giftcase.azurewebsites.net/api/Gifts/UpdateGiftStatus?giftId=1&userId=Ana&status=Claimed
         /// http://giftcase.azurewebsites.net/api/Gifts/1/UpdateGiftStatus?userId=Ana&status=Claimed
@@ -155,6 +175,11 @@ namespace GiftCaseBackend.Controllers
         [Route("api/Gifts/UpdateGiftStatus")]
         public bool UpdateGiftStatus(int giftId, string userId, GiftStatus status)
         {
+            // try to get the gift
+            // if gift doesn't exist, throw an exception: gift doesn't exist
+            // when you get the gift check if this user has the permission to update status
+            // if the user is the receiving user update the gift status
+
             return true;
         }
 
@@ -165,23 +190,57 @@ namespace GiftCaseBackend.Controllers
         /// http://giftcase.azurewebsites.net/api/Gifts/1/SendGift?userId=Ana&contactUsername=Vlatko
         /// </summary>
         /// <param name="itemId">Id of the item that is being purchased</param>
+        /// <param name="store">Name of the store the item is being purchased from. Todo: test if I can use an enum here, otherwise use string</param>
         /// <param name="userId">Id of the user who purchased the gift</param>
-        /// <param name="contactUsername">Username of the contact the user wants to buy the gift for</param>
+        /// <param name="contactId">Username of the contact the user wants to buy the gift for</param>
         /// <returns>Gift details</returns>
         [HttpGet]
         [Route("api/Gifts/{itemId}/SendGift")]
         [Route("api/Gifts/SendGift")]
-        public Gift SendGift(int itemId, string userId, string contactUsername)
+        public Gift SendGift(string itemId, Store store, string userId, string contactId)
         {
+            Gift gift = new Gift()
+            {
+                DateOfPurchase = DateTime.Now,
+                Status = GiftStatus.NotReceivedYet
+            };
+            
+            //todo: try to get the item from the BaaS
+            
+            //todo: if item doesn't exist get it from content providers
+
+            //todo: if item could not be found fallback to test repository
             var item = TestRepository.Items.Where(x => x.Id == itemId).FirstOrDefault();
             if(item==null)
                 throw new Exception("No Item with that Id");
+            
+            // when you get the item, create a gift
+            gift.Item = item;
 
-            return new Gift(){DateOfPurchase = DateTime.Now, 
-                Item = item,
-            Status = GiftStatus.NotReceivedYet,
-            UserWhoGaveTheGift = new Contact(){UserName = userId, Status = UserStatus.Registered},
-            UserWhoReceivedTheGift = new Contact(){UserName = contactUsername, Status = UserStatus.NonRegistered}};
+
+            //todo: get user details about current user and receiving user and fill up the related gift fields
+            gift.UserWhoGaveTheGift = new Contact() {Id = userId, Status = UserStatus.Registered};
+            gift.UserWhoReceivedTheGift = new Contact(){Id = contactId, Status = UserStatus.NonRegistered};
+
+            //todo: add the gift into the database
+            
+
+            //todo: send notifications to users
+
+            return gift;
+        }
+
+        #region Finished
+        /// <summary>
+        /// Gets the list of all available categories
+        /// URL example:
+        /// http://giftcase.azurewebsites.net/api/Gifts/CategoriesList
+        /// </summary>
+        /// <returns>List of categories</returns>
+        [HttpGet]
+        public List<ItemCategory> CategoriesList()
+        {
+            return TestRepository.Categories.Values.ToList();
         }
 
         /// <summary>
@@ -203,5 +262,6 @@ namespace GiftCaseBackend.Controllers
             var stream = new StreamContent(content);
             return stream;
         }
+        #endregion
     }
 }

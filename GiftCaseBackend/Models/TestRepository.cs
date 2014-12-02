@@ -5,67 +5,59 @@ using System.Web;
 
 namespace GiftCaseBackend.Models
 {
-
-    public enum ItemCategoryEnum
-    {
-        Book,
-        Movie,
-        Audio,
-        Game
-    }
-
     public class TestRepository
     {
-        public static List<ItemCategory> Categories = new List<ItemCategory>()
+        public static Dictionary<string,ItemCategory> Categories = new Dictionary<string,ItemCategory>()
         {
-            new ItemCategory(){Id=0,Name = ItemCategoryEnum.Book.ToString()},
-            new ItemCategory(){Id=1,Name = ItemCategoryEnum.Movie.ToString()},
-            new ItemCategory(){Id=2,Name = ItemCategoryEnum.Audio.ToString()},
-            new ItemCategory(){Id=3,Name = ItemCategoryEnum.Game.ToString()},
+            
+            {"Book",new ItemCategory(){Id=1000,Name = "Book"}}, // amazon browse node id = 1000
+            {"Movie",new ItemCategory(){Id=1,Name = "Movie"}},
+            {"Audio",new ItemCategory(){Id=2,Name = "Audio"}},
 
 
-            new ItemCategory(){Id=19,Name = "Action",ParentCategory = 3},
-            new ItemCategory(){Id=492,Name = "Indie",ParentCategory = 3},
-            new ItemCategory(){Id=21,Name = "Adventure",ParentCategory = 3},
-            new ItemCategory(){Id=122,Name = "RPG",ParentCategory = 3},
-            new ItemCategory(){Id=599,Name = "Simulation",ParentCategory = 3},
-            new ItemCategory(){Id=597,Name = "Casual",ParentCategory = 3},
-            new ItemCategory(){Id=4182,Name = "Single Player",ParentCategory = 3},
-            new ItemCategory(){Id=128,Name = "MMO",ParentCategory = 3},
-            new ItemCategory(){Id=3859,Name = "MultiPlayer",ParentCategory = 3},
-            new ItemCategory(){Id=699,Name = "Racing",ParentCategory = 3},
-            new ItemCategory(){Id=701,Name = "Sports",ParentCategory = 3},
-            new ItemCategory(){Id=1774,Name = "Shooter",ParentCategory = 3},
-            new ItemCategory(){Id=1663,Name = "FPS",ParentCategory = 3},
-            new ItemCategory(){Id=3942,Name = "SciFi",ParentCategory = 3},
-            new ItemCategory(){Id=9,Name = "Strategy",ParentCategory = 3},
+            {"Game",new ItemCategory(){Id=3,Name = "Game"}},
+            {"Action",new ItemCategory(){Id=19,Name = "Action",ParentCategory = 3}},
+            {"Indie",new ItemCategory(){Id=492,Name = "Indie",ParentCategory = 3}},
+            {"Adventure",new ItemCategory(){Id=21,Name = "Adventure",ParentCategory = 3}},
+            {"RPG",new ItemCategory(){Id=122,Name = "RPG",ParentCategory = 3}},
+            {"Simulation",new ItemCategory(){Id=599,Name = "Simulation",ParentCategory = 3}},
+            {"Casual",new ItemCategory(){Id=597,Name = "Casual",ParentCategory = 3}},
+            {"SinglePlayer",new ItemCategory(){Id=4182,Name = "SinglePlayer",ParentCategory = 3}},
+            {"MMO",new ItemCategory(){Id=128,Name = "MMO",ParentCategory = 3}},
+            {"MultiPlayer",new ItemCategory(){Id=3859,Name = "MultiPlayer",ParentCategory = 3}},
+            {"Racing",new ItemCategory(){Id=699,Name = "Racing",ParentCategory = 3}},
+            {"Sports",new ItemCategory(){Id=701,Name = "Sports",ParentCategory = 3}},
+            {"Shooter",new ItemCategory(){Id=1774,Name = "Shooter",ParentCategory = 3}},
+            {"FPS",new ItemCategory(){Id=1663,Name = "FPS",ParentCategory = 3}},
+            {"SciFi",new ItemCategory(){Id=3942,Name = "SciFi",ParentCategory = 3}},
+            {"Strategy",new ItemCategory(){Id=9,Name = "Strategy",ParentCategory = 3}},
         };
         public static List<Item> Items = new List<Item>()
         {
             new Book()
             {
-                Category = Categories[0],
+                Category = Categories["Book"],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1846573785 ",
                 Name = "Fifty Shades of Grey",
                 Store = Store.Amazon,
-                Id = 0
+                Id = "0"
             },
             new Book()
             {
-                Category = Categories[0],
+                Category = Categories["Book"],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1408855658 ",
                 Name = "Harry Potter and the Philosopher's Stone",
                 Store = Store.Amazon,
-                Id = 1
+                Id = "1"
             },
             new Movie()
             {
-                Category = Categories[1],
+                Category = Categories["Movie"],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/B00F3TCF7O ",
                 Name = "Captain America: The First Avenger",
                 Store = Store.Amazon,
-                Id = 2
-            }
+                Id = "2"
+            } 
         };
 
         public static List<Contact> Friends = new List<Contact>()

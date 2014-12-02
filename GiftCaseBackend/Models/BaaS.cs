@@ -141,11 +141,11 @@ namespace GiftCaseBackend.Models
 
         /// <summary>
         /// Serializes gift data into the database
-        /// </summary>
+        /// </summary> 
         /// <param name="gift">Gift to serialize</param>
         public static void AddNewGift(Gift gift)
         {
-            var serializedData = JsonConvert.SerializeObject(gift);
+            var serializedData = JsonConvert.SerializeObject(gift.Shorten());
             StorageService.InsertJSONDocument(DatabaseName, GiftCollection, serializedData);
         }
 
@@ -154,6 +154,53 @@ namespace GiftCaseBackend.Models
             var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", userId);
             var contact = JsonConvert.DeserializeObject<User>(document.GetJsonDocList()[0].jsonDoc);
             return contact;
+        }
+
+        /// <summary>
+        /// todo: try if this works
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static Contact GetContact(string userId)
+        {
+            var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", userId);
+            var contact = JsonConvert.DeserializeObject<Contact>(document.GetJsonDocList()[0].jsonDoc);
+            return contact;
+        }
+
+        /// <summary>
+        /// Todo: sort? get only $count items?
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static IEnumerable<Gift> GetInbox(string userId)
+        {
+            //Query q1 = QueryBuilder.Build("UserWhoReceivedTheGift", userId, Operator.EQUALS); 
+            
+            var documents = StorageService
+                //.FindDocumentsByQuery(DatabaseName, GiftCollection, new Query("")).GetJsonDocList();
+                .FindDocumentByKeyValue(DatabaseName, GiftCollection, "IdOfUserWhoReceivedTheGift", userId).GetJsonDocList();
+            List<Gift> inbox = new List<Gift>(documents.Count);
+            foreach (var jsonDocument in documents)
+            {
+                inbox.Add(JsonConvert.DeserializeObject<Gift>(jsonDocument.jsonDoc));
+            }
+            return inbox;
+        }
+
+        public static IEnumerable<Gift> GetOutbox(string userId)
+        {
+            //Query q1 = QueryBuilder.Build("UserWhoReceivedTheGift", userId, Operator.EQUALS); 
+
+            var documents = StorageService
+                //.FindDocumentsByQuery(DatabaseName, GiftCollection, new Query("")).GetJsonDocList();
+                .FindDocumentByKeyValue(DatabaseName, GiftCollection, "IdOfUserWhoGaveTheGift", userId).GetJsonDocList();
+            List<Gift> inbox = new List<Gift>(documents.Count);
+            foreach (var jsonDocument in documents)
+            {
+                inbox.Add(JsonConvert.DeserializeObject<Gift>(jsonDocument.jsonDoc));
+            }
+            return inbox;
         }
     }
 }
