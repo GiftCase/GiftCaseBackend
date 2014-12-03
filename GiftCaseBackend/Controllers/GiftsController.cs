@@ -35,35 +35,35 @@ namespace GiftCaseBackend.Controllers
         public IEnumerable<Item> SuggestGift(string userName, int count=3, int? categoryId=null, string categoryName = null,
             float priceMin=0, float priceMax = 100000)
         {
-            IEnumerable<Item> gifts = TestRepository.Items;
+            //User tempuser = TestRepository.Users.Find(username); //take username and get a user, and then forward it to the Recommendation engine! ANA?
 
-            // get category details
-            ItemCategory category=null;
-            if(categoryId!=null)
-                category = TestRepository.Categories.First(x => x.Value.Id == categoryId).Value;
-            else if(categoryName!=null)
-                category = TestRepository.Categories[categoryName];
+            User tempUser = new User { UserName = userName, Id = "10152464438050382" };
 
-            /*
-             * 
-            User tempUser = new User { UserName = username };
+            //GiftRecommendationEngine.CalculateAffinity(tempUser);
             tempUser.CalculateAffinity();
 
             if (categoryId == null)
             {
                 categoryId = -1; //meaning all cats
             }
-             IEnumerable<Item> gifts = GiftRecommendationEngine.RecommendGifts(tempUser, count, categoryId);
+            IEnumerable<Item> gifts = GiftRecommendationEngine.RecommendGifts(tempUser, count, categoryId);
 
-             * 
-             */
+            /*
+             //removed, it's in the gift recommendation engine now
+             
+            IEnumerable<Item> gifts = TestRepository.Items;
 
-
+            // get category details
+            ItemCategory category=null;
+            if(categoryId!=null)
+                category = TestRepository.Categories.First(x => x.Id == categoryId);
+            else if(categoryName!=null)
+                category = TestRepository.Categories.First(x => x.Name==categoryName);
 
             // if we are searching for games, search steam
             if (category != null && category.ParentCategory == 3)
             {
-                gifts = SteamProvider.ParseSteam(new []{category.Id},count);
+                gifts = SteamProvider.ParseSteam(category.Id,count);
             }
             // if we are not searching for games, just return dummy results
             else
@@ -74,15 +74,19 @@ namespace GiftCaseBackend.Controllers
                     gifts = gifts.Where(x => x.Category.Id == categoryId);
             }
 
-            // to ignore free games
-            priceMin = 0.1f;
+             * */
 
             // filter by price
+            //some free games have price = 0, we should ignore them?
+
+            // priceMin = 2;
+            // priceMax = 20;
             if (priceMin > 0 && priceMax < int.MaxValue && priceMin < priceMax)
                 gifts = gifts.Where(x => x.Price >= priceMin && x.Price <= priceMax);
             // return a certain count
             if (count > 0)
                 gifts = gifts.Take(count);
+
 
             return gifts;
         }
