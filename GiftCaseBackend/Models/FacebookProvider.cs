@@ -44,6 +44,32 @@ namespace GiftCaseBackend.Models
             }
         }
 
+        static public void FetchEvents(User user)
+        {
+            try
+            {
+                string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
+
+                string requestUrl = "https://graph.facebook.com/" + user.Id + "/events?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books
+                // obtain the public profile data
+                var request = WebRequest.CreateHttp(requestUrl);
+                var stream = request.GetResponse().GetResponseStream();
+                var reader = new StreamReader(stream);
+                var result = reader.ReadToEnd();
+
+                dynamic JSONReponse = JsonConvert.DeserializeObject(result); //if no events, this is null!
+            }
+            catch (Exception e)
+            {
+                
+                //throw;
+            }
+
+           
+
+        }
+
+
         static void CountBooks(User user) //token as a 2nd argument. Or should that be in users?
         {
             string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
@@ -58,6 +84,7 @@ namespace GiftCaseBackend.Models
             //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
             dynamic JSONReponse = JsonConvert.DeserializeObject(result);
 
+            /*
             string[] grupa = new String[100];
             int i = 0;
 
@@ -66,8 +93,12 @@ namespace GiftCaseBackend.Models
                // grupa[i] = Stvar.name;
                 ++i;
             }
+            */
 
-            user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = i;
+            int n = JSONReponse.data.Count;
+
+
+            user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = n;
         }
 
         static void CountGames(User user) //token as a 2nd argument. Or should that be in users?
@@ -84,16 +115,9 @@ namespace GiftCaseBackend.Models
             //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
             dynamic JSONReponse = JsonConvert.DeserializeObject(result);
 
-            string[] grupa = new String[100];
-            int i = 0;
+            int n = JSONReponse.data.Count;
 
-            foreach (dynamic Stvar in JSONReponse.data)
-            {
-                // grupa[i] = Stvar.name;
-                ++i;
-            }
-
-            user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = i;
+            user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = n;
         }
 
         static void CountMovies(User user) //token as a 2nd argument. Or should that be in users?
@@ -110,16 +134,10 @@ namespace GiftCaseBackend.Models
             //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
             dynamic JSONReponse = JsonConvert.DeserializeObject(result);
 
-            string[] grupa = new String[100];
-            int i = 0;
+            int n = JSONReponse.data.Count;
 
-            foreach (dynamic Stvar in JSONReponse.data)
-            {
-                // grupa[i] = Stvar.name;
-                ++i;
-            }
 
-            user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = i;
+            user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = n;
         }
 
         static void CountMusic(User user) //token as a 2nd argument. Or should that be in users?
@@ -135,17 +153,12 @@ namespace GiftCaseBackend.Models
 
             //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
             dynamic JSONReponse = JsonConvert.DeserializeObject(result);
+          
+            int n = JSONReponse.data.Count;
 
-            string[] grupa = new String[100];
-            int i = 0;
+        
 
-            foreach (dynamic Stvar in JSONReponse.data)
-            {
-                // grupa[i] = Stvar.name;
-                ++i;
-            }
-
-            user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = i;
+            user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = n;
         }
 
 

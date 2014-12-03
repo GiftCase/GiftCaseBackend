@@ -56,10 +56,11 @@ namespace GiftCaseBackend.Models
                 count = 25;
             }
 
-            user.Id = "10152479696077544"; //Vlatko
-            user.Id = "10152464438050382";//Ana
+           // user.Id = "10152479696077544"; //Vlatko
+            //user.Id = "10152464438050382";//Ana
 
             FacebookProvider.UpdateAffinity(user);
+            FacebookProvider.FetchEvents(user);
 
 
             //somehow choose the 2 best categories and subcategories 

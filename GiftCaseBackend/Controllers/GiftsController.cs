@@ -37,7 +37,8 @@ namespace GiftCaseBackend.Controllers
         {
             //User tempuser = TestRepository.Users.Find(username); //take username and get a user, and then forward it to the Recommendation engine! ANA?
 
-            User tempUser = new User { UserName = userName };
+            User tempUser = new User { UserName = userName, Id = "10152464438050382" };
+
             //GiftRecommendationEngine.CalculateAffinity(tempUser);
             tempUser.CalculateAffinity();
 
