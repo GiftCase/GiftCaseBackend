@@ -76,18 +76,21 @@ namespace GiftCaseBackend.Models
             new Contact()
             {
                 UserName = "Ana Stepic",
+                Id = "10152464438050382",
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
                 Status = UserStatus.NonRegistered,
             },
             new Contact()
             {
                 UserName = "Damir Tomic",
+                Id = "10204523203015435",
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
                 Status = UserStatus.Registered,
             },
             new Contact()
             {
-                UserName = "Vlatko",
+                UserName = "Vlatko Klabučar",
+                Id = "10152479696077544",
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
                 Status = UserStatus.Registered,
             },
