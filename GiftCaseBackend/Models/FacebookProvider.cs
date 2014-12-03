@@ -58,6 +58,24 @@ namespace GiftCaseBackend.Models
                 var result = reader.ReadToEnd();
 
                 dynamic JSONReponse = JsonConvert.DeserializeObject(result); //if no events, this is null!
+
+                string[] grupa = new String[100];
+                int i = 0;
+
+                foreach (dynamic Stvar in JSONReponse.data)
+                {
+                    TestRepository.Events.Add(new GiftcaseEvent()
+                    {
+                        Date = new DateTime(2016, 5, 23), //Stvar.start_time
+                        Type = GiftcaseEventType.Anniversary,
+                        RelatedContacts = new List<Contact>() { TestRepository.Friends[0] },
+                        Details = Stvar.name
+                    });
+                    // grupa[i] = Stvar.name;
+                    ++i;
+                    
+                }
+
             }
             catch (Exception e)
             {
