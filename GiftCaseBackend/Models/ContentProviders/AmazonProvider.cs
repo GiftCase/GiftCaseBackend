@@ -208,20 +208,24 @@ namespace GiftCaseBackend.Models
 
         private static Video GetVideo(Amazon.Item item)
         {
-            var video = new Video()
-            {
-                Director = item.ItemAttributes.Director[0],
-                Name = item.ItemAttributes.Title,
-                Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Video.ToString()],
-                IconUrl = item.SmallImage.URL,
-                Id = item.ASIN,
-                LinkToTheStore = item.DetailPageURL.Replace("null", ""),
-                PreviousPrice = 0,
-                PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode,
-                Store = Store.Amazon,
-            };
+
+            var video = new Video();
+            
             try
             {
+                video = new Video()
+                {
+                    Director = item.ItemAttributes.Director[0],
+                    Name = item.ItemAttributes.Title,
+                    Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Video.ToString()],
+                    IconUrl = item.SmallImage.URL,
+                    Id = item.ASIN,
+                    LinkToTheStore = item.DetailPageURL.Replace("null", ""),
+                    PreviousPrice = 0,
+                    PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode,
+                    Store = Store.Amazon,
+                };
+
                 video.Description = item.EditorialReviews[0].Content;
             }
             catch (Exception) { }

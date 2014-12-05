@@ -12,6 +12,27 @@ namespace GiftCaseBackend.Models
 {
     public class FacebookProvider
     {
+        public static string FetchExtendedToken(string shortToken)
+        {
+            string AppKey = "878246272199421";
+            string SecretAppKey = "3797d105cf3f7ed9b4142473f7727d24";
+            string requestUrl = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id="+AppKey+"&client_secret="+SecretAppKey+"&fb_exchange_token="+shortToken;
+
+            var request = WebRequest.CreateHttp(requestUrl);
+            var stream = request.GetResponse().GetResponseStream();
+            var reader = new StreamReader(stream);
+            var result = reader.ReadToEnd();
+
+            dynamic JSONReponse = JsonConvert.DeserializeObject(result); //if no events, this is null!
+            
+            //JSONReponse.data.access_token ????
+
+            //UNFINISHED!!!
+            throw new NotImplementedException("I need more tokens to test. I don't want to mess up the one I already have! XD");
+            return "";
+
+        }
+
         public static void UpdateUserInfoWithPublicProfile(User user)
         { 
             try
