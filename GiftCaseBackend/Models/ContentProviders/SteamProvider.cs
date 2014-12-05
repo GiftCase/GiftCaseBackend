@@ -35,7 +35,7 @@ namespace GiftCaseBackend.Models
 
     public static class SteamProvider
     {
-        public static IEnumerable<Item> ParseSteam(int[] subCategory, int count=25) //or an array of subcategories, i can do that, no problem
+        public static IEnumerable<Game> ParseSteam(int[] subCategory, int count=25) //or an array of subcategories, i can do that, no problem
         {
 
             int Count = count; // how many items will be parsed, max is 25!
@@ -72,7 +72,7 @@ namespace GiftCaseBackend.Models
 
             int counter = 0;
 
-            List<Item> itemList = new List<Item>();
+            var itemList = new List<Game>();
 
             if (mainDiv.InnerHtml == "" || mainDiv.SelectNodes(".//a") == null)
             {
@@ -186,7 +186,7 @@ namespace GiftCaseBackend.Models
                 string tempDescription = tempDescriptionNode.InnerHtml;
                        //HtmlAttribute gameURL = tag.Attributes["href"];
 
-                itemList.Add(new Item()
+                itemList.Add(new Game()
                 {
                     Id = tempGameID,
                     Price = price,
@@ -197,6 +197,7 @@ namespace GiftCaseBackend.Models
                     PriceCurrency = "€",
                     Store = Store.Steam,
                     Description = tempDescription,
+                    Platform = "PC"
                 });
             }
 

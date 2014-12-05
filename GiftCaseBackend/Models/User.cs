@@ -34,10 +34,9 @@ namespace GiftCaseBackend.Models
             Affinity.Add(TestRepository.ItemCategoryEnum.Game.ToString(), 10); //default affinities, remove when facebook API starts working
             Affinity.Add(TestRepository.ItemCategoryEnum.Book.ToString(), 2);
             Affinity.Add(TestRepository.ItemCategoryEnum.Audio.ToString(), 0);
-            Affinity.Add(TestRepository.ItemCategoryEnum.Movie.ToString(), 0);
+            Affinity.Add(TestRepository.ItemCategoryEnum.Video.ToString(), 0);
 
             EventList = new List<GiftcaseEvent>();
-            //EventList.Add(TestRepository.Events[1]); <-- infinite loop Damir :P
 
         }
 

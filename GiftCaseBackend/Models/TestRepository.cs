@@ -12,15 +12,15 @@ namespace GiftCaseBackend.Models
             Audio,
             Book,
             Game,
-            Movie
+            Video
         }
 
         public static Dictionary<string,ItemCategory> Categories = new Dictionary<string,ItemCategory>()
         {
             
-            {ItemCategoryEnum.Book.ToString(),new ItemCategory(){Id=1000,Name = ItemCategoryEnum.Book.ToString()}}, // amazon browse node id = 1000
-            {ItemCategoryEnum.Movie.ToString(),new ItemCategory(){Id=1,Name = ItemCategoryEnum.Movie.ToString()}},
-            {ItemCategoryEnum.Audio.ToString(),new ItemCategory(){Id=2,Name = ItemCategoryEnum.Audio.ToString()}},
+            {ItemCategoryEnum.Book.ToString(),new ItemCategory(){Id=1,Name = ItemCategoryEnum.Book.ToString()}}, // amazon browse node id = 1000
+            {ItemCategoryEnum.Video.ToString(),new ItemCategory(){Id=2,Name = ItemCategoryEnum.Video.ToString()}},//amazon browse node id = 130
+            {ItemCategoryEnum.Audio.ToString(),new ItemCategory(){Id=4,Name = ItemCategoryEnum.Audio.ToString()}},
 
 
             {ItemCategoryEnum.Game.ToString(),new ItemCategory(){Id=3,Name = ItemCategoryEnum.Game.ToString()}},
@@ -44,7 +44,7 @@ namespace GiftCaseBackend.Models
         {
             new Book()
             {
-                Category = Categories["Book"],
+                Category = Categories[ItemCategoryEnum.Book.ToString()],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1846573785 ",
                 Name = "Fifty Shades of Grey",
                 Store = Store.Amazon,
@@ -53,16 +53,16 @@ namespace GiftCaseBackend.Models
             },
             new Book()
             {
-                Category = Categories["Book"],
+                Category = Categories[ItemCategoryEnum.Book.ToString()],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/1408855658 ",
                 Name = "Harry Potter and the Philosopher's Stone",
                 Store = Store.Amazon,
                 Id = "1",
                 Price = 18.6f
             },
-            new Movie()
+            new Video()
             {
-                Category = Categories["Movie"],
+                Category = Categories[ItemCategoryEnum.Video.ToString()],
                 LinkToTheStore = "http://www.amazon.co.uk/dp/B00F3TCF7O ",
                 Name = "Captain America: The First Avenger",
                 Store = Store.Amazon,

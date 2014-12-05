@@ -15,17 +15,8 @@ namespace GiftCaseBackend.Models
         public int? ParentCategory;
     }
 
-    /// <summary>
-    /// Only contains needed information that needs to be serialized in the database
-    /// </summary>
-    /*public class BaseItem
-    {
-        public string Id { get; set; }
 
-        public Store Store { get; set; }
-    }*/
-
-    public class Item //: BaseItem
+    public class Item 
     {
         public string Id { get; set; }
 
@@ -53,8 +44,7 @@ namespace GiftCaseBackend.Models
         {
             Id = "0";
             Name = "Untitled";
-            Category = new ItemCategory();
-            Category = TestRepository.Categories["Book"];
+            Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Book.ToString()];
             Store = Store.Amazon;
             Description = "No description";
             PriceCurrency = "$";
@@ -71,14 +61,35 @@ namespace GiftCaseBackend.Models
             Author = "Unknown";
         }
     }
-    [KnownType(typeof(GiftCaseBackend.Models.Movie))]
-    public class Movie : Item
-    {
-        public string Studio { get; set; }
 
-        public Movie()
+    [KnownType(typeof(GiftCaseBackend.Models.Music))]
+    public class Music : Item
+    {
+        public string Artist { get; set; }
+
+        public Music()
         {
-            Studio = "Unknown";
+            Artist = "Unknown";
+        }
+    }
+    [KnownType(typeof(GiftCaseBackend.Models.Video))]
+    public class Video : Item
+    {
+        public string Director { get; set; }
+
+        public Video()
+        {
+            Director = "Unknown";
+        }
+    }
+    [KnownType(typeof(GiftCaseBackend.Models.Game))]
+    public class Game : Item
+    {
+        public string Platform { get; set; }
+
+        public Game()
+        {
+            Platform = "PC";
         }
     }
 

@@ -16,7 +16,7 @@ namespace GiftCaseBackend.Models
                 user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 0;
                 user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 9;
                 user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 10;
-                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 0; 
+                user.Affinity[TestRepository.ItemCategoryEnum.Video.ToString()] = 0; 
 
             }
             else if (temp==1)
@@ -24,7 +24,7 @@ namespace GiftCaseBackend.Models
                 user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 1;
                 user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 16;
                 user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 0;
-                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 1;
+                user.Affinity[TestRepository.ItemCategoryEnum.Video.ToString()] = 1;
             }
 
             else if (temp == 2)
@@ -32,14 +32,14 @@ namespace GiftCaseBackend.Models
                 user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 0;
                 user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 2;
                 user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 15;
-                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 0;
+                user.Affinity[TestRepository.ItemCategoryEnum.Video.ToString()] = 0;
             }
             else if (temp == 3)
             {
                 user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = 0;
                 user.Affinity[TestRepository.ItemCategoryEnum.Book.ToString()] = 16;
                 user.Affinity[TestRepository.ItemCategoryEnum.Game.ToString()] = 18;
-                user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = 1;
+                user.Affinity[TestRepository.ItemCategoryEnum.Video.ToString()] = 1;
             }
 
         }

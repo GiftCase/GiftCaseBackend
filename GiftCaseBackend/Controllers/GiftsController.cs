@@ -107,16 +107,17 @@ namespace GiftCaseBackend.Controllers
             IEnumerable<Gift> inbox;
             try
             {
-                // test if the user is 
+                // test if the user exists, if he exists get inbox from the BaaS
                 if (BaaS.DoesUserDataExist(userId))
                     inbox = BaaS.GetInbox(userId);
-                // fallback to test results
+                // if he doesn't exist, fallback to test results
                 else
                     inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.UserName == userId);
 
             }
             catch (Exception e)
             {
+                // if connection to BaaS fails, fallback to test results
                 inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.UserName == userId);
             }
             
@@ -271,5 +272,12 @@ namespace GiftCaseBackend.Controllers
             return stream;
         }
         #endregion
+
+        [HttpGet]
+        public IEnumerable<Item> Test()
+        {
+            return AmazonProvider.FindRelatedItems(new[] { "B00003CXB4" });
+
+        }
     }
 }
