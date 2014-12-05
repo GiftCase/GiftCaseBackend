@@ -155,7 +155,7 @@ namespace GiftCaseBackend.Models
             int n = JSONReponse.data.Count;
 
 
-            user.Affinity[TestRepository.ItemCategoryEnum.Movie.ToString()] = n;
+            user.Affinity[TestRepository.ItemCategoryEnum.Video.ToString()] = n;
         }
 
         static void CountMusic(User user) //token as a 2nd argument. Or should that be in users?
