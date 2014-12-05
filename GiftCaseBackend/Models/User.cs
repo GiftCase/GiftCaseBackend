@@ -55,12 +55,13 @@ namespace GiftCaseBackend.Models
 
         public string TelcoID { get; set; } //we assume all of our users have telcoID
 
-        
+        public TelcoData telcoData;
 
 
         public User()
         {
             Id = UserName;
+            this.telcoData = TelcoDataProvider.getTelcoData(this.TelcoID);
         }
 
         public void CalculateAffinity()

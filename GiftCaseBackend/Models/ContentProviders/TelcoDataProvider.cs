@@ -6,7 +6,7 @@ using System.Web;
 using Newtonsoft.Json.Linq;
 using System.Net;
 
-namespace GiftCaseBackend.Models.ContentProviders
+namespace GiftCaseBackend.Models
 {
     public static class TelcoDataProvider
     {
