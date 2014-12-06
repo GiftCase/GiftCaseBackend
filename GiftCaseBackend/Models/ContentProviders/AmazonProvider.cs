@@ -181,23 +181,22 @@ namespace GiftCaseBackend.Models
 
         private static Book GetBook(Amazon.Item item)
         {
+            // setting of properties that should never cause an exception
             Book book = new Book()
             {
-                Author = item.ItemAttributes.Author[0],
                 Name = item.ItemAttributes.Title,
                 Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Book.ToString()],
-                IconUrl = item.SmallImage.URL,
                 Id = item.ASIN,
                 LinkToTheStore = item.DetailPageURL.Replace("null", ""),
                 PreviousPrice = 0,
-                PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode,
                 Store = Store.Amazon,
             };
-            try
-            {
-                book.Description = item.EditorialReviews[0].Content;
-            }
-            catch (Exception) { }
+
+            // setting of properties that might cause an exception in some rare cases
+            try{book.Description = item.EditorialReviews[0].Content;}catch (Exception) { }
+            try{book.Author = item.ItemAttributes.Author[0];}catch (Exception) { }
+            try{book.IconUrl = item.SmallImage.URL;}catch (Exception) { }
+            try{book.PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode;}catch (Exception) { }
 
             float price = 0;
             float.TryParse(item.OfferSummary.LowestNewPrice.FormattedPrice.Substring(1), out price);
@@ -208,27 +207,20 @@ namespace GiftCaseBackend.Models
 
         private static Video GetVideo(Amazon.Item item)
         {
-
-            var video = new Video();
-            
-            try
+            var video = new Video()
             {
-                video = new Video()
-                {
-                    Director = item.ItemAttributes.Director[0],
-                    Name = item.ItemAttributes.Title,
-                    Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Video.ToString()],
-                    IconUrl = item.SmallImage.URL,
-                    Id = item.ASIN,
-                    LinkToTheStore = item.DetailPageURL.Replace("null", ""),
-                    PreviousPrice = 0,
-                    PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode,
-                    Store = Store.Amazon,
-                };
+                Name = item.ItemAttributes.Title,
+                Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Video.ToString()],
+                Id = item.ASIN,
+                LinkToTheStore = item.DetailPageURL.Replace("null", ""),
+                PreviousPrice = 0,
+                Store = Store.Amazon,
+            };
 
-                video.Description = item.EditorialReviews[0].Content;
-            }
-            catch (Exception) { }
+            try {video.Description = item.EditorialReviews[0].Content; }catch(Exception e){}
+            try {video.Director = item.ItemAttributes.Director[0]; }catch(Exception e){}
+            try {video.IconUrl = item.SmallImage.URL; }catch(Exception e){}
+            try {video.PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode; }catch(Exception e){}
 
             float price = 0;
             float.TryParse(item.OfferSummary.LowestNewPrice.FormattedPrice.Substring(1), out price);
@@ -241,21 +233,18 @@ namespace GiftCaseBackend.Models
         {
             var music = new Music()
             {
-                Artist = item.ItemAttributes.Artist[0],
                 Name = item.ItemAttributes.Title,
                 Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Audio.ToString()],
-                IconUrl = item.SmallImage.URL,
                 Id = item.ASIN,
                 LinkToTheStore = item.DetailPageURL.Replace("null", ""),
                 PreviousPrice = 0,
-                PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode,
                 Store = Store.Amazon,
             };
-            try
-            {
-                music.Description = item.EditorialReviews[0].Content;
-            }
-            catch (Exception) { }
+
+            try {music.Description = item.EditorialReviews[0].Content; }catch(Exception e){}
+            try {music.Artist = item.ItemAttributes.Artist[0]; }catch(Exception e){}
+            try {music.IconUrl = item.SmallImage.URL; }catch(Exception e){}
+            try {music.PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode; }catch(Exception e){}
 
             float price = 0;
             float.TryParse(item.OfferSummary.LowestNewPrice.FormattedPrice.Substring(1), out price);
@@ -268,34 +257,21 @@ namespace GiftCaseBackend.Models
         {
             var game = new Game()
             {
-                //Artist = item.ItemAttributes.Artist[0],
                 Name = item.ItemAttributes.Title,
                 Category = TestRepository.Categories[TestRepository.ItemCategoryEnum.Game.ToString()],
-                IconUrl = item.SmallImage.URL,
                 Id = item.ASIN,
                 LinkToTheStore = item.DetailPageURL.Replace("null", ""),
                 PreviousPrice = 0,
-                PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode,
-                Store = Store.Amazon,
-                Platform = "PS2",
+                Store = Store.Amazon
             };
-            try
-            {
-                game.Description = item.EditorialReviews[0].Content;
-            }
-            catch (Exception) { }
-            try
-            {
-                game.Platform = item.ItemAttributes.OperatingSystem;
-            }
-            catch (Exception) { }
+            try{game.Description = item.EditorialReviews[0].Content;}catch (Exception) { }
+            try{game.IconUrl = item.SmallImage.URL;}catch (Exception) { }
+            try{game.PriceCurrency = (item.OfferSummary.LowestNewPrice.CurrencyCode == "USD") ? "$" : item.OfferSummary.LowestNewPrice.CurrencyCode;}catch (Exception) { }
+
+            try{game.Platform = item.ItemAttributes.OperatingSystem;}catch (Exception) { }
             if (game.Platform == null)
             {
-                try
-                {
-                    game.Platform = item.ItemAttributes.HardwarePlatform;
-                }
-                catch (Exception) { }
+                try{game.Platform = item.ItemAttributes.HardwarePlatform;}catch (Exception) { }
             }
 
             float price = 0;
@@ -424,32 +400,22 @@ namespace GiftCaseBackend.Models
             foreach (var item in items)
             {
                 Item convertedItem = null;
+
+                // find out which type the item is
+
                 // how do I even find out which type the item is?
-                // lol...let's try and fail XD
-                try
-                {
+                // I should probably use browseNodeids to find out, but I'll do that later
+                // for now, this'll have to do:
+
+                if (item.ItemAttributes.Author!=null)
                     convertedItem = GetBook(item);
-                }
-                catch (Exception)
-                {
-                    try
-                    {
-                        convertedItem = GetMusic(item);
-                    }
-                    catch (Exception)
-                    {
-                        try
-                        {
-                            convertedItem = GetVideo(item);
-                        }
-                        catch (Exception)
-                        {
-                            convertedItem = GetGame(item);
-                        }
-                        
-                    }
-                   
-                }
+                else if (item.ItemAttributes.Artist!=null)
+                    convertedItem = GetMusic(item);
+                else if(item.ItemAttributes.Director!=null)
+                    convertedItem = GetVideo(item);
+                else 
+                    convertedItem = GetGame(item);
+
 
                 if(convertedItem!=null && !(convertedItem is Game && ((Game)convertedItem).Platform==null))
                     convertedItems.Add(convertedItem);
