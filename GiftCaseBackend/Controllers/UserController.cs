@@ -90,8 +90,8 @@ namespace GiftCaseBackend.Controllers
                     //SocialExceptionHandling(ex);
                     user = new User()
                     {
-                        Id = "abcd",
-                        UserName = userId,
+                        Id = userId,
+                        UserName = "NoName",
                         FacebookAccessToken = accessToken,
                         //Friends = Contacts(userId).ToList(),
                         Status = UserStatus.Registered,

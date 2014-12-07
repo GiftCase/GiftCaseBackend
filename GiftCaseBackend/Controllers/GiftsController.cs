@@ -116,13 +116,13 @@ namespace GiftCaseBackend.Controllers
                     inbox = BaaS.GetInbox(userId);
                 // if he doesn't exist, fallback to test results
                 else
-                    inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.UserName == userId);
+                    inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.Id == userId);
 
             }
             catch (Exception e)
             {
                 // if connection to BaaS fails, fallback to test results
-                inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.UserName == userId);
+                inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.Id == userId);
             }
             
             if (count >= 1)
@@ -151,11 +151,11 @@ namespace GiftCaseBackend.Controllers
                     outbox = BaaS.GetOutbox(userId);
                 // fallback to test results
                 else
-                    outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.UserName == userId);
+                    outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.Id == userId);
             }
             catch (Exception e)
             {
-                outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.UserName == userId);
+                outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.Id == userId);
             }
             
 
