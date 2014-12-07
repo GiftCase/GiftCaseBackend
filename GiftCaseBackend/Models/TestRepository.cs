@@ -119,6 +119,12 @@ namespace GiftCaseBackend.Models
                 UserWhoGaveTheGift = Friends[2], UserWhoReceivedTheGift = Friends[1]},
             new Gift(){DateOfPurchase = new DateTime(2014,5,22,13,12,5,0), Item = Items[1], Status = GiftStatus.NotReceivedYet,
                 UserWhoGaveTheGift = Friends[1], UserWhoReceivedTheGift = Friends[2]},
+                new Gift(){DateOfPurchase = new DateTime(2014,5,22,13,12,5,0), Item = Items[1], Status = GiftStatus.NotReceivedYet,
+                UserWhoGaveTheGift = Friends[3], UserWhoReceivedTheGift = Friends[0]},
+            new Gift(){DateOfPurchase = new DateTime(2014,5,22,13,12,5,0), Item = Items[0], Status = GiftStatus.NotReceivedYet,
+                UserWhoGaveTheGift = Friends[0], UserWhoReceivedTheGift = Friends[1]},
+            new Gift(){DateOfPurchase = new DateTime(2014,5,22,13,12,5,0), Item = Items[1], Status = GiftStatus.NotReceivedYet,
+                UserWhoGaveTheGift = Friends[1], UserWhoReceivedTheGift = Friends[0]},
         };
 
         public static List<GiftcaseEvent> Events = new List<GiftcaseEvent>()

@@ -18,6 +18,7 @@ namespace GiftCaseBackend.Models
         private const string DatabaseName = "USERDATA";
         private const string UserCollection = "Users";
         private const string GiftCollection = "Gifts";
+        private const string AppDataCollection = "AppData";
 
         public static ServiceAPI Api { get; private set; }
         public static UserService UserService { get; private set; }
@@ -39,6 +40,20 @@ namespace GiftCaseBackend.Models
             //Build Push Notification Service
             PushNotificationService = Api.BuildPushNotificationService();   
         }
+
+        public static string GetKeys(string service)
+        {
+            try
+            {
+                var document = StorageService.FindDocumentByKeyValue(DatabaseName, AppDataCollection, "Service", service);
+                return document.GetJsonDocList()[0].jsonDoc;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// Saves data about a new GiftCase user into the database. You have to check if that user already exists

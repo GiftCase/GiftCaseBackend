@@ -9,6 +9,7 @@ using System.Text;
 using System.Web;
 using Amazon.PAAPI.WCF;
 using GiftCaseBackend.Amazon;
+using Newtonsoft.Json;
 
 namespace GiftCaseBackend.Models
 {
@@ -135,19 +136,28 @@ namespace GiftCaseBackend.Models
 
     public static class AmazonProvider
     {
-        private const string AccessKeyId = "AKIAIU6U5OAEQZKTPKRQ";
-        private const string SecretKey = "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";
+        private static readonly string AccessKeyId;
+        private static readonly string SecretKey;
+
+        private static dynamic Keys;
+
         private const string EndpointUrl = "https://webservices.amazon.com/onca/soap?Service=AWSECommerceService";
 
         private static AWSECommerceServicePortTypeClient Client;
 
         static AmazonProvider()
         {
+            string text = BaaS.GetKeys("Amazon");
+            Keys = JsonConvert.DeserializeObject(text);
+            AccessKeyId = Keys.Public;
+            SecretKey = Keys.Private;
+
             BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
             binding.MaxReceivedMessageSize = int.MaxValue;
             // create a WCF Amazon ECS client
             Client = new AWSECommerceServicePortTypeClient(binding, new EndpointAddress(EndpointUrl));
             Client.ChannelFactory.Endpoint.Behaviors.Add(new AmazonSigningEndpointBehavior(AccessKeyId, SecretKey));
+           
         }
 
         private static ItemSearch GetSearch(ItemSearchRequest request)
