@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -197,6 +198,77 @@ namespace IntegrationTests
             request.Dispose();
             client.Dispose();
         }
+
+        [TestMethod]
+        public void GetFacebookLikes()
+        {
+            Contact tempContact = TestRepository.Friends.ToList()[0];
+            User tempUser = new User { UserName = tempContact.UserName, /* Id = "10152464438050382" */ Id = tempContact.Id };
+
+           // Contact anaTest = TestRepository.Friends[0];
+            FacebookProvider.UpdateAffinity(tempUser);
+
+            tempContact = TestRepository.Friends.ToList()[2];
+            tempUser = new User { UserName = tempContact.UserName, Id = tempContact.Id };
+
+           
+            FacebookProvider.UpdateAffinity(tempUser);
+
+        }
+
+        [TestMethod]
+        public void GetSteamData()
+        {
+            List<Game> tempGames =  SteamProvider.ParseSteam(new int[]{122},14).ToList();
+
+            if (tempGames.Count != 14) { throw new Exception();}
+
+            foreach (Game game in tempGames)
+            {
+                if (game.Description == null || game.Id == null || game.Name == null)
+                {
+                    throw new Exception();
+                }
+            }
+
+        }
+
+
+        [TestMethod]
+        public void GetUnspecifiedRecommendation()
+        {
+            Contact tempContact = TestRepository.Friends.ToList()[0];
+            User tempUser = new User { UserName = tempContact.UserName, Id = tempContact.Id };
+            List<Item> tempItems =  GiftRecommendationEngine.RecommendGifts(tempUser, 7).ToList();
+            if (tempItems.Count != 7) { throw new Exception(); }
+
+            foreach (Item item in tempItems)
+            {
+                if (item.Name == null || item.Id == null || item.Price > 0)
+                {
+                    throw new Exception();
+                }
+            }
+
+        }
+
+         [TestMethod]
+        public void GetRecommendationForSpecificCategory()
+        {
+            Contact tempContact = TestRepository.Friends.ToList()[2];
+            User tempUser = new User { UserName = tempContact.UserName, Id = tempContact.Id };
+            List<Item> tempItems = GiftRecommendationEngine.RecommendGifts(tempUser, 4, 1).ToList();
+            if (tempItems.Count != 4) { throw new Exception(); }
+
+            foreach (Item item in tempItems)
+            {
+                if (item.Name == null || item.Id == null || item.Price > 0)
+                {
+                    throw new Exception();
+                }
+            }
+        }
+
 
         private HttpRequestMessage CreateGetRequest(string url)
         {
