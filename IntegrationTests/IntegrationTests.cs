@@ -49,6 +49,154 @@ namespace IntegrationTests
             client.Dispose();
         }
 
+        [TestMethod]
+        public void GetContacts()
+        {
+            var client = new HttpClient(_server);
+            var request = CreateGetRequest("User/Contacts?userId=10152464438050382");
+  
+            using (HttpResponseMessage response = client.SendAsync(request).Result)
+            {
+                Assert.IsNotNull(response.Content);
+                Assert.AreEqual("application/json", response.Content.Headers.ContentType.MediaType);
+                try
+                {
+                    Assert.IsNotNull(Newtonsoft.Json.Linq.JObject.Parse(response.Content.ToString()));
+                }
+                catch (Exception e) {
+                    Console.WriteLine("  ERROR: GetContacts failed :(\nIOException source: {0}", e.Source);
+                }
+                
+            }
+
+            request.Dispose();
+            client.Dispose();
+        }
+
+        [TestMethod]
+        public void GetUserDetails()
+        {
+            var client = new HttpClient(_server);
+            var request = CreateGetRequest("User/Details?userId=10152464438050382");
+
+            using (HttpResponseMessage response = client.SendAsync(request).Result)
+            {
+                Assert.IsNotNull(response.Content);
+                Assert.AreEqual("application/json", response.Content.Headers.ContentType.MediaType);
+                try
+                {
+                    Assert.IsNotNull(Newtonsoft.Json.Linq.JObject.Parse(response.Content.ToString()));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("  ERROR: GetUserDetails failed :(\nIOException source: {0}", e.Source);
+                }
+
+            }
+
+            request.Dispose();
+            client.Dispose();
+        }
+
+        [TestMethod]
+        public void GetUserEvents()
+        {
+            var client = new HttpClient(_server);
+            var request = CreateGetRequest("User/10152464438050382/Events");
+
+            using (HttpResponseMessage response = client.SendAsync(request).Result)
+            {
+                Assert.IsNotNull(response.Content);
+                Assert.AreEqual("application/json", response.Content.Headers.ContentType.MediaType);
+                try
+                {
+                    Assert.IsNotNull(Newtonsoft.Json.Linq.JObject.Parse(response.Content.ToString()));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("  ERROR: GetUserEvents failed :(\nIOException source: {0}", e.Source);
+                }
+
+            }
+
+            request.Dispose();
+            client.Dispose();
+        }
+
+        [TestMethod]
+        public void SuggestGifts()
+        {
+            var client = new HttpClient(_server);
+            var request = CreateGetRequest("Gifts/SuggestGift?userName=ana");
+
+            using (HttpResponseMessage response = client.SendAsync(request).Result)
+            {
+                Assert.IsNotNull(response.Content);
+                Assert.AreEqual("application/json", response.Content.Headers.ContentType.MediaType);
+                try
+                {
+                    Assert.IsNotNull(Newtonsoft.Json.Linq.JObject.Parse(response.Content.ToString()));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("  ERROR: SuggestGifts failed :(\nIOException source: {0}", e.Source);
+                }
+
+            }
+
+            request.Dispose();
+            client.Dispose();
+        }
+
+        [TestMethod]
+        public void GetInbox()
+        {
+            var client = new HttpClient(_server);
+            var request = CreateGetRequest("Gifts/Inbox?userId=10152464438050382&count=3");
+
+            using (HttpResponseMessage response = client.SendAsync(request).Result)
+            {
+                Assert.IsNotNull(response.Content);
+                Assert.AreEqual("application/json", response.Content.Headers.ContentType.MediaType);
+                try
+                {
+                    Assert.IsNotNull(Newtonsoft.Json.Linq.JObject.Parse(response.Content.ToString()));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("  ERROR: GetInbox failed :(\nIOException source: {0}", e.Source);
+                }
+
+            }
+
+            request.Dispose();
+            client.Dispose();
+        }
+
+        [TestMethod]
+        public void GetOutbox()
+        {
+            var client = new HttpClient(_server);
+            var request = CreateGetRequest("Gifts/Outbox?userId=10152464438050382&count=3");
+
+            using (HttpResponseMessage response = client.SendAsync(request).Result)
+            {
+                Assert.IsNotNull(response.Content);
+                Assert.AreEqual("application/json", response.Content.Headers.ContentType.MediaType);
+                try
+                {
+                    Assert.IsNotNull(Newtonsoft.Json.Linq.JObject.Parse(response.Content.ToString()));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("  ERROR: GetOutbox failed :(\nIOException source: {0}", e.Source);
+                }
+
+            }
+
+            request.Dispose();
+            client.Dispose();
+        }
 
         private HttpRequestMessage CreateGetRequest(string url)
         {
