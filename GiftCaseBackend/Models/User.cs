@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
+using System.Web.DynamicData;
+using System.Web.Query.Dynamic;
 
 namespace GiftCaseBackend.Models
 {
@@ -68,6 +72,23 @@ namespace GiftCaseBackend.Models
         {
             //this.Affinity =  //i should probably improve this!
             GiftRecommendationEngine.CalculateAffinity(this);
+        }
+
+        public dynamic Shorten()
+        {
+            dynamic databaseData = new ExpandoObject();;
+            //dynamic databaseData = null;
+            if(Id!=null)
+                databaseData.Id = Id;
+            if(Name!=null)
+                databaseData.Name = Name;
+            databaseData.Status = Status;
+            if(ImageUrl!=null)
+                databaseData.ImageUrl = ImageUrl;
+            databaseData.Gender = Gender;
+            if(FacebookAccessToken!=null)
+                databaseData.FacebookAccessToken = FacebookAccessToken;
+            return databaseData;
         }
     }
 

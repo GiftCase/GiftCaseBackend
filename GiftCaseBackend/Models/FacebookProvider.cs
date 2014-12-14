@@ -39,7 +39,7 @@ namespace GiftCaseBackend.Models
             {
                 FacebookPublicProfile profile = null;
 
-                string requestUrl = "https://graph.facebook.com/" + user.Id;
+                string requestUrl = "https://graph.facebook.com/me?access_token=" + user.FacebookAccessToken;
                 // obtain the public profile data
                 var request = WebRequest.CreateHttp(requestUrl);
                 var stream = request.GetResponse().GetResponseStream();
@@ -57,12 +57,49 @@ namespace GiftCaseBackend.Models
                 user.Name = profile.name;
                 user.UserName = profile.username;
 
+                // get picture
+                //https://graph.facebook.com/10152464438050382/picture?redirect=false&access_token=
+                requestUrl = "https://graph.facebook.com/"+user.Id+"/picture?redirect=false&access_token="+user.FacebookAccessToken;
+                request = WebRequest.CreateHttp(requestUrl);
+                stream = request.GetResponse().GetResponseStream();
+                reader = new StreamReader(stream);
+                result = reader.ReadToEnd();
 
+                dynamic pictureData = JsonConvert.DeserializeObject(result);
+                user.ImageUrl = pictureData.data.url;
             }
             catch (Exception e)
             {
-               
+                // if this failed, access token is not valid, try to fetch public profile with public user id
+                try
+                {
+                    FacebookPublicProfile profile = null;
+
+                    string requestUrl = "https://graph.facebook.com/" + user.Id;
+                    // obtain the public profile data
+                    var request = WebRequest.CreateHttp(requestUrl);
+                    var stream = request.GetResponse().GetResponseStream();
+                    var reader = new StreamReader(stream);
+                    var result = reader.ReadToEnd();
+
+                    profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
+
+                    if (profile.gender == "female")
+                        user.Gender = Gender.Female;
+                    else if (profile.gender == "male")
+                        user.Gender = Gender.Male;
+                    else user.Gender = Gender.Unknown;
+
+                    user.Name = profile.name;
+                    user.UserName = profile.username;
+                }
+                catch (Exception e2)
+                {
+                }
             }
+
+            
+
         }
 
         static public void FetchEvents(User user)

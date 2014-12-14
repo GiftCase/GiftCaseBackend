@@ -217,26 +217,31 @@ namespace GiftCaseBackend.Controllers
                 DateOfPurchase = DateTime.Now,
                 Status = GiftStatus.NotReceivedYet
             };
-            
+
+            var item = new Item();
+            item.Id = itemId;
+            item.Store = store;
+            gift.Item = item;
+
             //todo: try to get the item from the BaaS
             
             //todo: if item doesn't exist get it from content providers
 
             //todo: if item could not be found fallback to test repository
-            var item = TestRepository.Items.Where(x => x.Id == itemId).FirstOrDefault();
+            /*var item = TestRepository.Items.Where(x => x.Id == itemId).FirstOrDefault();
             if(item==null)
-                throw new Exception("No Item with that Id");
+                throw new Exception("No Item with that Id");*/
             
             // when you get the item, create a gift
-            gift.Item = item;
+            //gift.Item = item;
 
 
             //todo: get user details about current user and receiving user and fill up the related gift fields
             gift.UserWhoGaveTheGift = new Contact() {Id = userId, Status = UserStatus.Registered};
-            gift.UserWhoReceivedTheGift = new Contact(){Id = contactId, Status = UserStatus.NonRegistered};
+            gift.UserWhoReceivedTheGift = new Contact(){Id = contactId, Status = UserStatus.Registered};
 
             //todo: add the gift into the database
-            
+            BaaS.AddNewGift(gift);
 
             //todo: send notifications to users
 

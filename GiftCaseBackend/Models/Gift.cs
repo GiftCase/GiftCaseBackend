@@ -148,6 +148,37 @@ namespace GiftCaseBackend.Models
             return gift;
         }
 
+        public Gift ToGift()
+        {
+            var gift = new Gift();
+            gift.Item = new Item();
+            gift.Item.Id = ItemId;
+            gift.Item.Store = Store;
+            gift.Status = Status;
+            gift.DateOfPurchase = DateOfPurchase;
+
+            try
+            {
+                gift.UserWhoGaveTheGift = BaaS.GetContact(IdOfUserWhoGaveTheGift);
+            }
+            catch (Exception e)
+            {
+                gift.UserWhoGaveTheGift = new Contact() { Id = IdOfUserWhoGaveTheGift };
+            }
+
+            try
+            {
+                gift.UserWhoReceivedTheGift = BaaS.GetContact(IdOfUserWhoReceivedTheGift);
+            }
+            catch (Exception e)
+            {
+                gift.UserWhoReceivedTheGift = new Contact() { Id = IdOfUserWhoReceivedTheGift };
+            }
+            
+            
+            // todo: actually get the item info
+            return gift;
+        }
     }
 
     public enum GiftStatus

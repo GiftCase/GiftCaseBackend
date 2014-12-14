@@ -67,16 +67,6 @@ namespace GiftCaseBackend.Controllers
 
                 FacebookProvider.UpdateUserInfoWithPublicProfile(user);
 
-                try
-                {
-                    // todo: this shit often doesn't work for some reason
-                    var facebookProfile = social.GetFacebookProfile(); //GetPublicProfile()[0];//GetFacebookProfile();
-                    //user.UserName = facebookProfile.GetName();
-                    user.ImageUrl = facebookProfile.GetPicture();
-                }
-                catch (Exception e)
-                {}
-
                 // creates user details data entry in the database
                 if (BaaS.DoesUserDataExist(userId))
                     BaaS.UpdateNonregisteredToRegisteredUserIfNeeded(user);

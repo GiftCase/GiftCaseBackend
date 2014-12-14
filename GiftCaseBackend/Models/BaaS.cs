@@ -62,25 +62,12 @@ namespace GiftCaseBackend.Models
         /// <param name="user">User data that needs to be saved into the database</param>
         public static void CreateUser(User user)
         {
-            // remove some properties so they don't get serialized
-            var receivedGifts = user.ReceivedGifts;
-            var sentGifts = user.SentGifts;
-            var friends = user.Friends;
-
-            user.ReceivedGifts = user.SentGifts = null;
-            user.Friends = null;
-
-            var serializedData = JsonConvert.SerializeObject(user);
+            var serializedData = JsonConvert.SerializeObject(user.Shorten());
             StorageService.InsertJSONDocument(DatabaseName, UserCollection, serializedData);
-
-            // restore reoved properties
-            user.ReceivedGifts = receivedGifts;
-            user.SentGifts = sentGifts;
-            user.Friends = friends;
         }
 
         /// <summary>
-        /// When a new user registeres in the GiftCase app we have to add his data in the database.
+        /// When a new user registers in the GiftCase app we have to add his data in the database.
         /// However, there is a possibility that he is a friend of a GiftCase user so his data would already be in the database.
         /// If his data is already in the database call this method, it updates user data to include fields that
         /// only registered users have.
@@ -140,9 +127,9 @@ namespace GiftCaseBackend.Models
         /// <returns>True if user data exists, false otherwise</returns>
         public static bool DoesUserDataExist(string facebookId)
         {
-            var document =StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", facebookId);
             try
             {
+                var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", facebookId);
                 if (document == null || document.GetJsonDocList().Count <= 0)
                     return false;
             }
@@ -195,10 +182,11 @@ namespace GiftCaseBackend.Models
             var documents = StorageService
                 //.FindDocumentsByQuery(DatabaseName, GiftCollection, new Query("")).GetJsonDocList();
                 .FindDocumentByKeyValue(DatabaseName, GiftCollection, "IdOfUserWhoReceivedTheGift", userId).GetJsonDocList();
-            List<Gift> inbox = new List<Gift>(documents.Count);
+            var inbox = new List<Gift>(documents.Count);
             foreach (var jsonDocument in documents)
             {
-                inbox.Add(JsonConvert.DeserializeObject<Gift>(jsonDocument.jsonDoc));
+                var gift = JsonConvert.DeserializeObject<ShortGift>(jsonDocument.jsonDoc);
+                inbox.Add(gift.ToGift());
             }
             return inbox;
         }
@@ -213,7 +201,8 @@ namespace GiftCaseBackend.Models
             List<Gift> inbox = new List<Gift>(documents.Count);
             foreach (var jsonDocument in documents)
             {
-                inbox.Add(JsonConvert.DeserializeObject<Gift>(jsonDocument.jsonDoc));
+                var gift = JsonConvert.DeserializeObject<ShortGift>(jsonDocument.jsonDoc);
+                inbox.Add(gift.ToGift());
             }
             return inbox;
         }
