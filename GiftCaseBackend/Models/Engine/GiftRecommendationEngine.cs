@@ -179,8 +179,11 @@ namespace GiftCaseBackend.Models
 
             //filter according to price
             //filter gifts already received
+            Random rnd = new Random();
+            List<Item> CombinedGiftList2 = CombinedGiftList.OrderBy(a => rnd.Next()).ToList();  // or .OrderBy(a => Guid.NewGuid()).ToList();
+            return CombinedGiftList2.Take(count);
 
-            return CombinedGiftList.Take(count);
+           // return CombinedGiftList.Take(count);
             
 
         }

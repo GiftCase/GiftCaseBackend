@@ -32,13 +32,33 @@ namespace GiftCaseBackend.Controllers
         /// <param name="priceMax"></param>
         /// <returns>List of gift recommendations</returns>
         [HttpGet]
-        public IEnumerable<Item> SuggestGift(string userName, int count=3, int? categoryId=null, string categoryName = null,
-            float priceMin=0, float priceMax = 100000)
+        public IEnumerable<Item> SuggestGift(string userName = null, int count=3, int? categoryId=null, string categoryName = null,
+            float priceMin=0, float priceMax = 100000, string userID = null)
         {
+            if (userName == null && userID == null)
+            {
+                throw new Exception("No user specified!");
+            }
+
             //User tempuser = TestRepository.Users.Find(username); //take username and get a user, and then forward it to the Recommendation engine! ANA?
 
             //problem oko user ili contact
-            Contact tempContact = TestRepository.Friends.Where(s=> s.UserName == userName).ToList()[0];
+            Contact tempContact;
+
+            if (userName != null)
+            {
+                var temp = TestRepository.Friends.Where(s=> s.UserName == userName).ToList();
+                if (temp.Count <= 0) { throw new Exception("No user with that username!"); }
+                tempContact = temp[0];
+            }
+
+            else // if (userID !=null)
+            {
+                var temp = TestRepository.Friends.Where(s => s.UserName == userID).ToList();
+                if (temp.Count <= 0) { throw new Exception("No user with that userID!"); }
+                tempContact = temp[0];
+            }
+
             User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id =tempContact.Id };
 
             //GiftRecommendationEngine.CalculateAffinity(tempUser);
@@ -92,6 +112,8 @@ namespace GiftCaseBackend.Controllers
 
             return gifts;
         }
+
+
         #endregion
 
         /// <summary>
