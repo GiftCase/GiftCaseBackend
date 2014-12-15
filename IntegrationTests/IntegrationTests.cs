@@ -15,17 +15,18 @@ namespace IntegrationTests
     [TestClass]
     public class IntegrationTests : IDisposable
     {
-        private HttpServer _server;
-        private string _url = "http://giftcase.azurewebsites.net/api/";
+        private static HttpServer _server;
+        private static string _url = "http://giftcase.azurewebsites.net/api/";
 
 
-        [TestInitialize]
-        public void InitializeServer() 
+        [ClassInitialize]
+        public static void InitializeServer(TestContext context) 
         {
             var config = new HttpConfiguration();
             config.MessageHandlers.Add(new WebApiKeyHandler());
             WebApiConfig.Register(config);
             _server = new HttpServer(config);
+            BaaS.Initialize();
         }
 
         [TestMethod]
@@ -33,7 +34,7 @@ namespace IntegrationTests
         {
             var client = new HttpClient(_server);
             var request = CreateGetRequest("Gifts/CategoriesList");
-            var expectedJson = JsonConvert.SerializeObject(TestRepository.Categories);
+            string expectedJson = JsonConvert.SerializeObject(TestRepository.Categories.Values);
                             /*"[{\"Id\":0,\"Name\":\"Book\",\"ParentCategory\":null}," +
                                "{\"Id\":1,\"Name\":\"Movie\",\"ParentCategory\":null}," +
                                "{\"Id\":2,\"Name\":\"Audio\",\"ParentCategory\":null}]";*/
