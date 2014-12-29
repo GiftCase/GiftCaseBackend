@@ -66,10 +66,12 @@ namespace GiftCaseBackend.Models
     public class Music : Item
     {
         public string Artist { get; set; }
+        public string ArtistId { get; set; }
 
         public Music()
         {
             Artist = "Unknown";
+            ArtistId = "";
         }
     }
     [KnownType(typeof(GiftCaseBackend.Models.Video))]

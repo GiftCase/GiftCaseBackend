@@ -12,6 +12,7 @@ using com.shephertz.app42.paas.sdk.csharp.pushNotification;
 using com.shephertz.app42.paas.sdk.csharp.social;
 using GiftCaseBackend.Models;
 using Newtonsoft.Json;
+using GiftCaseBackend.Models.ContentProviders;
 
 namespace GiftCaseBackend.Controllers
 {
@@ -274,10 +275,9 @@ namespace GiftCaseBackend.Controllers
 
          
 
-        public IEnumerable<Book> GetTest()
+        public dynamic GetTest()
         {
-            return AmazonProvider.BrowseBooks(0,0);
-
+            return iTunesProvider.BrowseMusic();
         }
 
         /// <summary>

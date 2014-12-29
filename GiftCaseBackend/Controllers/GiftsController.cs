@@ -272,6 +272,7 @@ namespace GiftCaseBackend.Controllers
             return gift;
         }
 
+
         #region Finished
         /// <summary>
         /// Gets the list of all available categories
