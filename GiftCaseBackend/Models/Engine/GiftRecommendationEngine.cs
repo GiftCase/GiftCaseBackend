@@ -47,7 +47,7 @@ namespace GiftCaseBackend.Models
         {
             IEnumerable<Item> SteamGiftList = new List<Item>();
             IEnumerable<Item> AmazonGiftList = new List<Item>();
-            IEnumerable<Item> ThirdGiftList = new List<Item>();
+            IEnumerable<Item> iTunesGiftList = new List<Item>();
 
             List<Item> CombinedGiftList = new List<Item>();
 
@@ -110,12 +110,16 @@ namespace GiftCaseBackend.Models
                     if (values[i].Key == TestRepository.ItemCategoryEnum.Audio.ToString())
                     {
                         // fetch something
+                        iTunesGiftList = iTunesProvider.BrowseMusic(5);
+                        CombinedGiftList.AddRange(iTunesGiftList.Take(countSplit[i]));
                     }
 
                     else if (values[i].Key == TestRepository.ItemCategoryEnum.Book.ToString())
                     {
                         //AmazonGiftList = AmazonProvider.SOMETHING!!!(subcategory,count/3);
                        // AmazonGiftList = TestRepository.Items.Where(x => x.Category.Id == 0 || x.Category.Id == 1 || x.Category.Id == 2).Take(count / 3).ToList<Item>();
+                        AmazonGiftList = AmazonProvider.BrowseBooks(5, 50);
+                        CombinedGiftList.AddRange(AmazonGiftList.Take(countSplit[i]));
                     }
 
                     else if (values[i].Key == TestRepository.ItemCategoryEnum.Game.ToString())
@@ -171,8 +175,10 @@ namespace GiftCaseBackend.Models
 
                 else if (catID == 4) //itnues music or amazon music?!!!!!
                 {
-                    AmazonGiftList = AmazonProvider.BrowseMusic(5, 50);
-                    CombinedGiftList.AddRange(AmazonGiftList.Take(count));
+                    //AmazonGiftList = AmazonProvider.BrowseMusic(5, 50);
+                    //CombinedGiftList.AddRange(AmazonGiftList.Take(count));
+                    iTunesGiftList = iTunesProvider.BrowseMusic(5);
+                    CombinedGiftList.AddRange(iTunesGiftList.Take(count));
                 }
             }
 

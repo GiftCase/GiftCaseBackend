@@ -12,7 +12,6 @@ using com.shephertz.app42.paas.sdk.csharp.pushNotification;
 using com.shephertz.app42.paas.sdk.csharp.social;
 using GiftCaseBackend.Models;
 using Newtonsoft.Json;
-using GiftCaseBackend.Models.ContentProviders;
 
 namespace GiftCaseBackend.Controllers
 {
