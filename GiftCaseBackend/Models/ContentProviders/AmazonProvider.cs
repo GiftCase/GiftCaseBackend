@@ -442,9 +442,58 @@ namespace GiftCaseBackend.Models
         /// <param name="name"></param>
         /// <param name="category"></param>
         /// <returns></returns>
-        public static Item GetItemByName(string name, ItemCategory category)
+        public static Item GetItemByName(string name, TestRepository.ItemCategoryEnum category)
         {
-            return null;
+            var request = GetSearchRequest(0,100000);
+
+            if (category == TestRepository.ItemCategoryEnum.Book)
+            {
+                // Browse books category and US books category node
+                request.SearchIndex = "Books";
+                request.BrowseNode = "1000";
+            }
+            else if (category == TestRepository.ItemCategoryEnum.Video)
+            {
+                request.SearchIndex = "Video";
+                request.BrowseNode = "130";
+            }
+            else if (category == TestRepository.ItemCategoryEnum.Audio)
+            {
+                request.SearchIndex = "Music";
+                request.BrowseNode = "301668";
+            }
+            else
+            {
+                request.SearchIndex = "VideoGames";
+                request.BrowseNode = "468642";
+            }
+
+            request.Title = name;
+
+            // issue the ItemSearch request
+            ItemSearchResponse response = Client.ItemSearch(GetSearch(request));
+
+            // convert the results into internal Book format
+            var convertedItems = new List<Book>();
+            var items = response.Items[0].Item;
+            if (items == null || items.Count() < 1)
+                return null;
+
+            var item = items[0];
+
+            Item result = null;
+
+
+            if (category == TestRepository.ItemCategoryEnum.Book)
+                result = GetBook(item);
+            else if (category == TestRepository.ItemCategoryEnum.Video)
+                result = GetVideo(item);
+            else if (category == TestRepository.ItemCategoryEnum.Audio)
+                result = GetMusic(item);
+            else
+                result = GetGame(item);
+            
+            return result;
         }
     }
 }

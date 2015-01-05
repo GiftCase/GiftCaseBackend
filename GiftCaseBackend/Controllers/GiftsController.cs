@@ -308,9 +308,9 @@ namespace GiftCaseBackend.Controllers
         #endregion
 
         [HttpGet]
-        public IEnumerable<Item> Test()
+        public dynamic Test()
         {
-            return AmazonProvider.FindRelatedItems(new[] { "B00003CXB4" });
+            return AmazonProvider.GetItemByName("Harry Potter Order of", TestRepository.ItemCategoryEnum.Book);
 
         }
     }
