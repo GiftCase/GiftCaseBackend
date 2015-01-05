@@ -32,8 +32,8 @@ namespace GiftCaseBackend.Controllers
         /// <param name="priceMax"></param>
         /// <returns>List of gift recommendations</returns>
         [HttpGet]
-        public IEnumerable<Item> SuggestGift(string userName = null, int count=3, int? categoryId=null, string categoryName = null,
-            float priceMin=0, float priceMax = 100000, string userID = null)
+        public IEnumerable<Item> SuggestGift(string userName = null, int count = 3, int? categoryId = null, string categoryName = null,
+            float priceMin = 0, float priceMax = 100000, string userID = null)
         {
             if (userName == null && userID == null)
             {
@@ -47,19 +47,19 @@ namespace GiftCaseBackend.Controllers
 
             if (userName != null)
             {
-                var temp = TestRepository.Friends.Where(s=> s.UserName == userName).ToList();
+                var temp = TestRepository.Friends.Where(s => s.UserName == userName).ToList();
                 if (temp.Count <= 0) { throw new Exception("No user with that username!"); }
                 tempContact = temp[0];
             }
 
             else // if (userID !=null)
             {
-                var temp = TestRepository.Friends.Where(s => s.UserName == userID).ToList();
+                var temp = TestRepository.Friends.Where(s => s.Id == userID).ToList();
                 if (temp.Count <= 0) { throw new Exception("No user with that userID!"); }
                 tempContact = temp[0];
             }
 
-            User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id =tempContact.Id };
+            User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempContact.Id };
 
             //GiftRecommendationEngine.CalculateAffinity(tempUser);
             tempUser.CalculateAffinity();
@@ -131,7 +131,7 @@ namespace GiftCaseBackend.Controllers
         public IEnumerable<Gift> Inbox(string userId, int count = 0)
         {
             //userId = UserController.CheckAutherization();
-              
+
             IEnumerable<Gift> inbox;
             try
             {
@@ -148,7 +148,7 @@ namespace GiftCaseBackend.Controllers
                 // if connection to BaaS fails, fallback to test results
                 inbox = TestRepository.Gifts.Where(x => x.UserWhoReceivedTheGift.Id == userId);
             }
-            
+
             if (count >= 1)
                 inbox = inbox.Take(count);
             return inbox;
@@ -181,7 +181,7 @@ namespace GiftCaseBackend.Controllers
             {
                 outbox = TestRepository.Gifts.Where(x => x.UserWhoGaveTheGift.Id == userId);
             }
-            
+
 
             if (count < 1)
                 return outbox;
@@ -248,21 +248,21 @@ namespace GiftCaseBackend.Controllers
             gift.Item = item;
 
             //todo: try to get the item from the BaaS
-            
+
             //todo: if item doesn't exist get it from content providers
 
             //todo: if item could not be found fallback to test repository
             /*var item = TestRepository.Items.Where(x => x.Id == itemId).FirstOrDefault();
             if(item==null)
                 throw new Exception("No Item with that Id");*/
-            
+
             // when you get the item, create a gift
             //gift.Item = item;
 
 
             //todo: get user details about current user and receiving user and fill up the related gift fields
-            gift.UserWhoGaveTheGift = new Contact() {Id = userId, Status = UserStatus.Registered};
-            gift.UserWhoReceivedTheGift = new Contact(){Id = contactId, Status = UserStatus.Registered};
+            gift.UserWhoGaveTheGift = new Contact() { Id = userId, Status = UserStatus.Registered };
+            gift.UserWhoReceivedTheGift = new Contact() { Id = contactId, Status = UserStatus.Registered };
 
             //todo: add the gift into the database
             BaaS.AddNewGift(gift);
@@ -271,7 +271,6 @@ namespace GiftCaseBackend.Controllers
 
             return gift;
         }
-
 
         #region Finished
         /// <summary>

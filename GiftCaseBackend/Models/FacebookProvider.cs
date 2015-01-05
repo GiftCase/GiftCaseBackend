@@ -238,6 +238,49 @@ namespace GiftCaseBackend.Models
         }
 
 
+        public static void FetchGiftCaseFriends(User user){
+
+             string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
+
+             string requestUrl = "https://graph.facebook.com/" + user.Id + "/friends?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books
+            // obtain the public profile data
+            var request = WebRequest.CreateHttp(requestUrl);
+            var stream = request.GetResponse().GetResponseStream();
+            var reader = new StreamReader(stream);
+            var result = reader.ReadToEnd();
+
+            //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
+            dynamic JSONReponse = JsonConvert.DeserializeObject(result);
+          
+            int n = JSONReponse.data.Count;
+
+        
+
+            user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = n;
+        }
+
+        public static void FetchInviteableFriends(User user)
+        {
+            string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
+
+            string requestUrl = "https://graph.facebook.com/" + user.Id + "/invitable_friends?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books
+            // obtain the public profile data
+            var request = WebRequest.CreateHttp(requestUrl);
+            var stream = request.GetResponse().GetResponseStream();
+            var reader = new StreamReader(stream);
+            var result = reader.ReadToEnd();
+
+            //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
+            dynamic JSONReponse = JsonConvert.DeserializeObject(result);
+
+            int n = JSONReponse.data.Count;
+
+
+
+            user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = n;
+        }
+
+
 
         public static void UpdateAffinity(User user)
         {
