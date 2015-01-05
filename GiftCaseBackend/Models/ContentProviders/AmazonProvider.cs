@@ -145,6 +145,7 @@ namespace GiftCaseBackend.Models
 
         private static AWSECommerceServicePortTypeClient Client;
 
+        #region private Methods
         static AmazonProvider()
         {
             string text = BaaS.GetKeys("Amazon");
@@ -290,8 +291,9 @@ namespace GiftCaseBackend.Models
 
             return game;
         }
+        #endregion
 
-
+        #region Browse Methods
         public static IEnumerable<Book> BrowseBooks(float minPrice, float maxPrice)
         {
             var request = GetSearchRequest(minPrice, maxPrice);
@@ -389,6 +391,7 @@ namespace GiftCaseBackend.Models
 
             return convertedItems;
         }
+        #endregion
 
         public static IEnumerable<Item> FindRelatedItems(string[] itemIds)
         {
@@ -431,6 +434,17 @@ namespace GiftCaseBackend.Models
                     convertedItems.Add(convertedItem);
             }
             return convertedItems;
+        }
+
+        /// <summary>
+        /// Find a specific amazon item by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        public static Item GetItemByName(string name, ItemCategory category)
+        {
+            return null;
         }
     }
 }
