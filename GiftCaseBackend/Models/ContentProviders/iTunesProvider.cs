@@ -7,7 +7,7 @@ using System.Web;
 using Newtonsoft.Json;
 using System.Web.Http.Routing;
 
-namespace GiftCaseBackend.Models.ContentProviders
+namespace GiftCaseBackend.Models
 {
     /// <summary>
     /// URL: https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html

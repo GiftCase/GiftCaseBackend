@@ -12,7 +12,6 @@ using com.shephertz.app42.paas.sdk.csharp.pushNotification;
 using com.shephertz.app42.paas.sdk.csharp.social;
 using GiftCaseBackend.Models;
 using Newtonsoft.Json;
-using GiftCaseBackend.Models.ContentProviders;
 
 namespace GiftCaseBackend.Controllers
 {
@@ -152,6 +151,74 @@ namespace GiftCaseBackend.Controllers
             }
         }
         #endregion
+
+        #region ContactsV2_Damir
+        [HttpGet]
+        [Route("api/User/{userId}/ContactsV2")]
+        [Route("api/User/ContactsV2")]
+        public IEnumerable<User>  ContactsV2(string userId=null)
+        {
+            //userId = CheckAutherization();
+
+            User tempUser = new User{ Id = userId};
+            if (userId == null)
+            {
+                tempUser.Id = "me";
+            }
+
+             //ako je null onda uzmi me
+            string [] tempResult = FacebookProvider.FetchGiftCaseFriends(tempUser);
+            
+            List<User> korisnici = new List<User> ();
+            
+
+           for (int i = 0; i < tempResult.Length; i+=2)
+			{
+                korisnici.Add(new User { UserName = tempResult[i], Id = tempResult[i+1] });
+			}
+
+            return korisnici;
+        }
+        #endregion
+
+        #region InvitesV2_Damir
+        [HttpGet]
+        //[Route("api/User/{userId}/ContactsV2")] //only works as /me/ !!!!!!
+        [Route("api/User/InvitesV2")]
+        public IEnumerable<User> InvitesV2(string userId = null)
+        {
+            //userId = CheckAutherization();
+            int limit = 10; //too many inviteable friends makes the app go 2 slow!!!!
+
+            User tempUser = new User { Id = userId };
+            if (userId == null)
+            {
+                tempUser.Id = "me";
+            }
+
+            //ako je null onda uzmi me
+
+
+            string[] tempResult = FacebookProvider.FetchInviteableFriends(tempUser,limit);
+
+            List<User> korisnici = new List<User>();
+
+            /* //krivo, mislim!
+            if (limit < tempResult.Length)
+            {
+                limit = tempResult.Length;
+            }
+             */ 
+
+            for (int i = 0; i < limit; i += 3)
+            {
+                korisnici.Add(new User { UserName = tempResult[i], Id = tempResult[i + 1], ImageUrl= tempResult[i+2]});
+            }
+
+            return korisnici.Take(5); //takes only 5, cuz otherwise it loads for too long, if you have a 100 friends
+        }
+        #endregion
+
 
         #region Low priority
         /// <summary>

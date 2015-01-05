@@ -12,8 +12,14 @@ namespace GiftCaseBackend.Models
 {
     public class FacebookProvider
     {
-        public static string FetchExtendedToken(string shortToken)
+
+        public static string DamirLongTermExtendedToken = "CAAMewqUUav0BADZAGXgZAmFhcNhjhtu6ZBcjlB1TMtDgJ7IOe6ZBKgcJUeVcT4vaoBWLTQvydLk0wKD1r2hGWTQOI8GllpQGTorI4oQ4p0QtYXSJMTGjkt9pOyFA0VPiIizKWnmIaM7tqkjd0WykCJjKtBNnwN1wQTgr0tVGCQ1NgBjWnhUe";
+
+        public static string FetchExtendedToken(User user, string shortToken)
         {
+
+            
+
             string AppKey = "878246272199421";
             string SecretAppKey = "3797d105cf3f7ed9b4142473f7727d24";
             string requestUrl = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id="+AppKey+"&client_secret="+SecretAppKey+"&fb_exchange_token="+shortToken;
@@ -23,12 +29,15 @@ namespace GiftCaseBackend.Models
             var reader = new StreamReader(stream);
             var result = reader.ReadToEnd();
 
-            dynamic JSONReponse = JsonConvert.DeserializeObject(result); //if no events, this is null!
-            
-            //JSONReponse.data.access_token ????
+            string s = result.Split('=')[1].Split('&')[0];
+            //dynamic JSONReponse = JsonConvert.DeserializeObject(result); //if no events, this is null!
+            //dynamic JSONResponse = JsonConvert.DeserializeXmlNode(result);
 
+            //JSONReponse.data.access_token ????   
+            
+            user.ExtendedToken = s;
             //UNFINISHED!!!
-            throw new NotImplementedException("I need more tokens to test. I don't want to mess up the one I already have! XD");
+            //throw new NotImplementedException("I need more tokens to test. I don't want to mess up the one I already have! XD");
             return "";
 
         }
@@ -235,6 +244,70 @@ namespace GiftCaseBackend.Models
         
 
             user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = n;
+        }
+
+
+        public static string[] FetchGiftCaseFriends(User user){
+
+             string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
+
+             string requestUrl = "https://graph.facebook.com/" + user.Id + "/friends?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books
+            // obtain the public profile data
+            var request = WebRequest.CreateHttp(requestUrl);
+            var stream = request.GetResponse().GetResponseStream();
+            var reader = new StreamReader(stream);
+            var result = reader.ReadToEnd();
+
+            //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
+            dynamic JSONReponse = JsonConvert.DeserializeObject(result);
+          
+            int n = JSONReponse.data.Count;
+
+            string [] temp = new string[2*n];
+
+            for (int i = 0; i < n; i++)
+            {
+                temp[2*i] = JSONReponse.data[i].name.ToString(); //name i id može!!!
+                temp[2*i + 1] = JSONReponse.data[i].id.ToString();
+            }
+
+            return temp;
+           // user.Affinity[TestRepository.ItemCategoryEnum.Audio.ToString()] = n;
+        }
+
+        public static string[] FetchInviteableFriends(User user, int limit)  //WORKS ONLY FOR /ME or people i Have 
+        {
+            string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
+
+            
+            //string requestUrl = "https://graph.facebook.com/" + "me" + "/invitable_friends?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books // NE MOŽE -> + user.Id + 
+            string requestUrl = "https://graph.facebook.com/" + user.Id + "/invitable_friends?access_token=" + DamirLongTermExtendedToken; //likes, music,games, movies, television, books // NE MOŽE -> + user.Id + 
+            // obtain the public profile data
+            var request = WebRequest.CreateHttp(requestUrl);
+            var stream = request.GetResponse().GetResponseStream();
+            var reader = new StreamReader(stream);
+            var result = reader.ReadToEnd();
+
+            //profile = JsonConvert.DeserializeObject<FacebookPublicProfile>(result);
+            dynamic JSONReponse = JsonConvert.DeserializeObject(result);
+
+
+            int n = JSONReponse.data.Count;
+            if (limit > n)
+            {
+                n = limit;
+            }
+
+            string[] temp = new string[3 * n];
+
+            for (int i = 0; i < n; i++)
+            {
+                temp[3 * i] = JSONReponse.data[i].name.ToString(); //name i id može!!! I picture i još par stvari za inviteable friends može!!!!
+                temp[3 * i + 1] = JSONReponse.data[i].id.ToString();
+                temp[3 * i + 2] = JSONReponse.data[i].picture.data.url.ToString();
+            }
+
+            return temp;
         }
 
 

@@ -61,11 +61,17 @@ namespace GiftCaseBackend.Models
 
         public TelcoData telcoData;
 
+        public string ShortToken = ""; //možda ubuduće korišteno;
+
+        public string ExtendedToken = "";
+      //timeout time for extended token???
+
 
         public User()
         {
             Id = UserName;
             this.telcoData = TelcoDataProvider.getTelcoData(this.TelcoID);
+
         }
 
         public void CalculateAffinity()
