@@ -59,7 +59,7 @@ namespace GiftCaseBackend.Controllers
                 tempContact = temp[0];
             }
 
-            User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempContact.Id };
+            User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempContact.Id }; //BITNO
 
             //GiftRecommendationEngine.CalculateAffinity(tempUser);
             tempUser.CalculateAffinity();
