@@ -76,6 +76,9 @@ namespace GiftCaseBackend.Models
 
                 dynamic pictureData = JsonConvert.DeserializeObject(result);
                 user.ImageUrl = pictureData.data.url;
+
+                FacebookProvider.FetchExtendedToken(user, user.FacebookAccessToken);
+
             }
             catch (Exception e)
             {
@@ -277,11 +280,29 @@ namespace GiftCaseBackend.Models
 
         public static string[] FetchInviteableFriends(User user, int limit)  //WORKS ONLY FOR /ME or people i Have 
         {
+
             string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
 
+            string tempToken=null;
+
+            if (user.ExtendedToken==null && user.ExtendedToken =="")
+            {
+                tempToken = DamirLongTermExtendedToken;
+            }
+
+            if (user.FacebookAccessToken == null && user.FacebookAccessToken == "")
+            {
+                tempToken = DamirLongTermExtendedToken;
+            }
+
+            if (tempToken == null)
+            {
+                tempToken = user.ExtendedToken;
+            }
             
             //string requestUrl = "https://graph.facebook.com/" + "me" + "/invitable_friends?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books // NE MOŽE -> + user.Id + 
-            string requestUrl = "https://graph.facebook.com/" + user.Id + "/invitable_friends?access_token=" + DamirLongTermExtendedToken; //likes, music,games, movies, television, books // NE MOŽE -> + user.Id + 
+            //string requestUrl = "https://graph.facebook.com/" + user.Id + "/invitable_friends?access_token=" + DamirLongTermExtendedToken; //likes, music,games, movies, television, books // NE MOŽE -> + user.Id + 
+            string requestUrl = "https://graph.facebook.com/" + "me" + "/invitable_friends?access_token=" + tempToken; 
             // obtain the public profile data
             var request = WebRequest.CreateHttp(requestUrl);
             var stream = request.GetResponse().GetResponseStream();
@@ -293,7 +314,7 @@ namespace GiftCaseBackend.Models
 
 
             int n = JSONReponse.data.Count;
-            if (limit > n)
+            if (limit < n)
             {
                 n = limit;
             }

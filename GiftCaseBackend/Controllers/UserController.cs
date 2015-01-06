@@ -185,15 +185,18 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         //[Route("api/User/{userId}/ContactsV2")] //only works as /me/ !!!!!!
         [Route("api/User/InvitesV2")]
-        public IEnumerable<User> InvitesV2(string userId = null)
+        public IEnumerable<User> InvitesV2(string userId = null,string accessToken =null, int count = 10)
         {
             //userId = CheckAutherization();
             int limit = 10; //too many inviteable friends makes the app go 2 slow!!!!
-
+            limit = count;
+            
             User tempUser = new User { Id = userId };
             if (userId == null)
             {
                 tempUser.Id = "me";
+                tempUser.FacebookAccessToken = accessToken;
+                tempUser.ExtendedToken = accessToken;
             }
 
             //ako je null onda uzmi me
@@ -210,12 +213,12 @@ namespace GiftCaseBackend.Controllers
             }
              */ 
 
-            for (int i = 0; i < limit; i += 3)
+            for (int i = 0; i < 3*limit; i += 3)
             {
                 korisnici.Add(new User { UserName = tempResult[i], Id = tempResult[i + 1], ImageUrl= tempResult[i+2]});
             }
 
-            return korisnici.Take(5); //takes only 5, cuz otherwise it loads for too long, if you have a 100 friends
+            return korisnici.Take(count); //takes only 5, cuz otherwise it loads for too long, if you have a 100 friends
         }
         #endregion
 
