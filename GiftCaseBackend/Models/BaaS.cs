@@ -96,21 +96,36 @@ namespace GiftCaseBackend.Models
         /// in the database. Call this method if you come across a non registered user whose data is still not in the database.
         /// </summary>
         /// <param name="facebookId">Facebook id of the non registered user</param>
-        public static void CreateNonregisteredUser(string facebookId)
+        public static void CreateNonregisteredUser(string facebookId, string username=null, string imageUrl=null)
         {
             var user = new Contact(); // maybe we should put new User() here instead of contact
             user.Id = facebookId;
             user.Status = UserStatus.NonRegistered;
+            user.UserName = username;
+            user.ImageUrl = imageUrl;
 
             // try to fetch additional facebook data
             try
             {
-                var profile = SocialService.GetFacebookProfilesFromIds(new[] { facebookId }).GetPublicProfile()[0];
-
-                user.ImageUrl = profile.GetPicture();
-                user.UserName = profile.GetName();
+                if(username==null || imageUrl==null)
+                {
+                    var profile = SocialService.GetFacebookProfilesFromIds(new[] { facebookId }).GetPublicProfile()[0];
+                    if (imageUrl == null)
+                        user.ImageUrl = profile.GetPicture();
+                    if (username == null)
+                        user.UserName = profile.GetName();
+                }
             }
-            catch (Exception e) { }
+            catch (Exception e) 
+            {
+
+            }
+            if (user.UserName == null)
+                user.UserName = "";
+            user.Name = user.UserName;
+
+            if (user.ImageUrl == null)
+                user.ImageUrl = "";
 
             // we are checking outside this function for performance reasons
            // if (DoesUserDataExist(facebookId) == false)
@@ -198,9 +213,14 @@ namespace GiftCaseBackend.Models
 
         public static User GetUser(string userId)
         {
-            var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", userId);
-            var contact = JsonConvert.DeserializeObject<User>(document.GetJsonDocList()[0].jsonDoc);
-            return contact;
+            try
+            {
+                var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", userId);
+                var contact = JsonConvert.DeserializeObject<User>(document.GetJsonDocList()[0].jsonDoc);
+                return contact;
+            }
+            catch (Exception e)
+            { return null; }
         }
 
         /// <summary>
@@ -210,9 +230,14 @@ namespace GiftCaseBackend.Models
         /// <returns></returns>
         public static Contact GetContact(string userId)
         {
-            var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", userId);
-            var contact = JsonConvert.DeserializeObject<Contact>(document.GetJsonDocList()[0].jsonDoc);
-            return contact;
+            try
+            {
+                var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", userId);
+                var contact = JsonConvert.DeserializeObject<Contact>(document.GetJsonDocList()[0].jsonDoc);
+                return contact;
+            }
+            catch (Exception e)
+            { return null; }
         }
 
         /// <summary>

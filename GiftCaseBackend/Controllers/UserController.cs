@@ -114,49 +114,7 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/User/{userId}/Contacts")]
         [Route("api/User/Contacts")]
-        public IEnumerable<Contact> Contacts(string userId=null)
-        {
-            //userId = CheckAutherization();
-
-            IEnumerable<Contact> friends = null;
-            try
-            {
-                // try to get user's registered friends
-                var social =BaaS.SocialService.GetFacebookFriendsFromLinkUser(userId);
-                friends = social.GetFriendList().Select(x=>
-                    new Contact()
-                    {
-                        Id = x.id,
-                        UserName = x.name,
-                        ImageUrl = x.GetPicture(),
-                    });
-
-                // if we were able to get non registered friends, add them to the database
-                foreach (var contact in friends)
-                {
-                    contact.Status = (BaaS.DoesUserDataExist(contact.Id)) ? UserStatus.NonRegistered : UserStatus.Registered;
-                    if(contact.Status==UserStatus.NonRegistered)
-                        BaaS.CreateNonregisteredUser(contact.Id);
-                }
-
-                return friends;
-            }
-            catch(Exception ex)
-            {
-                //fallback for testing purposes
-                if (friends != null)
-                    return friends;
-                // for testing purposes
-                return TestRepository.Friends;
-            }
-        }
-        #endregion
-
-        #region ContactsV2_Damir
-        [HttpGet]
-        [Route("api/User/{userId}/ContactsV2")]
-        [Route("api/User/ContactsV2")]
-        public IEnumerable<User>  ContactsV2(string userId=null)
+        public IEnumerable<Contact>  Contacts(string userId=null)
         {
             //userId = CheckAutherization();
 
@@ -169,23 +127,32 @@ namespace GiftCaseBackend.Controllers
              //ako je null onda uzmi me
             string [] tempResult = FacebookProvider.FetchGiftCaseFriends(tempUser);
             
-            List<User> korisnici = new List<User> ();
+            // fallback
+            if(tempResult==null || tempResult.Length==0)
+                return TestRepository.Friends;
+
+            var korisnici = new List<Contact> ();
             
 
            for (int i = 0; i < tempResult.Length; i+=2)
 			{
-                korisnici.Add(new User { UserName = tempResult[i], Id = tempResult[i+1] });
+               var contact = BaaS.GetContact(tempResult[i + 1]);
+               if(contact==null)
+                   contact = new Contact { UserName = tempResult[i], Id = tempResult[i + 1] };
+               contact.Status =  UserStatus.Registered;
+               korisnici.Add(contact);
+
 			}
 
             return korisnici;
         }
         #endregion
 
-        #region InvitesV2_Damir
+        #region Invites
         [HttpGet]
         //[Route("api/User/{userId}/ContactsV2")] //only works as /me/ !!!!!!
-        [Route("api/User/InvitesV2")]
-        public IEnumerable<User> InvitesV2(string userId = null,string accessToken =null, int count = 10)
+        [Route("api/User/Invites")]
+        public IEnumerable<Contact> Invites(string userId = null, string accessToken =null, int count = 10)
         {
             //userId = CheckAutherization();
             int limit = 10; //too many inviteable friends makes the app go 2 slow!!!!
@@ -204,7 +171,7 @@ namespace GiftCaseBackend.Controllers
 
             string[] tempResult = FacebookProvider.FetchInviteableFriends(tempUser,limit);
 
-            List<User> korisnici = new List<User>();
+            var korisnici = new List<Contact>();
 
             /* //krivo, mislim!
             if (limit < tempResult.Length)
@@ -215,7 +182,11 @@ namespace GiftCaseBackend.Controllers
 
             for (int i = 0; i < 3*limit; i += 3)
             {
-                korisnici.Add(new User { UserName = tempResult[i], Id = tempResult[i + 1], ImageUrl= tempResult[i+2]});
+                var contact = new Contact { UserName = tempResult[i], Id = tempResult[i + 1], ImageUrl = tempResult[i + 2], Status=UserStatus.NonRegistered };
+                korisnici.Add(contact);
+
+                if(!BaaS.DoesUserDataExist(contact.Id))
+                    BaaS.CreateNonregisteredUser(contact.Id, contact.UserName, contact.ImageUrl);
             }
 
             return korisnici.Take(count); //takes only 5, cuz otherwise it loads for too long, if you have a 100 friends

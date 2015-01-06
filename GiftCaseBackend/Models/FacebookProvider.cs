@@ -17,9 +17,6 @@ namespace GiftCaseBackend.Models
 
         public static string FetchExtendedToken(User user, string shortToken)
         {
-
-            
-
             string AppKey = "878246272199421";
             string SecretAppKey = "3797d105cf3f7ed9b4142473f7727d24";
             string requestUrl = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id="+AppKey+"&client_secret="+SecretAppKey+"&fb_exchange_token="+shortToken;
