@@ -73,6 +73,7 @@ namespace GiftCaseBackend.Models
 
         public static List<Contact> Friends = new List<Contact>()
         {
+            /*
             new Contact()
             {
                 UserName = "Ana Stepic",
@@ -100,10 +101,12 @@ namespace GiftCaseBackend.Models
                 ImageUrl = "https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg",
                 Status = UserStatus.Registered,
             },
+             */ 
         };
 
         public static List<Gift> Gifts = new List<Gift>()
         {
+            /*
             new Gift(){DateOfPurchase = new DateTime(2014,4,20,12,22,15,0), Item = Items[0], Status = GiftStatus.Received, 
                 UserWhoGaveTheGift = Friends[1], UserWhoReceivedTheGift = Friends[2]},
             new Gift()
@@ -125,10 +128,12 @@ namespace GiftCaseBackend.Models
                 UserWhoGaveTheGift = Friends[0], UserWhoReceivedTheGift = Friends[1]},
             new Gift(){DateOfPurchase = new DateTime(2014,5,22,13,12,5,0), Item = Items[1], Status = GiftStatus.NotReceivedYet,
                 UserWhoGaveTheGift = Friends[1], UserWhoReceivedTheGift = Friends[0]},
+             */
         };
 
         public static List<GiftcaseEvent> Events = new List<GiftcaseEvent>()
         {
+            /*
             new GiftcaseEvent()
             {
                 Date = new DateTime(2016,5,23), Type = GiftcaseEventType.Anniversary, RelatedContacts = new List<Contact>(){Friends[0]},
@@ -144,6 +149,7 @@ namespace GiftCaseBackend.Models
                 Date = new DateTime(2016,6,23), Type = GiftcaseEventType.Graduation, RelatedContacts = new List<Contact>(){Friends[2], Friends[1], Friends[0]},
                 Details = "Hopefully :)"
             },
+             */ 
         }; 
     }
 }

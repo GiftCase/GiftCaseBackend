@@ -63,8 +63,14 @@ namespace GiftCaseBackend.Controllers
             //problem oko user ili contact
             Contact tempContact;
 
+            User tempX = BaaS.GetUser(userID);
+
+
+            if (tempX == null) { throw new Exception("No user with that username!"); }
+            /*
             if (userName != null)
             {
+                
                 var temp = TestRepository.Friends.Where(s => s.UserName == userName).ToList();
                 if (temp.Count <= 0) { throw new Exception("No user with that username!"); }
                 tempContact = temp[0];
@@ -76,8 +82,10 @@ namespace GiftCaseBackend.Controllers
                 if (temp.Count <= 0) { throw new Exception("No user with that userID!"); }
                 tempContact = temp[0];
             }
+            */
+            //User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempContact.Id }; //BITNO
 
-            User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempContact.Id }; //BITNO
+            User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempX.Id }; //BITNO
 
             //GiftRecommendationEngine.CalculateAffinity(tempUser);
             tempUser.CalculateAffinity();
