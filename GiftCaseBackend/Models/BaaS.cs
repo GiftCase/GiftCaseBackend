@@ -147,8 +147,53 @@ namespace GiftCaseBackend.Models
         /// <param name="gift">Gift to serialize</param>
         public static void AddNewGift(Gift gift)
         {
+            try
+            {
             var serializedData = JsonConvert.SerializeObject(gift.Shorten());
             StorageService.InsertJSONDocument(DatabaseName, GiftCollection, serializedData);
+            }
+            catch (Exception e) { }
+        }
+
+        public static Gift GetGift(string giftId)
+        {
+            try
+            {
+                var document = StorageService.FindDocumentByKeyValue(DatabaseName, GiftCollection, "GiftId", giftId);
+                var shortGift = JsonConvert.DeserializeObject<ShortGift>(document.GetJsonDocList()[0].jsonDoc);
+                if (shortGift == null)
+                    return null;
+                return shortGift.ToGift();
+            }
+            catch (Exception e) { return null; }
+        }
+
+        public static void UpdateGiftStatus(string giftId, GiftStatus status)
+        {
+            try
+            {
+                var document = StorageService.FindDocumentByKeyValue(DatabaseName, GiftCollection, "GiftId", giftId);
+                var shortGift = JsonConvert.DeserializeObject<ShortGift>(document.GetJsonDocList()[0].jsonDoc);
+                if (shortGift.Status != status)
+                {
+                    shortGift.Status = status;
+                    var serializedData = JsonConvert.SerializeObject(shortGift);
+                    StorageService.UpdateDocumentByDocId(DatabaseName, GiftCollection,
+                        document.GetJsonDocList()[0].docId, serializedData);
+                }
+            }
+            catch (Exception) { }
+        }
+
+        public static bool LogOut(string userId, string deviceId)
+        {
+            try
+            {
+                PushNotificationService.DeleteDeviceToken(userId, deviceId);
+                return true;
+            }
+            catch (Exception e) { }
+            return false;
         }
 
         public static User GetUser(string userId)

@@ -291,6 +291,26 @@ namespace GiftCaseBackend.Models
 
             return game;
         }
+
+        private static Item GetItem(Amazon.Item item)
+        {
+            Item convertedItem = null;
+            // find out which type the item is
+
+            // how do I even find out which type the item is?
+            // I should probably use browseNodeids to find out, but I'll do that later
+            // for now, this'll have to do:
+
+            if (item.ItemAttributes.Author != null)
+                convertedItem = GetBook(item);
+            else if (item.ItemAttributes.Artist != null)
+                convertedItem = GetMusic(item);
+            else if (item.ItemAttributes.Director != null)
+                convertedItem = GetVideo(item);
+            else
+                convertedItem = GetGame(item);
+            return convertedItem;
+        }
         #endregion
 
         #region Browse Methods
@@ -412,24 +432,9 @@ namespace GiftCaseBackend.Models
 
             foreach (var item in items)
             {
-                Item convertedItem = null;
 
-                // find out which type the item is
-
-                // how do I even find out which type the item is?
-                // I should probably use browseNodeids to find out, but I'll do that later
-                // for now, this'll have to do:
-
-                if (item.ItemAttributes.Author!=null)
-                    convertedItem = GetBook(item);
-                else if (item.ItemAttributes.Artist!=null)
-                    convertedItem = GetMusic(item);
-                else if(item.ItemAttributes.Director!=null)
-                    convertedItem = GetVideo(item);
-                else 
-                    convertedItem = GetGame(item);
-
-
+                Item convertedItem = GetItem(item);
+                
                 if(convertedItem!=null && !(convertedItem is Game && ((Game)convertedItem).Platform==null))
                     convertedItems.Add(convertedItem);
             }
@@ -494,6 +499,34 @@ namespace GiftCaseBackend.Models
                 result = GetGame(item);
             
             return result;
+        }
+
+        public static Item GetItemById(string itemId)
+        {
+            var request = new ItemLookupRequest();
+            request.ItemId = new string[]{itemId};
+            // fetch basic properties, prices and small image link
+            request.ResponseGroup = new string[] { "Small", "OfferSummary", "Images", "EditorialReview", "ItemAttributes" };
+
+            // create the search
+            var lookup = new ItemLookup();
+            lookup.Request = new[] { request };
+            lookup.AWSAccessKeyId = AccessKeyId;
+            lookup.AssociateTag = "aztag-20";
+
+            var response = Client.ItemLookup(lookup);
+
+            // convert the results into internal Book format
+            var convertedItems = new List<Book>();
+            var items = response.Items[0].Item;
+            if (items == null || items.Count() < 1)
+                return null;
+
+            var item = items[0];
+
+            Item result = GetItem(item);
+            return result;
+
         }
     }
 }

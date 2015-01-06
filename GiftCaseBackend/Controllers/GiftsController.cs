@@ -13,6 +13,24 @@ namespace GiftCaseBackend.Controllers
 {
     public class GiftsController : ApiController
     {
+        private Item GetItemFromContentProviders(string itemId, Store store)
+        {
+            if (store == Store.Amazon)
+                return AmazonProvider.GetItemById(itemId);
+            else if (store == Store.iTunes)
+            {
+                var item = iTunesProvider.GetMusicById(itemId);
+                if (item != null && item.Count > 0)
+                    return item[0];
+            }
+            else if (store == Store.Steam)
+                return null;
+            // todo:
+            //return SteamProvider.GetItemById(itemId);
+
+            return null;
+        }
+
         #region SuggestGift
         /// <summary>
         /// Recommends some gifts
@@ -116,6 +134,7 @@ namespace GiftCaseBackend.Controllers
 
         #endregion
 
+        #region Finished
         /// <summary>
         /// Gets the user's inbox - list of received gifts
         /// URL example:
@@ -203,15 +222,33 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/Gifts/{giftId}/UpdateGiftStatus")]
         [Route("api/Gifts/UpdateGiftStatus")]
-        public bool UpdateGiftStatus(int giftId, string userId, GiftStatus status)
+        public bool UpdateGiftStatus(string giftId, string userId, GiftStatus status)
         {
             // try to get the gift
+            var gift = BaaS.GetGift(giftId);
             // if gift doesn't exist, throw an exception: gift doesn't exist
+            if (gift == null)
+                throw new Exception("No gift with that Id.");
+            
             // when you get the gift check if this user has the permission to update status
+            // also check if the status update is of appropriate status
+            if (gift.UserWhoReceivedTheGift.Id != userId || !(status == GiftStatus.Received || status == GiftStatus.Claimed))
+                throw new Exception("You don't have the permission to update this gift to that status.");
+
             // if the user is the receiving user update the gift status
+            BaaS.UpdateGiftStatus(gift.Id, status);
+
+            // notify the sending user that the gift has been received
+            if(status==GiftStatus.Received)
+                NotificationSettings.SendGiftOpenedMessage(gift);
+            //or claimed
+            else
+                NotificationSettings.SendGiftClaimedMessage(gift);
 
             return true;
         }
+
+        
 
         /// <summary>
         /// Purchases and sends the gift to a user
@@ -242,37 +279,39 @@ namespace GiftCaseBackend.Controllers
                 Status = GiftStatus.NotReceivedYet
             };
 
-            var item = new Item();
+            // generate gift unique id
+            gift.Id = userId + contactId + DateTime.Now.Ticks;
+
+            //get item from content providers
+            var item = GetItemFromContentProviders(itemId, store);
+
+            //if item could not be found fallback to test repository
+            if(item==null)
+            {
+                item = TestRepository.Items.Where(x => x.Id == itemId).FirstOrDefault();
+                if (item == null)
+                    throw new Exception("No Item with that Id");
+            }
+
+            // when you get the item, create a gift
             item.Id = itemId;
             item.Store = store;
             gift.Item = item;
 
-            //todo: try to get the item from the BaaS
-
-            //todo: if item doesn't exist get it from content providers
-
-            //todo: if item could not be found fallback to test repository
-            /*var item = TestRepository.Items.Where(x => x.Id == itemId).FirstOrDefault();
-            if(item==null)
-                throw new Exception("No Item with that Id");*/
-
-            // when you get the item, create a gift
-            //gift.Item = item;
-
-
-            //todo: get user details about current user and receiving user and fill up the related gift fields
             gift.UserWhoGaveTheGift = new Contact() { Id = userId, Status = UserStatus.Registered };
-            gift.UserWhoReceivedTheGift = new Contact() { Id = contactId, Status = UserStatus.Registered };
 
-            //todo: add the gift into the database
+            gift.UserWhoReceivedTheGift = BaaS.GetUser(contactId);
+
+            //add the gift into the database
             BaaS.AddNewGift(gift);
 
-            //todo: send notifications to users
+            //Send notification to user who is getting the gift
+            NotificationSettings.SendGiftReceivedMessage(gift.UserWhoGaveTheGift, (User)gift.UserWhoReceivedTheGift, gift);
 
             return gift;
         }
 
-        #region Finished
+        
         /// <summary>
         /// Gets the list of all available categories
         /// URL example:

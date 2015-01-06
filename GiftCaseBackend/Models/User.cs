@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Web;
 using System.Web.DynamicData;
 using System.Web.Query.Dynamic;
 
 namespace GiftCaseBackend.Models
 {
+    
     public class Contact 
     {
         public string Id { get; set; }
@@ -47,7 +49,7 @@ namespace GiftCaseBackend.Models
         
 
     }
-
+    [KnownType(typeof(GiftCaseBackend.Models.User))]
     public class User : Contact
     {
         public string FacebookAccessToken { get; set; }

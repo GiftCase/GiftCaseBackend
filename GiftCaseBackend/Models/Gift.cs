@@ -97,6 +97,7 @@ namespace GiftCaseBackend.Models
 
     public class Gift
     {
+        public string Id { get; set; }
         public Item Item { get; set; }
 
         public GiftStatus Status { get; set; }
@@ -110,6 +111,7 @@ namespace GiftCaseBackend.Models
         public ShortGift Shorten()
         {
             ShortGift gift = new ShortGift();
+            gift.GiftId = Id;
             gift.ItemId = Item.Id;
             gift.Store = Item.Store;
             gift.Status = Status;
@@ -126,6 +128,7 @@ namespace GiftCaseBackend.Models
     /// </summary>
     public class ShortGift
     {
+        public string GiftId { get; set; }
         public string ItemId { get; set; }
 
         public Store Store { get; set; }
@@ -141,6 +144,7 @@ namespace GiftCaseBackend.Models
         public static explicit operator ShortGift(Gift originalGift)  // explicit byte to digit conversion operator
         {
             ShortGift gift = new ShortGift();
+            gift.GiftId = originalGift.Id;
             gift.ItemId = originalGift.Item.Id;
             gift.Store = originalGift.Item.Store;
             gift.Status = originalGift.Status;
@@ -153,6 +157,7 @@ namespace GiftCaseBackend.Models
         public Gift ToGift()
         {
             var gift = new Gift();
+            gift.Id = GiftId;
             gift.Item = new Item();
             gift.Item.Id = ItemId;
             gift.Item.Store = Store;

@@ -235,9 +235,11 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/LogOut")]
         public bool LogOut(string userId, string deviceToken)
         {
-            //todo: remove registered device id's so the user doesn't get notifications
-
-            return true;
+            //remove registered device id's so the user doesn't get notifications
+            var result = BaaS.LogOut(userId, deviceToken);
+            if(result)
+                HttpContext.Current.Session["user"] = null;
+            return result;
         }
 
 
@@ -339,13 +341,6 @@ namespace GiftCaseBackend.Controllers
             
         }
         */
-
-         
-
-        public dynamic GetTest()
-        {
-            return iTunesProvider.BrowseMusic();
-        }
 
         /// <summary>
         /// Checks if user is authorized to access this resource.
