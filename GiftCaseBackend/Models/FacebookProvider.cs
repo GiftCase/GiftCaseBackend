@@ -156,8 +156,9 @@ namespace GiftCaseBackend.Models
                     tempEvents.Add(new GiftcaseEvent()
                     {
                         //Date = new DateTime(Stvar.start_time),
-                      Date = new DateTime(int.Parse(datum[2]),int.Parse(datum[1]),int.Parse(datum[0]),int.Parse(vrijeme[0]), int.Parse(vrijeme[1]),int.Parse(vrijeme[2])),
+                      //Date = new DateTime(int.Parse(datum[2]),int.Parse(datum[1]),int.Parse(datum[0]),int.Parse(vrijeme[0]), int.Parse(vrijeme[1]),int.Parse(vrijeme[2])),
                         //Date = new DateTime(2016, 5, 23), //Stvar.start_time
+                        Date  = DateTime.Now,
                         Type = GiftcaseEventType.Anniversary,
                         //RelatedContacts = new List<Contact>() { TestRepository.Friends[0] },
                         RelatedContacts = new List<Contact>() { user },
