@@ -88,10 +88,10 @@ namespace GiftCaseBackend.Controllers
                     };
                 }
             }
-            /*
+            
             try { var push = BaaS.PushNotificationService.StoreDeviceToken(userId, deviceToken, DeviceType.ANDROID); }
             catch(Exception e){}
-            */
+            
 
             // remember current user so we can authenticate the requests
             HttpContext.Current.Session["user"] = user;
