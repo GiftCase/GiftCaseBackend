@@ -33,6 +33,7 @@ namespace GiftCaseBackend.Models
             //JSONReponse.data.access_token ????   
             
             user.ExtendedToken = s;
+            user.FacebookAccessToken = s;
             //UNFINISHED!!!
             //throw new NotImplementedException("I need more tokens to test. I don't want to mess up the one I already have! XD");
             return "";
@@ -61,7 +62,7 @@ namespace GiftCaseBackend.Models
                 else user.Gender = Gender.Unknown;
 
                 user.Name = profile.name;
-                user.UserName = profile.username;
+                user.UserName = profile.name; //profile.username; //taj username lose ispadne, bolje samo name!
 
                 // get picture
                 //https://graph.facebook.com/10152464438050382/picture?redirect=false&access_token=
@@ -111,13 +112,30 @@ namespace GiftCaseBackend.Models
 
         }
 
-        static public void FetchEvents(User user)
+        static public List<GiftcaseEvent>  FetchEvents(User user)
         {
+
+            List<GiftcaseEvent> tempEvents = new List<GiftcaseEvent>();
+
             try
             {
+                string token;
                 string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
 
-                string requestUrl = "https://graph.facebook.com/" + user.Id + "/events?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books
+                //AnaLongTermToken =  FacebookProvider.DamirLongTermExtendedToken;
+
+                //koristi od usera token ako ga ima!
+                if (user.FacebookAccessToken != null)
+                {
+                    token = user.FacebookAccessToken;
+                }
+
+                else
+                {
+                    token = AnaLongTermToken;
+                }
+
+                string requestUrl = "https://graph.facebook.com/" + user.Id + "/events?access_token=" + token; //likes, music,games, movies, television, books
                 // obtain the public profile data
                 var request = WebRequest.CreateHttp(requestUrl);
                 var stream = request.GetResponse().GetResponseStream();
@@ -129,19 +147,37 @@ namespace GiftCaseBackend.Models
                 string[] grupa = new String[100];
                 int i = 0;
 
+
                 foreach (dynamic Stvar in JSONReponse.data)
                 {
-                    TestRepository.Events.Add(new GiftcaseEvent()
+                    string []datum = Stvar.start_time.ToString().Split(' ')[0].Split('.');
+                    string[] vrijeme = Stvar.start_time.ToString().Split(' ')[1].Split(':');
+
+                    tempEvents.Add(new GiftcaseEvent()
                     {
-                        Date = new DateTime(2016, 5, 23), //Stvar.start_time
+                        //Date = new DateTime(Stvar.start_time),
+                      Date = new DateTime(int.Parse(datum[2]),int.Parse(datum[1]),int.Parse(datum[0]),int.Parse(vrijeme[0]), int.Parse(vrijeme[1]),int.Parse(vrijeme[2])),
+                        //Date = new DateTime(2016, 5, 23), //Stvar.start_time
                         Type = GiftcaseEventType.Anniversary,
-                        RelatedContacts = new List<Contact>() { TestRepository.Friends[0] },
+                        //RelatedContacts = new List<Contact>() { TestRepository.Friends[0] },
+                        RelatedContacts = new List<Contact>() { user },
                         Details = Stvar.name
                     });
+
+                    //TestRepository.Events.Add(new GiftcaseEvent()
+                    //{
+                    //    Date = new DateTime(2016, 5, 23), //Stvar.start_time
+                    //    Type = GiftcaseEventType.Anniversary,
+                    //    //RelatedContacts = new List<Contact>() { TestRepository.Friends[0] },
+                    //    RelatedContacts = new List<Contact>() { user },
+                    //    Details = Stvar.name
+                    //});
                     // grupa[i] = Stvar.name;
                     ++i;
                     
                 }
+
+                
 
             }
             catch (Exception e)
@@ -150,7 +186,7 @@ namespace GiftCaseBackend.Models
                 //throw;
             }
 
-           
+            return tempEvents;
 
         }
 

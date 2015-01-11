@@ -64,7 +64,7 @@ namespace GiftCaseBackend.Controllers
             Contact tempContact;
 
             User tempX = BaaS.GetUser(userID);
-
+            
 
             if (tempX == null) { throw new Exception("No user with that username!"); }
             /*
@@ -83,9 +83,11 @@ namespace GiftCaseBackend.Controllers
                 tempContact = temp[0];
             }
             */
-            //User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempContact.Id }; //BITNO
-
-            User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempX.Id }; //BITNO
+          
+            //STARO:
+            //User tempUser = new User { UserName = userName, /* Id = "10152464438050382" */ Id = tempX.Id }; //BITNO
+            //NOVO:
+            User tempUser = tempX;
 
             //GiftRecommendationEngine.CalculateAffinity(tempUser);
             tempUser.CalculateAffinity();
