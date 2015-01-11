@@ -286,8 +286,17 @@ namespace GiftCaseBackend.Models
         public static string[] FetchGiftCaseFriends(User user){
 
              string AnaLongTermToken = "CAAMewqUUav0BADBpQbA3mQZAwzZB1mmL2TzR7hrYildnnEHJUCipZC0QZAZAZCoKhwh6ZAHd80tCYSMIhluo6IeRBlkSctEK7ZAHHff7OnVPRe1hjTRW0FPsmbitIYtbCZC8Gj7bCfG39Lqv63ACaSs7TTSsd2p725c5LthCUwp4qA3pdZACWIqLDOfmKtcZCCHCrCIRuVknu2Ru4ZBuqAu1lajO";
+            string token ;
 
-             string requestUrl = "https://graph.facebook.com/" + user.Id + "/friends?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books
+            if (user.FacebookAccessToken == null)
+            {
+                token = AnaLongTermToken;
+            }
+
+            else token = user.FacebookAccessToken;
+                
+
+             string requestUrl = "https://graph.facebook.com/" + user.Id + "/friends?access_token=" + token; //likes, music,games, movies, television, books
             // obtain the public profile data
             var request = WebRequest.CreateHttp(requestUrl);
             var stream = request.GetResponse().GetResponseStream();
