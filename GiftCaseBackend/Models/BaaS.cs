@@ -261,7 +261,7 @@ namespace GiftCaseBackend.Models
             return inbox;
         }
 
-        public static IEnumerable<Gift> GetOutbox(string userId)
+        public static List<Gift> GetOutbox(string userId)
         {
             //Query q1 = QueryBuilder.Build("UserWhoReceivedTheGift", userId, Operator.EQUALS); 
 

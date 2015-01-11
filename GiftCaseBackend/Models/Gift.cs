@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GiftCaseBackend.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -158,9 +159,15 @@ namespace GiftCaseBackend.Models
         {
             var gift = new Gift();
             gift.Id = GiftId;
-            gift.Item = new Item();
+
+            try
+            {
+                gift.Item = GiftsController.GetItemFromContentProviders(ItemId, Store);
+            }
+            catch (Exception e) { }
+            /*gift.Item = new Item();
             gift.Item.Id = ItemId;
-            gift.Item.Store = Store;
+            gift.Item.Store = Store;*/
             gift.Status = Status;
             gift.DateOfPurchase = DateOfPurchase;
 

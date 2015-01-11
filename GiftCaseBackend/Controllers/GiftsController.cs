@@ -13,7 +13,7 @@ namespace GiftCaseBackend.Controllers
 {
     public class GiftsController : ApiController
     {
-        private Item GetItemFromContentProviders(string itemId, Store store)
+        public static Item GetItemFromContentProviders(string itemId, Store store)
         {
             if (store == Store.Amazon)
                 return AmazonProvider.GetItemById(itemId);
