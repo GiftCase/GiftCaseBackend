@@ -185,8 +185,8 @@ namespace GiftCaseBackend.Controllers
                 var contact = new Contact { UserName = tempResult[i], Id = tempResult[i + 1], ImageUrl = tempResult[i + 2], Status=UserStatus.NonRegistered };
                 korisnici.Add(contact);
 
-                if(!BaaS.DoesUserDataExist(contact.Id))
-                    BaaS.CreateNonregisteredUser(contact.Id, contact.UserName, contact.ImageUrl);
+                //if(!BaaS.DoesUserDataExist(contact.Id))
+                  //  BaaS.CreateNonregisteredUser(contact.Id, contact.UserName, contact.ImageUrl);
             }
 
             return korisnici.Take(count); //takes only 5, cuz otherwise it loads for too long, if you have a 100 friends

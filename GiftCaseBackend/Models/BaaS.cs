@@ -204,7 +204,8 @@ namespace GiftCaseBackend.Models
         {
             try
             {
-                PushNotificationService.DeleteDeviceToken(userId, deviceId);
+                PushNotificationService.UnSubscribeDevice(userId, deviceId);
+                //PushNotificationService.DeleteDeviceToken(userId, deviceId);
                 return true;
             }
             catch (Exception e) { }
