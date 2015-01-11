@@ -129,11 +129,17 @@ namespace GiftCaseBackend.Controllers
 
             }
 
+            if (userId == null)
+            {
+                userId = "10204523203015435";
+            }
+
             if (tempUser == null)
             {
                 tempUser = new User() { Id = userId };
             }
 
+           
 
             //User tempUser = new User{ Id = userId};
             //if (userId == null)
