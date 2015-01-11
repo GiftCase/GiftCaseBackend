@@ -150,18 +150,25 @@ namespace GiftCaseBackend.Models
 
                 foreach (dynamic Stvar in JSONReponse.data)
                 {
-                    string []datum = Stvar.start_time.ToString().Split(' ')[0].Split('.');
+                    string[] datum = Stvar.start_time.ToString().Split(' ')[0].Split('.');
                     string[] vrijeme = Stvar.start_time.ToString().Split(' ')[1].Split(':');
+
+                    User t = new User { Id = "123" };
+
+                    if (Stvar.name == "Test giftcase event")
+                    {
+                        t = BaaS.GetUser("10152479696077544");
+                    }
 
                     tempEvents.Add(new GiftcaseEvent()
                     {
                         //Date = new DateTime(Stvar.start_time),
-                      //Date = new DateTime(int.Parse(datum[2]),int.Parse(datum[1]),int.Parse(datum[0]),int.Parse(vrijeme[0]), int.Parse(vrijeme[1]),int.Parse(vrijeme[2])),
+                        Date = DateTime.Now,
+                        //Date = new DateTime(int.Parse(datum[2]), int.Parse(datum[1]), int.Parse(datum[0]), int.Parse(vrijeme[0]), int.Parse(vrijeme[1]), int.Parse(vrijeme[2])),
                         //Date = new DateTime(2016, 5, 23), //Stvar.start_time
-                        Date  = DateTime.Now,
                         Type = GiftcaseEventType.Anniversary,
                         //RelatedContacts = new List<Contact>() { TestRepository.Friends[0] },
-                        RelatedContacts = new List<Contact>() { user },
+                        RelatedContacts = new List<Contact>() { user, t },
                         Details = Stvar.name
                     });
 
@@ -175,9 +182,8 @@ namespace GiftCaseBackend.Models
                     //});
                     // grupa[i] = Stvar.name;
                     ++i;
-                    
-                }
 
+                }
                 
 
             }
