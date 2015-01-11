@@ -69,7 +69,7 @@ namespace GiftCaseBackend.Controllers
 
                 // creates user details data entry in the database
                 if (BaaS.DoesUserDataExist(userId))
-                    BaaS.UpdateUser(user);
+                    BaaS.UpdateUserData(user);
                 else
                     BaaS.CreateUser(user);
             }
