@@ -81,12 +81,24 @@ namespace GiftCaseBackend.Models
                 var contact = JsonConvert.DeserializeObject<Contact>(document.GetJsonDocList()[0].jsonDoc);
                 if (contact.Status == UserStatus.NonRegistered)
                 {
-                    var serializedData = JsonConvert.SerializeObject(user);
+                    var serializedData = JsonConvert.SerializeObject(user.Shorten());
                     StorageService.InsertJSONDocument(DatabaseName, UserCollection, serializedData);
                     // change user data
                     StorageService.UpdateDocumentByDocId(DatabaseName, UserCollection,
                         document.GetJsonDocList()[0].docId, serializedData);
                 }
+            }
+            catch (Exception) { }
+        }
+
+        public static void UpdateUserData(User user)
+        {
+            try
+            {
+                var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", user.Id);
+                var serializedData = JsonConvert.SerializeObject(user.Shorten());
+                StorageService.UpdateDocumentByDocId(DatabaseName, UserCollection,
+                                     document.GetJsonDocList()[0].docId, serializedData);
             }
             catch (Exception) { }
         }
@@ -204,7 +216,8 @@ namespace GiftCaseBackend.Models
         {
             try
             {
-                PushNotificationService.DeleteDeviceToken(userId, deviceId);
+                PushNotificationService.UnSubscribeDevice(userId, deviceId);
+                //PushNotificationService.DeleteDeviceToken(userId, deviceId);
                 return true;
             }
             catch (Exception e) { }

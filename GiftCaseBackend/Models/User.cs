@@ -96,6 +96,8 @@ namespace GiftCaseBackend.Models
             databaseData.Gender = Gender;
             if(FacebookAccessToken!=null)
                 databaseData.FacebookAccessToken = FacebookAccessToken;
+            if (ExtendedToken != null)
+                databaseData.ExtendedToken = ExtendedToken;
             return databaseData;
         }
     }
