@@ -89,8 +89,11 @@ namespace GiftCaseBackend.Controllers
                 }
             }
             
-            try {if(!string.IsNullOrWhiteSpace(deviceToken) && !string.IsNullOrEmpty(deviceToken)) 
-                var push = BaaS.PushNotificationService.StoreDeviceToken(userId, deviceToken, DeviceType.ANDROID); }
+            try 
+            {
+                if(!string.IsNullOrWhiteSpace(deviceToken) && !string.IsNullOrEmpty(deviceToken)) 
+                    BaaS.PushNotificationService.StoreDeviceToken(userId, deviceToken, DeviceType.ANDROID); 
+            }
             catch(Exception e){}
             
 
