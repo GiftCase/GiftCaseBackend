@@ -230,6 +230,7 @@ namespace GiftCaseBackend.Models
             {
                 var document = StorageService.FindDocumentByKeyValue(DatabaseName, UserCollection, "Id", userId);
                 var contact = JsonConvert.DeserializeObject<User>(document.GetJsonDocList()[0].jsonDoc);
+                contact.UserName = contact.Name;
                 return contact;
             }
             catch (Exception e)
