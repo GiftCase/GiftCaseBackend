@@ -121,6 +121,10 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Contacts")]
         public IEnumerable<Contact>  Contacts(string userId=null)
         {
+            List<Contact> l = new List<Contact>();
+            l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
+            return l;
+
             var korisnici = new List<Contact>();
 
             //userId = CheckAutherization();
@@ -136,7 +140,7 @@ namespace GiftCaseBackend.Controllers
 
                 if (userId == null)
                 {
-                    userId = "10204523203015435";
+                    userId = "10204523203015435"; //hardcoded backup
                 }
 
                 if (tempUser == null)

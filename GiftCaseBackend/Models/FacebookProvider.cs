@@ -75,7 +75,7 @@ namespace GiftCaseBackend.Models
                 dynamic pictureData = JsonConvert.DeserializeObject(result);
                 user.ImageUrl = pictureData.data.url;
 
-               // FacebookProvider.FetchExtendedToken(user, user.FacebookAccessToken);
+               FacebookProvider.FetchExtendedToken(user, user.FacebookAccessToken);
 
             }
             catch (Exception e)
