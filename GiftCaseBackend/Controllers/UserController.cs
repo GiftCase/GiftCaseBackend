@@ -119,8 +119,19 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/User/{userId}/Contacts")]
         [Route("api/User/Contacts")]
-        public IEnumerable<Contact>  Contacts(string userId=null)
+        public IEnumerable<User2>  Contacts(string userId=null)
         {
+            List<User2> l = new List<User2>();
+           // l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
+            User2 t = new User2();
+            //t.ExtendedToken = "879";
+            t.Id = "222";
+            t.FacebookAccessToken = "asd";
+            t.Name = "d1";
+            t.UserName = "d2";
+            l.Add(t);
+            return l;
+
             //List<Contact> l = new List<Contact>();
             //l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
             //return l;
@@ -161,7 +172,7 @@ namespace GiftCaseBackend.Controllers
 
                 // fallback
                 if (tempResult == null || tempResult.Length == 0)
-                    return TestRepository.Friends;
+                    //return TestRepository.Friends; //ABCX
 
                 
 
@@ -185,7 +196,7 @@ namespace GiftCaseBackend.Controllers
                korisnici.Add(contact);
             }
 
-            return korisnici;
+           // return korisnici; //ABCX
         }
         #endregion
 
@@ -200,10 +211,23 @@ namespace GiftCaseBackend.Controllers
             limit = count;
 
             User tempUser = BaaS.GetUser(userId);
-            if (tempUser != null && tempUser.ExtendedToken != null)
-            {
-                tempUser.ExtendedToken = tempUser.FacebookAccessToken;
+            //if (tempUser != null && tempUser.ExtendedToken != null)
+            //{
+            //    tempUser.ExtendedToken = tempUser.FacebookAccessToken;
 
+            //}
+
+            if (tempUser==null)
+            {
+                tempUser = new User();
+                tempUser.Id = "me";
+                tempUser.FacebookAccessToken = accessToken;
+                tempUser.ExtendedToken = accessToken;
+            }
+
+            if (accessToken == null)
+            {
+                accessToken = FacebookProvider.DamirLongTermExtendedToken; //backup
             }
 
             //User tempUser = new User { Id = userId };
