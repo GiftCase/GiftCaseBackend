@@ -32,7 +32,7 @@ namespace GiftCaseBackend.Models
 
             //JSONReponse.data.access_token ????   
             
-            user.ExtendedToken = s;
+            //user.ExtendedToken = s; //ABCX
             user.FacebookAccessToken = s;
             //UNFINISHED!!!
             //throw new NotImplementedException("I need more tokens to test. I don't want to mess up the one I already have! XD");
@@ -334,10 +334,11 @@ namespace GiftCaseBackend.Models
 
             string tempToken=null;
 
-            if (user.ExtendedToken==null && user.ExtendedToken =="")
-            {
-                tempToken = DamirLongTermExtendedToken;
-            }
+            //ABCX
+            //if (user.ExtendedToken==null && user.ExtendedToken =="")
+            //{
+            //    tempToken = DamirLongTermExtendedToken;
+            //}
 
             if (user.FacebookAccessToken == null && user.FacebookAccessToken == "")
             {
@@ -346,7 +347,9 @@ namespace GiftCaseBackend.Models
 
             if (tempToken == null)
             {
-                tempToken = user.ExtendedToken;
+                //ABCX
+                //tempToken = user.ExtendedToken;
+                tempToken = user.FacebookAccessToken;
             }
             
             //string requestUrl = "https://graph.facebook.com/" + "me" + "/invitable_friends?access_token=" + AnaLongTermToken; //likes, music,games, movies, television, books // NE MOŽE -> + user.Id + 

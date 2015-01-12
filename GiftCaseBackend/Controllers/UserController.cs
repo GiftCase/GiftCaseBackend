@@ -83,7 +83,7 @@ namespace GiftCaseBackend.Controllers
                         Id = userId,
                         UserName = "NoName",
                         FacebookAccessToken = accessToken,
-                        ExtendedToken = accessToken,
+                        //ExtendedToken = accessToken, //ABCX
                         //Friends = Contacts(userId).ToList(),
                         Status = UserStatus.Registered,
                     };
@@ -119,10 +119,10 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/User/{userId}/Contacts")]
         [Route("api/User/Contacts")]
-        public IEnumerable<User2>  Contacts(string userId=null)
+        public IEnumerable<Contact>  Contacts(string userId=null)
         {
-            List<User2> l = new List<User2>();
-            return l;
+            //List<User2> l = new List<User2>();
+            //return l;
            //// l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
            // User2 t = new User2();
            // //t.ExtendedToken = "879";
@@ -144,11 +144,12 @@ namespace GiftCaseBackend.Controllers
             {
 
                 User tempUser = BaaS.GetUser(userId);
-                if (tempUser != null && tempUser.ExtendedToken != null)
-                {
-                    tempUser.ExtendedToken = tempUser.FacebookAccessToken;
+                //ABCX
+                //if (tempUser != null && tempUser.ExtendedToken != null)
+                //{
+                //    tempUser.ExtendedToken = tempUser.FacebookAccessToken;
 
-                }
+                //}
 
                 if (userId == null)
                 {
@@ -173,7 +174,7 @@ namespace GiftCaseBackend.Controllers
 
                 // fallback
                 if (tempResult == null || tempResult.Length == 0)
-                    //return TestRepository.Friends; //ABCX
+                    return TestRepository.Friends; //ABCX
 
                 
 
@@ -197,7 +198,7 @@ namespace GiftCaseBackend.Controllers
                korisnici.Add(contact);
             }
 
-           // return korisnici; //ABCX
+            return korisnici; //ABCX
         }
         #endregion
 
@@ -223,7 +224,7 @@ namespace GiftCaseBackend.Controllers
                 tempUser = new User();
                 tempUser.Id = "me";
                 tempUser.FacebookAccessToken = accessToken;
-                tempUser.ExtendedToken = accessToken;
+                // tempUser.ExtendedToken = accessToken; //ABCX
             }
 
             if (accessToken == null)
@@ -236,7 +237,7 @@ namespace GiftCaseBackend.Controllers
             {
                 tempUser.Id = "me";
                 tempUser.FacebookAccessToken = accessToken;
-                tempUser.ExtendedToken = accessToken;
+                //tempUser.ExtendedToken = accessToken; //ABCX
             }
 
             //ako je null onda uzmi me
@@ -375,11 +376,12 @@ namespace GiftCaseBackend.Controllers
             List<GiftcaseEvent> tempEvents = new List<GiftcaseEvent>();
 
             User tempUser = BaaS.GetUser(userId);
-            if (tempUser.ExtendedToken != null)
-            {
-                tempUser.ExtendedToken = tempUser.FacebookAccessToken;
+            //ABCX
+            //if (tempUser.ExtendedToken != null)
+            //{
+            //    tempUser.ExtendedToken = tempUser.FacebookAccessToken;
                 
-            }
+            //}
 
             if (tempUser == null)
             {
