@@ -155,12 +155,11 @@ namespace GiftCaseBackend.Models
 
                     User t = new User { Id = "123" };
 
-                    if (Stvar.name == "Test giftcase event")
-                    {
-                        t = BaaS.GetUser("10152479696077544");
-                    }
+                  
 
-                    tempEvents.Add(new GiftcaseEvent()
+                    
+
+                    GiftcaseEvent x = new GiftcaseEvent()
                     {
                         //Date = new DateTime(Stvar.start_time),
                         Date = DateTime.Now,
@@ -168,9 +167,17 @@ namespace GiftCaseBackend.Models
                         //Date = new DateTime(2016, 5, 23), //Stvar.start_time
                         Type = GiftcaseEventType.Anniversary,
                         //RelatedContacts = new List<Contact>() { TestRepository.Friends[0] },
-                        RelatedContacts = new List<Contact>() { user, t },
+                        RelatedContacts = new List<Contact>() { user },
                         Details = Stvar.name
-                    });
+
+                    };
+                    if (Stvar.name == "Test giftcase event")
+                    {
+                        t = BaaS.GetUser("10152479696077544");
+                        x.RelatedContacts.Add(t);
+                    }
+                    
+                    tempEvents.Add(x);
 
                     //TestRepository.Events.Add(new GiftcaseEvent()
                     //{
