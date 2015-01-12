@@ -107,26 +107,26 @@ namespace GiftCaseBackend.Models
     public class User2 : Contact
     {
         public string FacebookAccessToken { get; set; }
-        public List<Contact> Friends { get; set; }
+        //public List<Contact> Friends { get; set; }
 
-        public List<Gift> SentGifts { get; set; }
+        //public List<Gift> SentGifts { get; set; }
 
-        public List<Gift> ReceivedGifts { get; set; }
+       // public List<Gift> ReceivedGifts { get; set; }
 
-        public string TelcoID { get; set; } //we assume all of our users have telcoID
+        //public string TelcoID { get; set; } //we assume all of our users have telcoID
 
-        public TelcoData telcoData;
+        //public TelcoData telcoData;
 
-        public string ShortToken = ""; //možda ubuduće korišteno;
+        //public string ShortToken = ""; //možda ubuduće korišteno;
 
-        private string ExtendedToken = "";
+        //private string ExtendedToken = "";
         //timeout time for extended token???
 
 
         public User2()
         {
             Id = UserName;
-            this.telcoData = TelcoDataProvider.getTelcoData(this.TelcoID);
+            //this.telcoData = TelcoDataProvider.getTelcoData(this.TelcoID);
 
         }
 
