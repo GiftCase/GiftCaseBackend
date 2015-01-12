@@ -121,9 +121,9 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Contacts")]
         public IEnumerable<Contact>  Contacts(string userId=null)
         {
-            List<Contact> l = new List<Contact>();
-            l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
-            return l;
+            //List<Contact> l = new List<Contact>();
+            //l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
+            //return l;
 
             var korisnici = new List<Contact>();
 
