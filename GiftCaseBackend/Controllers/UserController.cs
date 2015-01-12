@@ -69,7 +69,7 @@ namespace GiftCaseBackend.Controllers
 
                 // creates user details data entry in the database
                 if (BaaS.DoesUserDataExist(userId))
-                    BaaS.UpdateNonregisteredToRegisteredUserIfNeeded(user);
+                    BaaS.UpdateUserData(user);
                 else
                     BaaS.CreateUser(user);
             }
@@ -83,6 +83,7 @@ namespace GiftCaseBackend.Controllers
                         Id = userId,
                         UserName = "NoName",
                         FacebookAccessToken = accessToken,
+                        //ExtendedToken = accessToken, //ABCX
                         //Friends = Contacts(userId).ToList(),
                         Status = UserStatus.Registered,
                     };
@@ -120,35 +121,84 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Contacts")]
         public IEnumerable<Contact>  Contacts(string userId=null)
         {
-            //userId = CheckAutherization();
+            //List<User2> l = new List<User2>();
+            ////l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
+            //User2 t = new User2();
+            ////t.ExtendedToken = "879";
+            //t.Id = "222";
+            //t.FacebookAccessToken = "asd";
+            //t.Name = "d1";
+            //t.UserName = "d2";
+            //l.Add(t);
+            //return l;
+          
 
-            User tempUser = new User{ Id = userId};
-            if (userId == null)
+            //List<Contact> l = new List<Contact>();
+            //l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
+            //return l;
+
+            var korisnici = new List<Contact>();
+
+            //userId = CheckAutherization();
+            try
             {
-                tempUser.Id = "me";
+
+                User tempUser = BaaS.GetUser(userId);
+                //ABCX
+                //if (tempUser != null && tempUser.ExtendedToken != null)
+                //{
+                //    tempUser.ExtendedToken = tempUser.FacebookAccessToken;
+
+                //}
+
+                if (userId == null)
+                {
+                    userId = "10204523203015435"; //hardcoded backup
+                }
+
+                if (tempUser == null)
+                {
+                    tempUser = new User() { Id = userId };
+                }
+
+
+
+                //User tempUser = new User{ Id = userId};
+                //if (userId == null)
+                //{
+                //    tempUser.Id = "me";
+                //}
+
+                //ako je null onda uzmi me
+                string[] tempResult = FacebookProvider.FetchGiftCaseFriends(tempUser);
+
+                // fallback
+                if (tempResult == null || tempResult.Length == 0)
+                    return TestRepository.Friends; //ABCX
+
+                
+
+
+                for (int i = 0; i < tempResult.Length; i += 2)
+                {
+                    var contact = BaaS.GetContact(tempResult[i + 1]);
+                    if (contact == null)
+                        contact = new Contact { UserName = tempResult[i], Name = tempResult[i], Id = tempResult[i + 1] };
+                    contact.Status = UserStatus.Registered;
+                    contact.UserName = contact.Name;
+                    korisnici.Add(contact);
+
+                }
+
             }
 
-             //ako je null onda uzmi me
-            string [] tempResult = FacebookProvider.FetchGiftCaseFriends(tempUser);
-            
-            // fallback
-            if(tempResult==null || tempResult.Length==0)
-                return TestRepository.Friends;
-
-            var korisnici = new List<Contact> ();
-            
-
-           for (int i = 0; i < tempResult.Length; i+=2)
-			{
-               var contact = BaaS.GetContact(tempResult[i + 1]);
-               if(contact==null)
-                   contact = new Contact { UserName = tempResult[i], Id = tempResult[i + 1] };
-               contact.Status =  UserStatus.Registered;
+            catch (Exception e)
+            {
+               Contact contact = new Contact { UserName = "ERROR", Name = "ERROR", Id = "666" };
                korisnici.Add(contact);
+            }
 
-			}
-
-            return korisnici;
+            return korisnici; //ABCX
         }
         #endregion
 
@@ -161,13 +211,33 @@ namespace GiftCaseBackend.Controllers
             //userId = CheckAutherization();
             int limit = 10; //too many inviteable friends makes the app go 2 slow!!!!
             limit = count;
-            
-            User tempUser = new User { Id = userId };
+
+            User tempUser = BaaS.GetUser(userId);
+            //if (tempUser != null && tempUser.ExtendedToken != null)
+            //{
+            //    tempUser.ExtendedToken = tempUser.FacebookAccessToken;
+
+            //}
+
+            if (tempUser==null)
+            {
+                tempUser = new User();
+                tempUser.Id = "me";
+                tempUser.FacebookAccessToken = accessToken;
+                // tempUser.ExtendedToken = accessToken; //ABCX
+            }
+
+            if (accessToken == null)
+            {
+                accessToken = FacebookProvider.DamirLongTermExtendedToken; //backup
+            }
+
+            //User tempUser = new User { Id = userId };
             if (userId == null)
             {
                 tempUser.Id = "me";
                 tempUser.FacebookAccessToken = accessToken;
-                tempUser.ExtendedToken = accessToken;
+                //tempUser.ExtendedToken = accessToken; //ABCX
             }
 
             //ako je null onda uzmi me
@@ -186,7 +256,7 @@ namespace GiftCaseBackend.Controllers
 
             for (int i = 0; i < 3*limit; i += 3)
             {
-                var contact = new Contact { UserName = tempResult[i], Id = tempResult[i + 1], ImageUrl = tempResult[i + 2], Status=UserStatus.NonRegistered };
+                var contact = new Contact { UserName = tempResult[i], Name = tempResult[i],Id = tempResult[i + 1], ImageUrl = tempResult[i + 2], Status=UserStatus.NonRegistered };
                 korisnici.Add(contact);
 
                 //if(!BaaS.DoesUserDataExist(contact.Id))
@@ -303,8 +373,29 @@ namespace GiftCaseBackend.Controllers
         [Route("api/User/Events")]
         public IEnumerable<GiftcaseEvent> Events(string userId)
         {
-            return TestRepository.Events;
+            List<GiftcaseEvent> tempEvents = new List<GiftcaseEvent>();
+
+            User tempUser = BaaS.GetUser(userId);
+            //ABCX
+            //if (tempUser.ExtendedToken != null)
+            //{
+            //    tempUser.ExtendedToken = tempUser.FacebookAccessToken;
+                
+            //}
+
+            if (tempUser == null)
+            {
+                tempUser = new User() { Id = userId };
+            }
+            
+            tempEvents = FacebookProvider.FetchEvents(tempUser);
+
+
+            return tempEvents;
+
+            //return TestRepository.Events.Where( x=> x.RelatedContacts.Contains(tempUser)) ;
             //.Where(x=>x.RelatedContacts.Count!=1 && x.RelatedContacts[0].UserName=="Gijs")
+            //return TestRepository.Events;
         }
 
         /*

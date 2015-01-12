@@ -174,6 +174,7 @@ namespace GiftCaseBackend.Models
             try
             {
                 gift.UserWhoGaveTheGift = BaaS.GetContact(IdOfUserWhoGaveTheGift);
+                gift.UserWhoGaveTheGift.UserName = gift.UserWhoGaveTheGift.Name;
             }
             catch (Exception e)
             {
@@ -183,6 +184,7 @@ namespace GiftCaseBackend.Models
             try
             {
                 gift.UserWhoReceivedTheGift = BaaS.GetContact(IdOfUserWhoReceivedTheGift);
+                gift.UserWhoReceivedTheGift.UserName = gift.UserWhoReceivedTheGift.Name;
             }
             catch (Exception e)
             {

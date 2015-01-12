@@ -65,7 +65,7 @@ namespace GiftCaseBackend.Models
 
         public string ShortToken = ""; //možda ubuduće korišteno;
 
-        public string ExtendedToken = "";
+        private string ExtendedToken = "";
       //timeout time for extended token???
 
 
@@ -101,6 +101,39 @@ namespace GiftCaseBackend.Models
             return databaseData;
         }
     }
+
+
+    [KnownType(typeof(GiftCaseBackend.Models.User2))]
+    public class User2 : Contact
+    {
+        public string FacebookAccessToken { get; set; }
+        //public List<Contact> Friends { get; set; }
+
+        //public List<Gift> SentGifts { get; set; }
+
+       // public List<Gift> ReceivedGifts { get; set; }
+
+        //public string TelcoID { get; set; } //we assume all of our users have telcoID
+
+        //public TelcoData telcoData;
+
+        //public string ShortToken = ""; //možda ubuduće korišteno;
+
+        //private string ExtendedToken = "";
+        //timeout time for extended token???
+
+
+        public User2()
+        {
+            Id = UserName;
+            //this.telcoData = TelcoDataProvider.getTelcoData(this.TelcoID);
+
+        }
+
+
+
+    }
+
 
     public enum UserStatus
     {

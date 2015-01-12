@@ -60,7 +60,7 @@ namespace GiftCaseBackend.Models
             //user.Id = "10152464438050382";//Ana
 
             FacebookProvider.UpdateAffinity(user);
-            FacebookProvider.FetchEvents(user);
+           // FacebookProvider.FetchEvents(user);
             //FacebookProvider.FetchGiftCaseFriends(user);
             //FacebookProvider.FetchInviteableFriends(user);
            // FacebookProvider.FetchExtendedToken(user, "CAAMewqUUav0BAHdiLkH4xE210I75ZC6kCSuuaLqXcQnaOkjq1ocSpxjMoZB947ff7orVzELGeJez19qNJjh0FZCNWR136yGWh6jiUK0GkgKCeFhEBGj9NC8FaBcFI2kpf3QUmOoXjWDDlXFChACTZAZBovo5ZCu6N2hMlsgCJGxGtxVdWRRy8NMW6YEZC4GTV0kDGR62PgikpEkaxLx5ZCbK");
