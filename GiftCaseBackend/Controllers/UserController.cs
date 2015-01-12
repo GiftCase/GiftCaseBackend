@@ -122,15 +122,16 @@ namespace GiftCaseBackend.Controllers
         public IEnumerable<User2>  Contacts(string userId=null)
         {
             List<User2> l = new List<User2>();
-           // l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
-            User2 t = new User2();
-            //t.ExtendedToken = "879";
-            t.Id = "222";
-            t.FacebookAccessToken = "asd";
-            t.Name = "d1";
-            t.UserName = "d2";
-            l.Add(t);
             return l;
+           //// l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
+           // User2 t = new User2();
+           // //t.ExtendedToken = "879";
+           // t.Id = "222";
+           // t.FacebookAccessToken = "asd";
+           // t.Name = "d1";
+           // t.UserName = "d2";
+           // l.Add(t);
+           // return l;
 
             //List<Contact> l = new List<Contact>();
             //l.Add(new Contact { Id = "666", UserName = "ERRROR", Gender = Models.Gender.Male, Name = "ERR", ImageUrl = "URL", Status = UserStatus.Registered });
