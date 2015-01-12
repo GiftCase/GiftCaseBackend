@@ -314,7 +314,7 @@ namespace GiftCaseBackend.Controllers
             BaaS.AddNewGift(gift);
 
             //Send notification to user who is getting the gift
-            NotificationSettings.SendGiftReceivedMessage(gift.UserWhoGaveTheGift, (User)gift.UserWhoReceivedTheGift, gift);
+            NotificationSettings.SendGiftReceivedMessage(gift.UserWhoReceivedTheGift, (User)gift.UserWhoGaveTheGift, gift);
 
             return gift;
         }
