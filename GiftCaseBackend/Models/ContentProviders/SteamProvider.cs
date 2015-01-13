@@ -205,6 +205,12 @@ namespace GiftCaseBackend.Models
 
         }
 
+
+        internal static Item GetItemById(string itemId)
+        {
+            Item i = new Item { Name = "steam game", Description = "Desc", IconUrl = "",Id = "itemID", Price =9.99F, PriceCurrency = "€", Store = Store.Steam };
+            return i;
+        }
     }
 
 

@@ -24,10 +24,9 @@ namespace GiftCaseBackend.Controllers
                     return item[0];
             }
             else if (store == Store.Steam)
-                return null;
-            // todo:
-            //return SteamProvider.GetItemById(itemId);
-
+            {
+                return SteamProvider.GetItemById(itemId);
+            }
             return null;
         }
 
