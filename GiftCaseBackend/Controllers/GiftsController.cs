@@ -289,6 +289,10 @@ namespace GiftCaseBackend.Controllers
                 Status = GiftStatus.NotReceivedYet
             };
 
+            //QUICK FIX , Damir XD
+            string tempSwap = userId;
+            userId = contactId;
+            contactId = tempSwap;
             // generate gift unique id
             gift.Id = userId + contactId + DateTime.Now.Ticks;
 
@@ -310,13 +314,19 @@ namespace GiftCaseBackend.Controllers
 
             gift.UserWhoGaveTheGift = new Contact() { Id = userId, Status = UserStatus.Registered };
 
+            User xyz = BaaS.GetUser(userId);
+            if (xyz != null)
+            {
+                gift.UserWhoGaveTheGift = xyz;
+            }
+
             gift.UserWhoReceivedTheGift = BaaS.GetUser(contactId);
 
             //add the gift into the database
             BaaS.AddNewGift(gift);
 
             //Send notification to user who is getting the gift
-            NotificationSettings.SendGiftReceivedMessage(gift.UserWhoReceivedTheGift, (User)gift.UserWhoGaveTheGift, gift);
+            NotificationSettings.SendGiftReceivedMessage(gift.UserWhoReceivedTheGift, gift.UserWhoGaveTheGift, gift);
 
             return gift;
         }

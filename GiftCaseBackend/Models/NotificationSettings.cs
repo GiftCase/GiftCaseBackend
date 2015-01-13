@@ -15,7 +15,7 @@ namespace GiftCaseBackend.Models
         public static string GiftOpened = "{0} just opened your gift of {1}!"; // 0 - username of the user who got the gift, 1 - what gift
         public static string GiftClaimed = "{0} just opened your gift of {1}!"; // 0 - username of the user who got the gift, 1 - what gift
 
-        public static void SendGiftReceivedMessage(Contact userGettingTheGift, User userGivingTheGift, Gift gift)
+        public static void SendGiftReceivedMessage(Contact userGettingTheGift, Contact userGivingTheGift, Gift gift)
         {
             try
             {
