@@ -357,7 +357,7 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/Gifts/{giftId}/DownloadGift")]
         [Route("api/Gifts/DownloadGift")]
-        public string/*StreamContent*/ DownloadGift(int giftId, string userId)
+        public string/*StreamContent*/ DownloadGift(string giftId=null, string userId=null)
         {
             return "true";
             //var content = new FileStream("https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg", FileMode.Open, FileAccess.Read);
