@@ -357,11 +357,12 @@ namespace GiftCaseBackend.Controllers
         [HttpGet]
         [Route("api/Gifts/{giftId}/DownloadGift")]
         [Route("api/Gifts/DownloadGift")]
-        public StreamContent DownloadGift(int giftId, string userId)
+        public string/*StreamContent*/ DownloadGift(int giftId, string userId)
         {
-            var content = new FileStream("https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg", FileMode.Open, FileAccess.Read);
-            var stream = new StreamContent(content);
-            return stream;
+            return "true";
+            //var content = new FileStream("https://lh5.googleusercontent.com/-z4GINoMoCgA/AAAAAAAAAAI/AAAAAAAAABQ/CM0fRlsGcD8/photo.jpg", FileMode.Open, FileAccess.Read);
+            //var stream = new StreamContent(content);
+            //return stream;
         }
         #endregion
 
