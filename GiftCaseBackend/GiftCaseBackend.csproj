@@ -86,6 +86,11 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="ClassDiagram.cd" />
+    <Content Include="ClassDiagram1.cd" />
+    <Content Include="C:\Users\Viperus\Desktop\ClassDiagram2.cd">
+      <Link>ClassDiagram2.cd</Link>
+    </Content>
+    <Content Include="ClassDiagramBackend.cd" />
     <None Include="Service References\Amazon\configuration91.svcinfo" />
     <None Include="Service References\Amazon\configuration.svcinfo" />
     <Content Include="Service References\Amazon\GiftCaseBackend.Amazon.BrowseNodeLookupResponse.datasource">
